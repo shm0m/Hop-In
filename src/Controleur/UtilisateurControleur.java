@@ -11,6 +11,11 @@ public class UtilisateurControleur {
         utilisateurDAO.ajouterUtilisateur(u);
     }
 
+    public Utilisateur trouverParEmailEtMotDePasse(String email, String mdp) {
+        return utilisateurDAO.trouverParEmailEtMotDePasse(email, mdp);
+    }
+
+
     public void afficherTousLesUtilisateurs() {
         List<Utilisateur> liste = utilisateurDAO.getAll();
         for (Utilisateur u : liste) {

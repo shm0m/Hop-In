@@ -31,6 +31,31 @@ public class UtilisateurDAO {
         }
     }
 
+    public Utilisateur trouverParEmailEtMotDePasse(String email, String mdp) {
+        String sql = "SELECT * FROM Utilisateur WHERE email = ? AND mot_de_passe = ?";
+        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, email);
+            stmt.setString(2, mdp);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Utilisateur(
+                        rs.getInt("id"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("email"),
+                        rs.getString("mot_de_passe"),
+                        rs.getString("type_membre"),
+                        rs.getString("role"),
+                        rs.getString("date_naissance")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     public List<Utilisateur> getAll() {
         List<Utilisateur> utilisateurs = new ArrayList<>();
         String sql = "SELECT * FROM Utilisateur";
@@ -43,7 +68,8 @@ public class UtilisateurDAO {
                         rs.getString("email"),
                         rs.getString("mot_de_passe"),
                         rs.getString("type_membre"),
-                        rs.getString("role")
+                        rs.getString("role"),
+                        rs.getString("date_naissance")
                 );
                 utilisateurs.add(u);
             }
