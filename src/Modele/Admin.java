@@ -30,7 +30,7 @@ public class Admin extends Utilisateur {
             }
             sql=sql+"prix="+prix;
         }
-        sql=sql+" where id_Attraction="+idAtt+";";
+        sql=sql+" where id_Attraction="+idAtt+";" ;
         System.out.println(sql);
         GestionConnexion gerant=new GestionConnexion();
         try {
