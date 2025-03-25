@@ -9,7 +9,7 @@ public class UtilisateurDAO {
 
     private Connection getConnection() {
         try {
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/hop-in", "root", "");
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/hop_in", "root", "");
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
