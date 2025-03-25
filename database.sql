@@ -14,12 +14,13 @@ CREATE TABLE Utilisateur (
     role ENUM('CLIENT', 'ADMIN') NOT NULL
 );
 
--- Table Attraction
+-- Table Attraction (avec capacite_max pour gérer le quota)
 CREATE TABLE Attraction (
     id_attraction INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     description TEXT,
-    prix DECIMAL(6,2) NOT NULL
+    prix DECIMAL(6,2) NOT NULL,
+    capacite_max INT NOT NULL DEFAULT 30
 );
 
 -- Table Reservation
@@ -36,7 +37,7 @@ CREATE TABLE Reservation (
     FOREIGN KEY (id_attraction) REFERENCES Attraction(id_attraction)
 );
 
--- Table ReductionUtilisateur
+-- Table ReductionUtilisateur (réduction personnalisée par user)
 CREATE TABLE ReductionUtilisateur (
     id_reduction_utilisateur INT AUTO_INCREMENT PRIMARY KEY,
     id INT,
