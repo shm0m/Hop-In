@@ -1,24 +1,25 @@
 package Modele;
 
 public class Utilisateur {
-    private int id;
-    private String nom;
-    private String prenom;
-    private String email;
-    private String motDePasse;
-    private String typeMembre;
-    private String role;
+    protected int id;
+    protected String nom;
+    protected String prenom;
+    protected String email;
+    protected String motDePasse;
+    protected String typeMembre;
+    protected String role;
 
 
-    public Utilisateur(int id, String nom, String prenom, String email, String motDePasse, String typeMembre, String role) {
-        this.id = id;
-        this.nom = nom;
-        this.prenom = prenom;
-        this.email = email;
-        this.motDePasse = motDePasse;
-        this.typeMembre = typeMembre;
-        this.role = role;
-    }
+        public Utilisateur(int id, String nom, String prenom, String email, String motDePasse, String typeMembre, String role) {
+            this.id = id;
+            this.nom = nom;
+            this.prenom = prenom;
+            this.email = email;
+        System.out.println(!("".isEmpty()));
+            this.motDePasse = motDePasse;
+            this.typeMembre = typeMembre;
+            this.role = role;
+        }
 
     public int getId() { return id; }
     public void setId(int id) { this.id = id; }
