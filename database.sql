@@ -1,8 +1,8 @@
-
 -- Création de la base de données
 CREATE DATABASE IF NOT EXISTS hop_in;
+USE hop_in;
 
--- Table Utilisateur (fusion de Client et Admin)
+-- Table Utilisateur
 CREATE TABLE Utilisateur (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(50),
@@ -25,25 +25,23 @@ CREATE TABLE Attraction (
 -- Table Reservation
 CREATE TABLE Reservation (
     id_reservation INT AUTO_INCREMENT PRIMARY KEY,
-    id_utilisateur INT,
+    id INT,
     id_attraction INT,
     date_reservation DATE NOT NULL,
     nb_personnes INT NOT NULL,
     reduction_appliquee DECIMAL(4,2) NOT NULL,
     prix_total DECIMAL(8,2) NOT NULL,
     statut ENUM('CONFIRMEE', 'ANNULEE'),
-    FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id),
+    FOREIGN KEY (id) REFERENCES Utilisateur(id),
     FOREIGN KEY (id_attraction) REFERENCES Attraction(id_attraction)
 );
 
--- Table Reduction
-CREATE TABLE Reduction (
-    id_reduction INT AUTO_INCREMENT PRIMARY KEY,
+-- Table ReductionUtilisateur
+CREATE TABLE ReductionUtilisateur (
+    id_reduction_utilisateur INT AUTO_INCREMENT PRIMARY KEY,
+    id INT,
     nom VARCHAR(100) NOT NULL,
     pourcentage DECIMAL(4,2) NOT NULL,
-    condition_age_min INT,
-    condition_age_max INT,
-    membre_necessaire BOOLEAN
+    membre_necessaire BOOLEAN,
+    FOREIGN KEY (id) REFERENCES Utilisateur(id)
 );
-
-
