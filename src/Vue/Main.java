@@ -1,13 +1,16 @@
 package Vue;
 
 import Controleur.UtilisateurControleur;
+import Controleur.ReservationControleur;
 import Modele.Utilisateur;
+
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         UtilisateurControleur controleur = new UtilisateurControleur();
+        ReservationControleur reservationControleur = new ReservationControleur();
 
         System.out.println("=== Bienvenue sur Hop'In ===");
         System.out.println("1. Se connecter");
@@ -27,6 +30,15 @@ public class Main {
             Utilisateur utilisateur = controleur.trouverParEmailEtMotDePasse(email, mdp);
             if (utilisateur != null) {
                 System.out.println("Connexion réussie, bienvenue " + utilisateur.getPrenom() + " !");
+
+                System.out.println("\nSouhaitez-vous réserver une attraction ? (oui/non)");
+                String rep = scanner.nextLine();
+                if (rep.equalsIgnoreCase("oui")) {
+                    reservationControleur.effectuerReservation(utilisateur, 1, 25.00);
+                } else {
+                    System.out.println("À bientôt !");
+                }
+
             } else {
                 System.out.println("Identifiants incorrects.");
             }
@@ -58,8 +70,9 @@ public class Main {
             Utilisateur u = new Utilisateur(0, nom, prenom, email, motDePasse, dateNaissance, typeMembre, role);
             controleur.ajouterUtilisateur(u);
 
-            System.out.println("✅ Utilisateur enregistré !");
+            System.out.println("Utilisateur enregistré !");
         }
+
         scanner.close();
     }
 }

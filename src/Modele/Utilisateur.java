@@ -1,6 +1,7 @@
 package Modele;
 
 import java.time.LocalDate;
+import java.time.Period;
 
 public class Utilisateur {
     private int id;
@@ -12,7 +13,7 @@ public class Utilisateur {
     private String role;
     private String dateNaissance;
 
-    public Utilisateur(int id, String nom, String prenom, String email, String motDePasse, String dateNaissance, String typeMembre, String role) {
+    public Utilisateur(int id, String nom, String prenom, String email, String motDePasse, String dateNaissance, String typeMembre, String role){
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -23,6 +24,10 @@ public class Utilisateur {
         this.role = role;
     }
 
+    public int getAge() {
+        LocalDate birth = LocalDate.parse(this.dateNaissance);
+        return Period.between(birth, LocalDate.now()).getYears();
+    }
 
     public int getId() {
         return id;

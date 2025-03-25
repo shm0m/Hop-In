@@ -44,9 +44,9 @@ public class UtilisateurDAO {
                         rs.getString("prenom"),
                         rs.getString("email"),
                         rs.getString("mot_de_passe"),
+                        rs.getString("date_naissance"),
                         rs.getString("type_membre"),
-                        rs.getString("role"),
-                        rs.getString("date_naissance")
+                        rs.getString("role")
                 );
             }
         } catch (SQLException e) {
@@ -54,7 +54,6 @@ public class UtilisateurDAO {
         }
         return null;
     }
-
 
     public List<Utilisateur> getAll() {
         List<Utilisateur> utilisateurs = new ArrayList<>();

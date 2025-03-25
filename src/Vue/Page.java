@@ -1,9 +1,6 @@
-package Graphique;
+package Vue;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class Page extends JFrame {
     private JTextField c1, c2, c3,c4,c5;
