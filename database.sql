@@ -46,3 +46,9 @@ CREATE TABLE ReductionUtilisateur (
     membre_necessaire BOOLEAN,
     FOREIGN KEY (id) REFERENCES Utilisateur(id)
 );
+
+
+Modifs à faire:
+Créer une table Promotions qui contient les codes promos (dont aucun (0%) sénior et junior) ainsi que
+d'autres crées par les admins. RéductionUtilisateur a desormais deux clefs qui sont à la fois primaires
+et étrangères: idReduc et IdReservation.
