@@ -24,6 +24,10 @@ public class Utilisateur {
         this.role = role;
     }
 
+    public Utilisateur(){
+
+    }
+
     public int getAge() {
         LocalDate birth = LocalDate.parse(this.dateNaissance);
         return Period.between(birth, LocalDate.now()).getYears();
@@ -79,6 +83,7 @@ public class Utilisateur {
     public String getRole() {
         return role;
     }
+
     public void setRole(String role) {
         this.role = role;
     }

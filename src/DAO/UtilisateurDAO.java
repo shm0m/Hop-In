@@ -17,7 +17,7 @@ public class UtilisateurDAO {
     }
 
     public void ajouterUtilisateur(Utilisateur u) {
-        String sql = "INSERT INTO Utilisateur (nom, prenom, email, mot_de_passe, date_naissance, type_membre, role) VALUES (?, ?, ?, ?, CURDATE(), ?, ?)";
+        String sql = "INSERT INTO Utilisateur (nom, prenom, email, mot_de_passe, date_naissance, type_membre, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, u.getNom());
             stmt.setString(2, u.getPrenom());
@@ -54,6 +54,32 @@ public class UtilisateurDAO {
         }
         return null;
     }
+
+    public Utilisateur trouverParEmail(String email) {
+        Utilisateur utilisateur = null;
+        try (Connection conn = getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM utilisateur WHERE email = ?")) {
+            stmt.setString(1, email);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                utilisateur = new Utilisateur(
+                        rs.getInt("id"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("email"),
+                        rs.getString("mot_de_passe"),
+                        rs.getString("date_naissance"),
+                        rs.getString("type_membre"),
+                        rs.getString("role")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return utilisateur;
+    }
+
+
 
     public List<Utilisateur> getAll() {
         List<Utilisateur> utilisateurs = new ArrayList<>();
