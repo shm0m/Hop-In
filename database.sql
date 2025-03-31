@@ -43,7 +43,7 @@ CREATE TABLE ReductionUtilisateur (
     nom VARCHAR(100) NOT NULL,
     pourcentage DECIMAL(4,2) NOT NULL,
     membre_necessaire BOOLEAN,
-    ageMin DATE;
+    ageMin DATE,
     ageMax DATE,
     dateDeb DATE,
     dateFin DATE
