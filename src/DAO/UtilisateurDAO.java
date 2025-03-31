@@ -34,17 +34,32 @@ public class UtilisateurDAO {
             stmt.setString(1, email);
             stmt.setString(2, mdp);
             ResultSet rs = stmt.executeQuery();
+            String role=rs.getString("role");
             if (rs.next()) {
-                return new Utilisateur(
-                        rs.getInt("id"),
-                        rs.getString("nom"),
-                        rs.getString("prenom"),
-                        rs.getString("email"),
-                        rs.getString("mot_de_passe"),
-                        rs.getString("date_naissance"),
-                        rs.getString("type_membre"),
-                        rs.getString("role")
-                );
+                if(role.equals("CLIENT")){
+                    return new Utilisateur(
+                            rs.getInt("id"),
+                            rs.getString("nom"),
+                            rs.getString("prenom"),
+                            rs.getString("email"),
+                            rs.getString("mot_de_passe"),
+                            rs.getString("date_naissance"),
+                            rs.getString("type_membre"),
+                            role
+                    );
+                }
+                else{
+                    return new Admin(
+                            rs.getInt("id"),
+                            rs.getString("nom"),
+                            rs.getString("prenom"),
+                            rs.getString("email"),
+                            rs.getString("mot_de_passe"),
+                            rs.getString("date_naissance"),
+                            rs.getString("type_membre"),
+                            role
+                    );
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
