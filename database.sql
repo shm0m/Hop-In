@@ -30,7 +30,7 @@ CREATE TABLE Reservation (
     id_attraction INT,
     date_reservation DATE NOT NULL,
     nb_personnes INT NOT NULL,
-    reduction_appliquee DECIMAL(4,2) NOT NULL,
+    idReduction INT references ReductionUtilisateur(id_reduction_utilisateur),
     prix_total DECIMAL(8,2) NOT NULL,
     statut ENUM('CONFIRMEE', 'ANNULEE'),
     FOREIGN KEY (id) REFERENCES Utilisateur(id),
@@ -46,7 +46,10 @@ CREATE TABLE ReductionUtilisateur (
     membre_necessaire BOOLEAN,
     FOREIGN KEY (id) REFERENCES Utilisateur(id)
 );
-
+/*//////////////////////////////////////////////////*/
+/*À mettre si vous n'avez pas la dernière version !!*/
+/*alter table Reservation drop reduction_appliquee; alter table Reservation add idReduction INT references ReductionUtilisateur(id_reduction_utilisateur);*/
+/*//////////////////////////////////////////////////*/
 
 Modifs à faire:
 Créer une table Promotions qui contient les codes promos (dont aucun (0%) sénior et junior) ainsi que
