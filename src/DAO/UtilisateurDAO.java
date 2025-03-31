@@ -6,19 +6,16 @@ import java.util.List;
 import Modele.Utilisateur;
 
 public class UtilisateurDAO {
-
-    private Connection getConnection() {
-        try {
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/hop_in", "root", "");
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+    private GestionConnexion gerant;
+    public UtilisateurDAO() {
+        gerant=new GestionConnexion();
     }
 
+
+
     public void ajouterUtilisateur(Utilisateur u) {
-        String sql = "INSERT INTO Utilisateur (nom, prenom, email, mot_de_passe, date_naissance, type_membre, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        String sql = "INSERT INTO Utilisateur (nom, prenom, email, mot_de_passe, date_naissance, type_membre, role) VALUES (?, ?, ?, ?, CURDATE(), ?, ?)";
+        try (Connection conn = this.gerant.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, u.getNom());
             stmt.setString(2, u.getPrenom());
             stmt.setString(3, u.getEmail());
@@ -33,7 +30,7 @@ public class UtilisateurDAO {
 
     public Utilisateur trouverParEmailEtMotDePasse(String email, String mdp) {
         String sql = "SELECT * FROM Utilisateur WHERE email = ? AND mot_de_passe = ?";
-        try (Connection conn = getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+        try (Connection conn = this.gerant.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, email);
             stmt.setString(2, mdp);
             ResultSet rs = stmt.executeQuery();
@@ -55,36 +52,10 @@ public class UtilisateurDAO {
         return null;
     }
 
-    public Utilisateur trouverParEmail(String email) {
-        Utilisateur utilisateur = null;
-        try (Connection conn = getConnection();
-             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM utilisateur WHERE email = ?")) {
-            stmt.setString(1, email);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                utilisateur = new Utilisateur(
-                        rs.getInt("id"),
-                        rs.getString("nom"),
-                        rs.getString("prenom"),
-                        rs.getString("email"),
-                        rs.getString("mot_de_passe"),
-                        rs.getString("date_naissance"),
-                        rs.getString("type_membre"),
-                        rs.getString("role")
-                );
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return utilisateur;
-    }
-
-
-
     public List<Utilisateur> getAll() {
         List<Utilisateur> utilisateurs = new ArrayList<>();
         String sql = "SELECT * FROM Utilisateur";
-        try (Connection conn = getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            try (Connection conn = this.gerant.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
                 Utilisateur u = new Utilisateur(
                         rs.getInt("id"),
