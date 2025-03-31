@@ -48,57 +48,39 @@ public class PageEnregistrementSwing extends JFrame {
         addField(panel, gbc, "Mot de passe", mdpField, 4);
         addField(panel, gbc, "Date de naissance (AAAA-MM-JJ)", dateField, 5);
 
-        addRadioGroup(panel, gbc, "Type de membre", new String[]{"AUCUN", "REGULIER", "SENIOR", "ENFANT"}, 6);
-        ButtonGroup typeGroup = currentRadioGroup;
-
-        // Radio buttons rôle
-        addRadioGroup(panel, gbc, "Rôle", new String[]{"CLIENT", "ADMIN"}, 7);
-        ButtonGroup roleGroup = currentRadioGroup;
-
-        JButton btnEnregistrer = new JButton("S'enregistrer");
-        styliseButton(btnEnregistrer, new Color(247, 143, 179));
-        gbc.gridx = 0;
-        gbc.gridy = 8;
-        gbc.gridwidth = 2;
-        panel.add(btnEnregistrer, gbc);
-
         JLabel message = new JLabel(" ");
         message.setHorizontalAlignment(SwingConstants.CENTER);
         message.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        gbc.gridx = 0;
         gbc.gridy = 9;
+        gbc.gridwidth = 2;
         panel.add(message, gbc);
 
-        JButton btnRetour = new JButton("Retour");
+        JButton btn = new JButton("S'enregistrer");
+        styliseButton(btn, new Color(255, 105, 180));
+        gbc.gridy = 8;
+        panel.add(btn, gbc);
+
+        JButton btnRetour = new JButton("⬅ Retour");
         styliseButton(btnRetour, Color.LIGHT_GRAY);
         gbc.gridy = 10;
         panel.add(btnRetour, gbc);
 
-        btnEnregistrer.addActionListener(e -> {
-            String nom = nomField.getText();
-            String prenom = prenomField.getText();
-            String email = emailField.getText();
-            String mdp = new String(mdpField.getPassword());
-            String date = dateField.getText();
-            String typeMembre = getSelectedButtonText(typeGroup);
-            String role = getSelectedButtonText(roleGroup);
-
-            if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty() || mdp.isEmpty() || date.isEmpty() || typeMembre == null || role == null) {
-                message.setForeground(Color.RED);
-                message.setText("Veuillez remplir tous les champs.");
-                return;
-            }
-
+        btn.addActionListener(e -> {
             UtilisateurControleur controleur = new UtilisateurControleur();
-            if (controleur.trouverParEmail(email) != null) {
-                message.setForeground(Color.RED);
-                message.setText("Cet email est déjà utilisé.");
-                return;
-            }
-
-            Utilisateur u = new Utilisateur(0, nom, prenom, email, mdp, date, typeMembre, role);
+            Utilisateur u = new Utilisateur(
+                    0,
+                    nomField.getText(),
+                    prenomField.getText(),
+                    emailField.getText(),
+                    new String(mdpField.getPassword()),
+                    dateField.getText(),
+                    "CLIENT", // à adapter selon ton implémentation
+                    "AUCUN"
+            );
             controleur.ajouterUtilisateur(u);
             message.setForeground(new Color(0, 128, 0));
-            message.setText("Compte créé avec succès !");
+            message.setText("✅ Utilisateur enregistré avec succès !");
         });
 
         btnRetour.addActionListener(e -> {
@@ -112,7 +94,6 @@ public class PageEnregistrementSwing extends JFrame {
         setVisible(true);
     }
 
-
     private void addField(JPanel panel, GridBagConstraints gbc, String label, JComponent field, int y) {
         JLabel jLabel = new JLabel(label + " :");
         jLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -120,8 +101,8 @@ public class PageEnregistrementSwing extends JFrame {
         gbc.gridy = y;
         panel.add(jLabel, gbc);
 
-        gbc.gridx = 1;
         field.setPreferredSize(new Dimension(250, 30));
+        gbc.gridx = 1;
         panel.add(field, gbc);
     }
 
@@ -137,37 +118,5 @@ public class PageEnregistrementSwing extends JFrame {
         button.setFont(new Font("Segoe UI", Font.BOLD, 14));
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }
-
-    private ButtonGroup currentRadioGroup;
-    private void addRadioGroup(JPanel panel, GridBagConstraints gbc, String label, String[] options, int y) {
-        JLabel jLabel = new JLabel(label + " :");
-        jLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        gbc.gridx = 0;
-        gbc.gridy = y;
-        panel.add(jLabel, gbc);
-
-        JPanel optionPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        optionPanel.setBackground(Color.WHITE);
-        ButtonGroup group = new ButtonGroup();
-
-        for (String option : options) {
-            JRadioButton btn = new JRadioButton(option);
-            btn.setBackground(Color.WHITE);
-            btn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-            group.add(btn);
-            optionPanel.add(btn);
-        }
-
-        currentRadioGroup = group;
-        gbc.gridx = 1;
-        panel.add(optionPanel, gbc);
-    }
-
-    private String getSelectedButtonText(ButtonGroup group) {
-        for (AbstractButton button : java.util.Collections.list(group.getElements())) {
-            if (button.isSelected()) return button.getText();
-        }
-        return null;
     }
 }
