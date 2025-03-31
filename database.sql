@@ -30,7 +30,7 @@ CREATE TABLE Reservation (
     id_attraction INT,
     date_reservation DATE NOT NULL,
     nb_personnes INT NOT NULL,
-    idReduction INT references ReductionUtilisateur(id_reduction_utilisateur),
+    id_reduction_utilisateur INT references ReductionUtilisateur(id_reduction_utilisateur),
     prix_total DECIMAL(8,2) NOT NULL,
     statut ENUM('CONFIRMEE', 'ANNULEE'),
     FOREIGN KEY (id) REFERENCES Utilisateur(id),
@@ -40,15 +40,24 @@ CREATE TABLE Reservation (
 -- Table ReductionUtilisateur (réduction personnalisée par user)
 CREATE TABLE ReductionUtilisateur (
     id_reduction_utilisateur INT AUTO_INCREMENT PRIMARY KEY,
-    id INT,
     nom VARCHAR(100) NOT NULL,
     pourcentage DECIMAL(4,2) NOT NULL,
     membre_necessaire BOOLEAN,
-    FOREIGN KEY (id) REFERENCES Utilisateur(id)
+    ageMin DATE;
+    ageMax DATE,
+    dateDeb DATE,
+    dateFin DATE
 );
-/*//////////////////////////////////////////////////*/
+/* ////////////////////////////////////////////////// */
 /*À mettre si vous n'avez pas la dernière version !!*/
-/*alter table Reservation drop reduction_appliquee; alter table Reservation add idReduction INT references ReductionUtilisateur(id_reduction_utilisateur);*/
+/*alter table Reservation drop reduction_appliquee; alter table Reservation add id_reduction_utilisateur INT references ReductionUtilisateur(id_reduction_utilisateur);
+alter table ReductionUtilisateur drop id;
+alter table ReductionUtilisateur add ageMin DATE;
+alter table ReductionUtilisateur add ageMax DATE;
+alter table ReductionUtilisateur add dateDeb DATE;
+alter table ReductionUtilisateur add dateFin DATE;*/
+
+
 /*//////////////////////////////////////////////////*/
 
 Modifs à faire:
