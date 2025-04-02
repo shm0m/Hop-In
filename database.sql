@@ -3,7 +3,7 @@ CREATE DATABASE IF NOT EXISTS hop_in;
 USE hop_in;
 
 -- Table Utilisateur
-CREATE TABLE Utilisateur (
+CREATE TABLE utilisateur (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(50),
     prenom VARCHAR(50),
@@ -15,7 +15,7 @@ CREATE TABLE Utilisateur (
 );
 
 -- Table Attraction (avec capacite_max pour gérer le quota)
-CREATE TABLE Attraction (
+CREATE TABLE attraction (
     id_attraction INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     description TEXT,
@@ -23,22 +23,9 @@ CREATE TABLE Attraction (
     capacite_max INT NOT NULL DEFAULT 30
 );
 
--- Table Reservation
-CREATE TABLE Reservation (
-    id_reservation INT AUTO_INCREMENT PRIMARY KEY,
-    id INT,
-    id_attraction INT,
-    date_reservation DATE NOT NULL,
-    nb_personnes INT NOT NULL,
-    id_reduction_utilisateur INT references ReductionUtilisateur(id_reduction_utilisateur),
-    prix_total DECIMAL(8,2) NOT NULL,
-    statut ENUM('CONFIRMEE', 'ANNULEE'),
-    FOREIGN KEY (id) REFERENCES Utilisateur(id),
-    FOREIGN KEY (id_attraction) REFERENCES Attraction(id_attraction)
-);
 
 -- Table ReductionUtilisateur (réduction personnalisée par user)
-CREATE TABLE ReductionUtilisateur (
+CREATE TABLE reductionUtilisateur (
     id_reduction_utilisateur INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     pourcentage DECIMAL(4,2) NOT NULL,
@@ -49,7 +36,22 @@ CREATE TABLE ReductionUtilisateur (
     dateFin DATE
 );
 
-INSERT INTO Attraction (nom, description, prix, capacite_max) VALUES
+-- Table Reservation
+CREATE TABLE reservation (
+    id_reservation INT AUTO_INCREMENT PRIMARY KEY,
+    id INT,
+    id_attraction INT,
+    date_reservation DATE NOT NULL,
+    nb_personnes INT NOT NULL,
+    id_reduction_utilisateur INT
+    prix_total DECIMAL(8,2) NOT NULL,
+    statut ENUM('CONFIRMEE', 'ANNULEE'),
+    FOREIGN KEY (id) REFERENCES utilisateur(id),
+    FOREIGN KEY (id_attraction) REFERENCES attraction(id_attraction),
+    FOREIGN KEY (id_reduction_utilisateur) REFERENCES reductionUtilisateur(id_reduction_utilisateur)
+);
+
+INSERT INTO attraction (nom, description, prix, capacite_max) VALUES
 ('Laser Game', 'Affrontez vos amis dans un labyrinthe lumineux avec des pistolets laser.', 12.00, 25),
 ('Exploration', 'Parcours interactif pour découvrir la jungle et les animaux exotiques.', 10.50, 30),
 ('Sculpture Citrouille', 'Atelier créatif d’Halloween : sculptez votre propre citrouille !', 8.00, 20),
