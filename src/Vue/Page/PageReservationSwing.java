@@ -7,59 +7,54 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 
 public class PageReservationSwing extends JFrame {
-
     private JPanel calendarPanel;
     private JLabel moisLabel;
     private LocalDate currentMonth;
 
+    private final Color COLOR_HAUTE = new Color(102, 204, 102);
+    private final Color COLOR_BASSE = new Color(102, 178, 255);
+    private final Color COLOR_NOCTURNE = new Color(186, 85, 211);
+    private final Color COLOR_SCULPTURE = new Color(255, 165, 0);
+    private final Color COLOR_NORMAL = new Color(224, 224, 224);
+
     public PageReservationSwing() {
-        setTitle("Réservations - Hop'In");
+        setTitle("📅 Réservation Hop'In");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null);
-        setBackground(new Color(250, 250, 255));
+        setLayout(new BorderLayout());
 
         currentMonth = LocalDate.now().withDayOfMonth(1);
-        setLayout(new BorderLayout(20, 20));
-        JPanel topPanel = new JPanel(new BorderLayout());
-        topPanel.setBackground(new Color(245, 245, 255));
-        topPanel.setBorder(BorderFactory.createEmptyBorder(20, 30, 10, 30));
 
-        JButton prevButton = new JButton("⬅ Mois précédent");
-        JButton nextButton = new JButton("Mois suivant ➡");
-        styliseNavButton(prevButton);
-        styliseNavButton(nextButton);
+        JPanel topPanel = new JPanel(new BorderLayout());
+        JButton prev = new JButton("⬅");
+        JButton next = new JButton("➡");
 
         moisLabel = new JLabel("", SwingConstants.CENTER);
-        moisLabel.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        moisLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
 
-        topPanel.add(prevButton, BorderLayout.WEST);
+        topPanel.add(prev, BorderLayout.WEST);
         topPanel.add(moisLabel, BorderLayout.CENTER);
-        topPanel.add(nextButton, BorderLayout.EAST);
+        topPanel.add(next, BorderLayout.EAST);
         add(topPanel, BorderLayout.NORTH);
 
-        calendarPanel = new JPanel(new GridLayout(0, 7, 10, 10));
-        calendarPanel.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 40));
-        calendarPanel.setBackground(Color.WHITE);
+        calendarPanel = new JPanel(new GridLayout(0, 7, 5, 5));
+        calendarPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         add(calendarPanel, BorderLayout.CENTER);
 
-        JPanel legendPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 30, 10));
-        legendPanel.setBackground(new Color(245, 245, 245));
-        legendPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        JPanel legend = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        legend.add(createLegend(COLOR_HAUTE, "Haute saison"));
+        legend.add(createLegend(COLOR_BASSE, "Basse saison"));
+        legend.add(createLegend(COLOR_NOCTURNE, "Nocturne Halloween"));
+        legend.add(createLegend(COLOR_SCULPTURE, "Sculpture citrouille"));
+        legend.add(createLegend(COLOR_NORMAL, "Normal"));
+        add(legend, BorderLayout.SOUTH);
 
-        legendPanel.add(createLegend(new Color(144, 238, 144), "Haute saison"));         // vert pastel
-        legendPanel.add(createLegend(new Color(173, 216, 230), "Basse saison"));         // bleu ciel doux
-        legendPanel.add(createLegend(new Color(186, 85, 211), "Nocturne Halloween"));    // violet profond
-        legendPanel.add(createLegend(new Color(255, 200, 120), "Sculpture Citrouille")); // orange doux
-        legendPanel.add(createLegend(new Color(220, 220, 220), "Normal"));               // gris clair
-
-        add(legendPanel, BorderLayout.SOUTH);
-        prevButton.addActionListener(e -> {
+        prev.addActionListener(e -> {
             currentMonth = currentMonth.minusMonths(1);
             refreshCalendar();
         });
 
-        nextButton.addActionListener(e -> {
+        next.addActionListener(e -> {
             currentMonth = currentMonth.plusMonths(1);
             refreshCalendar();
         });
@@ -68,22 +63,11 @@ public class PageReservationSwing extends JFrame {
         setVisible(true);
     }
 
-    private void styliseNavButton(JButton btn) {
-        btn.setBackground(new Color(200, 230, 255));
-        btn.setForeground(Color.DARK_GRAY);
-        btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createLineBorder(new Color(150, 200, 240), 1));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-    }
-
-    private JPanel createLegend(Color color, String label) {
+    private JPanel createLegend(Color c, String label) {
         JPanel p = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        p.setBackground(new Color(245, 245, 245));
         JLabel box = new JLabel("■");
-        box.setForeground(color);
+        box.setForeground(c);
         JLabel txt = new JLabel(" " + label);
-        txt.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         p.add(box);
         p.add(txt);
         return p;
@@ -91,40 +75,46 @@ public class PageReservationSwing extends JFrame {
 
     private void refreshCalendar() {
         calendarPanel.removeAll();
-        moisLabel.setText(currentMonth.getMonth().getDisplayName(TextStyle.FULL, Locale.FRENCH).toUpperCase() + " " + currentMonth.getYear());
+        moisLabel.setText(currentMonth.getMonth().getDisplayName(TextStyle.FULL, Locale.FRENCH) + " " + currentMonth.getYear());
 
         String[] jours = {"Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"};
-        for (String jour : jours) {
-            JLabel lbl = new JLabel(jour, SwingConstants.CENTER);
+        for (String j : jours) {
+            JLabel lbl = new JLabel(j, SwingConstants.CENTER);
             lbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
-            lbl.setOpaque(true);
-            lbl.setBackground(new Color(230, 240, 255));
-            lbl.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
             calendarPanel.add(lbl);
         }
 
-        LocalDate firstDay = currentMonth;
-        int firstDayOfWeek = firstDay.getDayOfWeek().getValue();
-        int daysInMonth = firstDay.lengthOfMonth();
+        LocalDate first = currentMonth;
+        int firstDay = first.getDayOfWeek().getValue();
+        int total = first.lengthOfMonth();
 
-        for (int i = 1; i < firstDayOfWeek; i++) {
-            calendarPanel.add(new JLabel(""));
-        }
+        for (int i = 1; i < firstDay; i++) calendarPanel.add(new JLabel(""));
 
-        for (int day = 1; day <= daysInMonth; day++) {
-            LocalDate date = currentMonth.withDayOfMonth(day);
-            JButton btn = new JButton(String.valueOf(day));
+        for (int d = 1; d <= total; d++) {
+            LocalDate date = currentMonth.withDayOfMonth(d);
+            JButton btn = new JButton(String.valueOf(d));
             btn.setOpaque(true);
+            btn.setBorderPainted(false);
             btn.setBackground(getColorForDate(date));
-            btn.setBorder(BorderFactory.createLineBorder(Color.DARK_GRAY, 1));
-            btn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-            btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            btn.setToolTipText(date.toString() + " - " + getSaison(date));
+            btn.setToolTipText(getSaison(date));
 
-            btn.addActionListener(e -> JOptionPane.showMessageDialog(this,
-                    "Date sélectionnée : " + date +
-                            "\n Saison : " + getSaison(date),
-                    "Infos Réservation", JOptionPane.INFORMATION_MESSAGE));
+            btn.addActionListener(e -> {
+                String[] attractions = {"Laser Game", "Exploration", "Sculpture Citrouille", "Nocturne Halloween"};
+                String choix = (String) JOptionPane.showInputDialog(
+                        this,
+                        "Choisissez une attraction :",
+                        "Attraction",
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        attractions,
+                        attractions[0]
+                );
+
+                if (choix != null) {
+                    new VueHoraireAttraction(choix, date); // On ouvre la page avec la date et l’attraction choisies
+                }
+            });
+
 
             calendarPanel.add(btn);
         }
@@ -135,21 +125,21 @@ public class PageReservationSwing extends JFrame {
 
     private Color getColorForDate(LocalDate date) {
         return switch (getSaison(date)) {
-            case "Haute saison" -> new Color(144, 238, 144);
-            case "Basse saison" -> new Color(173, 216, 230);
-            case "Nocturne Halloween" -> new Color(186, 85, 211);
-            case "Sculpture Citrouille" -> new Color(255, 200, 120);
-            default -> new Color(220, 220, 220);
+            case "Haute saison" -> COLOR_HAUTE;
+            case "Basse saison" -> COLOR_BASSE;
+            case "Nocturne Halloween" -> COLOR_NOCTURNE;
+            case "Sculpture citrouille" -> COLOR_SCULPTURE;
+            default -> COLOR_NORMAL;
         };
     }
 
-    private String getSaison(LocalDate date) {
-        int d = date.getDayOfMonth();
-        int m = date.getMonthValue();
-        if (m == 10 && d >= 25) return "Nocturne Halloween";
-        if (m == 10 && d >= 19 && d <= 24) return "Sculpture Citrouille";
-        if (m >= 4 && m <= 8) return "Haute saison";
-        if (m == 10 || m == 9) return "Basse saison";
+    private String getSaison(LocalDate d) {
+        int day = d.getDayOfMonth(), month = d.getMonthValue();
+
+        if (month == 10 && day >= 25) return "Nocturne Halloween";
+        if (month == 10 && day >= 19 && day <= 24) return "Sculpture citrouille";
+        if (month >= 4 && month <= 8) return "Haute saison";
+        if (month == 9 || month == 10) return "Basse saison";
         return "Normal";
     }
 }
