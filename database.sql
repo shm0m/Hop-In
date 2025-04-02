@@ -43,7 +43,7 @@ CREATE TABLE reservation (
     id_attraction INT,
     date_reservation DATE NOT NULL,
     nb_personnes INT NOT NULL,
-    id_reduction_utilisateur INT
+    id_reduction_utilisateur INT,
     prix_total DECIMAL(8,2) NOT NULL,
     statut ENUM('CONFIRMEE', 'ANNULEE'),
     FOREIGN KEY (id) REFERENCES utilisateur(id),
