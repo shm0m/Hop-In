@@ -3,7 +3,10 @@ package DAO;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import Modele.Client;
 import Modele.Utilisateur;
+import Modele.Admin;
 
 public class UtilisateurDAO {
     private GestionConnexion gerant;
@@ -20,7 +23,6 @@ public class UtilisateurDAO {
             stmt.setString(2, u.getPrenom());
             stmt.setString(3, u.getEmail());
             stmt.setString(4, u.getMotDePasse());
-            stmt.setString(5, u.getTypeMembre());
             stmt.setString(6, u.getRole());
             stmt.executeUpdate();
         } catch (SQLException e) {
@@ -37,15 +39,13 @@ public class UtilisateurDAO {
             String role=rs.getString("role");
             if (rs.next()) {
                 if(role.equals("CLIENT")){
-                    return new Utilisateur(
+                    return new Client(
                             rs.getInt("id"),
                             rs.getString("nom"),
                             rs.getString("prenom"),
                             rs.getString("email"),
                             rs.getString("mot_de_passe"),
-                            rs.getString("date_naissance"),
-                            rs.getString("type_membre"),
-                            role
+                            rs.getString("date_naissance")
                     );
                 }
                 else{
@@ -54,10 +54,7 @@ public class UtilisateurDAO {
                             rs.getString("nom"),
                             rs.getString("prenom"),
                             rs.getString("email"),
-                            rs.getString("mot_de_passe"),
-                            rs.getString("date_naissance"),
-                            rs.getString("type_membre"),
-                            role
+                            rs.getString("mot_de_passe")
                     );
                 }
             }
@@ -69,17 +66,15 @@ public class UtilisateurDAO {
 
     public List<Utilisateur> getAll() {
         List<Utilisateur> utilisateurs = new ArrayList<>();
-        String sql = "SELECT * FROM Utilisateur";
+        String sql = "SELECT * FROM Utilisateur WHERE role='CLIENT'; ";
             try (Connection conn = this.gerant.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                Utilisateur u = new Utilisateur(
+                Utilisateur u = new Client(
                         rs.getInt("id"),
                         rs.getString("nom"),
                         rs.getString("prenom"),
                         rs.getString("email"),
                         rs.getString("mot_de_passe"),
-                        rs.getString("type_membre"),
-                        rs.getString("role"),
                         rs.getString("date_naissance")
                 );
                 utilisateurs.add(u);

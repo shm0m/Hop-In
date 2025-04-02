@@ -3,36 +3,24 @@ package Modele;
 import java.time.LocalDate;
 import java.time.Period;
 
-public class Utilisateur {
-    private int id;
-    private String nom;
-    private String prenom;
-    private String email;
-    private String motDePasse;
-    private String typeMembre;
-    private String role;
-    private String dateNaissance;
+public abstract class Utilisateur {
+    protected int id;
+    protected String nom;
+    protected String prenom;
+    protected String email;
+    protected String motDePasse;
 
-    public Utilisateur(int id, String nom, String prenom, String email, String motDePasse, String dateNaissance, String typeMembre, String role){
+    /*public Utilisateur(int id, String nom, String prenom, String email, String motDePasse, String role){
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.motDePasse = motDePasse;
         this.dateNaissance = dateNaissance;
-        this.typeMembre = typeMembre;
-        this.role = role;
     }
-
     public Utilisateur(){
 
-    }
-
-    public int getAge() {
-        LocalDate birth = LocalDate.parse(this.dateNaissance);
-        return Period.between(birth, LocalDate.now()).getYears();
-    }
-
+    }*/
     public int getId() {
         return id;
     }
@@ -73,27 +61,7 @@ public class Utilisateur {
         this.motDePasse = motDePasse;
     }
 
-    public String getTypeMembre() {
-        return typeMembre;
-    }
-    public void setTypeMembre(String typeMembre) {
-        this.typeMembre = typeMembre;
-    }
-
     public String getRole() {
-        return role;
+        return("Utilisateur");
     }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    public String getDateNaissance() {
-        return dateNaissance;
-    }
-
-    public void setDateNaissance(String dateNaissance) {
-        this.dateNaissance = dateNaissance;
-    }
-
 }

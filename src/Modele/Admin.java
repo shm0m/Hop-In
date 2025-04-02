@@ -7,8 +7,16 @@ import DAO.UtilisateurDAO.*;
 import java.sql.*;
 
 public class Admin extends Utilisateur {
-    public Admin(int id, String nom, String prenom, String email, String motDePasse, String typeMembre, String role) {
-        super();
+    public Admin(int id, String nom, String prenom, String email, String motDePasse) {
+        this.id = id;
+        this.nom = nom;
+        this.prenom = prenom;
+        this.email = email;
+        this.motDePasse = motDePasse;
+    }
+    @Override
+    public String getRole(){
+        return("Admin");
     }
 
 
