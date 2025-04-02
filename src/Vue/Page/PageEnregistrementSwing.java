@@ -48,6 +48,46 @@ public class PageEnregistrementSwing extends JFrame {
         addField(panel, gbc, "Mot de passe", mdpField, 4);
         addField(panel, gbc, "Date de naissance (AAAA-MM-JJ)", dateField, 5);
 
+        // Boutons radio Type de membre
+        JLabel membreLabel = new JLabel("Type de membre :");
+        membreLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        gbc.gridx = 0; gbc.gridy = 6;
+        panel.add(membreLabel, gbc);
+
+        JPanel membrePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        ButtonGroup groupeMembre = new ButtonGroup();
+        String[] membres = {"AUCUN", "REGULIER", "SENIOR", "ENFANT"};
+        for (String m : membres) {
+            JRadioButton rb = new JRadioButton(m);
+            rb.setActionCommand(m);
+            rb.setBackground(Color.WHITE);
+            rb.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            groupeMembre.add(rb);
+            membrePanel.add(rb);
+        }
+        gbc.gridx = 1;
+        panel.add(membrePanel, gbc);
+
+        // Boutons radio Rôle
+        JLabel roleLabel = new JLabel("Rôle :");
+        roleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        gbc.gridx = 0; gbc.gridy = 7;
+        panel.add(roleLabel, gbc);
+
+        JPanel rolePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        ButtonGroup groupeRole = new ButtonGroup();
+        String[] roles = {"CLIENT", "ADMIN"};
+        for (String r : roles) {
+            JRadioButton rb = new JRadioButton(r);
+            rb.setActionCommand(r);
+            rb.setBackground(Color.WHITE);
+            rb.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            groupeRole.add(rb);
+            rolePanel.add(rb);
+        }
+        gbc.gridx = 1;
+        panel.add(rolePanel, gbc);
+
         JLabel message = new JLabel(" ");
         message.setHorizontalAlignment(SwingConstants.CENTER);
         message.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -67,6 +107,15 @@ public class PageEnregistrementSwing extends JFrame {
         panel.add(btnRetour, gbc);
 
         btn.addActionListener(e -> {
+            String typeMembre = (groupeMembre.getSelection() != null) ? groupeMembre.getSelection().getActionCommand() : null;
+            String role = (groupeRole.getSelection() != null) ? groupeRole.getSelection().getActionCommand() : null;
+
+            if (typeMembre == null || role == null) {
+                message.setForeground(Color.RED);
+                message.setText("Veuillez sélectionner un type de membre et un rôle.");
+                return;
+            }
+
             UtilisateurControleur controleur = new UtilisateurControleur();
             Utilisateur u = new Utilisateur(
                     0,
@@ -75,12 +124,12 @@ public class PageEnregistrementSwing extends JFrame {
                     emailField.getText(),
                     new String(mdpField.getPassword()),
                     dateField.getText(),
-                    "CLIENT", // à adapter selon ton implémentation
-                    "AUCUN"
+                    typeMembre,
+                    role
             );
             controleur.ajouterUtilisateur(u);
             message.setForeground(new Color(0, 128, 0));
-            message.setText("✅ Utilisateur enregistré avec succès !");
+            message.setText("Utilisateur enregistré avec succès !");
         });
 
         btnRetour.addActionListener(e -> {
