@@ -13,11 +13,11 @@ public class ReservationControleur {
 
     public double calculerReduction(Utilisateur u) {
         int age = getAgeFromString(u.getDateNaissance());
-        String type = u.getTypeMembre();
+        /*String type = u.getTypeMembre();*/
 
         if (age < 12) return 30.0;
         if (age >= 60) return 20.0;
-        if ("REGULIER".equalsIgnoreCase(type)) return 10.0;
+        /*if ("REGULIER".equalsIgnoreCase(type)) return 10.0;*/
         return 0.0;
     }
 

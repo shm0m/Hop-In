@@ -64,4 +64,8 @@ public abstract class Utilisateur {
     public String getRole() {
         return("Utilisateur");
     }
+
+    public String getDateNaissance(){return("00-00-2000");}
+
+    /*public String getTypeMembre(){return("Indéfini");}*/
 }

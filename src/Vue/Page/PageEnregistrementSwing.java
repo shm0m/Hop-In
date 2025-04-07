@@ -2,6 +2,8 @@ package Vue.Page;
 
 import Controleur.UtilisateurControleur;
 import Modele.Utilisateur;
+import Modele.Client;
+import Modele.Admin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -117,15 +119,13 @@ public class PageEnregistrementSwing extends JFrame {
             }
 
             UtilisateurControleur controleur = new UtilisateurControleur();
-            Utilisateur u = new Utilisateur(
+            Utilisateur u = new Client(
                     0,
                     nomField.getText(),
                     prenomField.getText(),
                     emailField.getText(),
                     new String(mdpField.getPassword()),
-                    dateField.getText(),
-                    typeMembre,
-                    role
+                    dateField.getText()
             );
             controleur.ajouterUtilisateur(u);
             message.setForeground(new Color(0, 128, 0));
