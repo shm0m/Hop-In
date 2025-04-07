@@ -40,8 +40,8 @@ public class UtilisateurDAO {
             stmt.setString(2, mdp);
             ResultSet rs = stmt.executeQuery();
             System.out.println(stmt);
-            String role=rs.getString("role");
             if (rs.next()) {
+                String role=rs.getString("role");
                 if(role.equals("CLIENT")){
                     return new Client(
                             rs.getInt("id"),
