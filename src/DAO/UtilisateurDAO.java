@@ -54,7 +54,6 @@ public class UtilisateurDAO {
                 }
                 else{
                     return new Admin(
-                            rs.getInt("id"),
                             rs.getString("nom"),
                             rs.getString("prenom"),
                             rs.getString("email"),

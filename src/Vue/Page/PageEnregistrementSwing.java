@@ -22,7 +22,7 @@ public class PageEnregistrementSwing extends JFrame {
         gbc.insets = new Insets(12, 12, 12, 12);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel title = new JLabel("Créer un compte Hop'In", SwingConstants.CENTER);
+        JLabel title = new JLabel("Créer un compte Hop'In",SwingConstants.CENTER );
         title.setFont(new Font("Verdana", Font.BOLD, 26));
         title.setForeground(new Color(255, 105, 180));
 
@@ -79,6 +79,8 @@ public class PageEnregistrementSwing extends JFrame {
         JPanel rolePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         ButtonGroup groupeRole = new ButtonGroup();
         String[] roles = {"CLIENT", "ADMIN"};
+        java.util.List<JRadioButton> boutonRoles;
+
         for (String r : roles) {
             JRadioButton rb = new JRadioButton(r);
             rb.setActionCommand(r);
@@ -117,19 +119,35 @@ public class PageEnregistrementSwing extends JFrame {
                 message.setText("Veuillez sélectionner un type de membre et un rôle.");
                 return;
             }
+            if (role=="ADMIN"){
+                VerifAdmin verif=new VerifAdmin();
+                if(verif.getValide()){
+                    Utilisateur u=new Admin(
+                        nomField.getText(),
+                        prenomField.getText(),
+                        emailField.getText(),
+                        new String(mdpField.getPassword())
+                    );
 
-            UtilisateurControleur controleur = new UtilisateurControleur();
-            Utilisateur u = new Client(
-                    0,
-                    nomField.getText(),
-                    prenomField.getText(),
-                    emailField.getText(),
-                    new String(mdpField.getPassword()),
-                    dateField.getText()
-            );
-            controleur.ajouterUtilisateur(u);
-            message.setForeground(new Color(0, 128, 0));
-            message.setText("Utilisateur enregistré avec succès !");
+                    UtilisateurControleur controleur = new UtilisateurControleur();
+                    controleur.ajouterUtilisateur(u);
+                    message.setForeground(new Color(0, 128, 0));
+                    message.setText("Utilisateur enregistré avec succès !");
+                }
+            }else {
+                Utilisateur u = new Client(
+                        0,
+                        nomField.getText(),
+                        prenomField.getText(),
+                        emailField.getText(),
+                        new String(mdpField.getPassword()),
+                        dateField.getText()
+                );
+                UtilisateurControleur controleur = new UtilisateurControleur();
+                controleur.ajouterUtilisateur(u);
+                message.setForeground(new Color(0, 128, 0));
+                message.setText("Utilisateur enregistré avec succès !");
+            }
         });
 
         btnRetour.addActionListener(e -> {
