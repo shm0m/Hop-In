@@ -20,18 +20,22 @@ public class VueHoraireAttraction extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JLabel titre = new JLabel("Réservation - " + date + " | " + attraction, SwingConstants.CENTER);
-        titre.setFont(new Font("Segoe UI", Font.BOLD, 20));
-        titre.setBorder(BorderFactory.createEmptyBorder(20, 0, 10, 0));
+        // Bandeau titre
+        JLabel titre = new JLabel("📅 Réservation - " + date + " | " + attraction, SwingConstants.CENTER);
+        titre.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        titre.setOpaque(true);
+        titre.setBackground(new Color(240, 240, 240));
+        titre.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         add(titre, BorderLayout.NORTH);
 
+        // Panel principal
         JPanel mainPanel = new JPanel(new BorderLayout());
 
-        // Partie gauche : créneaux
-        JPanel panelGauche = new JPanel();
-        panelGauche.setLayout(new BoxLayout(panelGauche, BoxLayout.Y_AXIS));
-        panelGauche.setBackground(Color.WHITE);
-        panelGauche.setBorder(BorderFactory.createEmptyBorder(20, 40, 20, 20));
+        // Tableau de créneaux (style Pronote)
+        JPanel planningPanel = new JPanel();
+        planningPanel.setLayout(new GridLayout(0, 1, 5, 5));
+        planningPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 30));
+        planningPanel.setBackground(new Color(250, 250, 250));
 
         List<String> creneaux = getCreneauxSelonSaison(date);
         Map<String, Integer> reservations = getReservationsSimulees(creneaux);
@@ -39,38 +43,26 @@ public class VueHoraireAttraction extends JFrame {
         for (String creneau : creneaux) {
             int inscrits = reservations.getOrDefault(creneau, 0);
 
-            JPanel bloc = new JPanel(new BorderLayout());
-            bloc.setMaximumSize(new Dimension(500, 50));
-            bloc.setBackground(Color.WHITE);
-            bloc.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createLineBorder(new Color(200, 200, 200)),
-                    BorderFactory.createEmptyBorder(8, 16, 8, 16)
-            ));
+            JPanel ligne = new JPanel(new BorderLayout());
+            ligne.setPreferredSize(new Dimension(700, 50));
+            ligne.setBackground(Color.WHITE);
+            ligne.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
 
-            JLabel heureLabel = new JLabel(creneau);
-            heureLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
-            bloc.add(heureLabel, BorderLayout.WEST);
+            JLabel heure = new JLabel("🕒 " + creneau, SwingConstants.LEFT);
+            heure.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            heure.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
-            JLabel dispoLabel = new JLabel(inscrits + "/" + PLACES_MAX + " inscrits");
-            dispoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
-            dispoLabel.setForeground(inscrits >= PLACES_MAX ? Color.RED : new Color(34, 139, 34));
-            bloc.add(dispoLabel, BorderLayout.EAST);
+            JLabel statut = new JLabel(inscrits + "/" + PLACES_MAX + " inscrits", SwingConstants.RIGHT);
+            statut.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            statut.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
+            statut.setForeground(inscrits >= PLACES_MAX ? Color.RED : new Color(50, 150, 50));
 
-            bloc.setCursor(new Cursor(Cursor.HAND_CURSOR));
-            bloc.setBackground(new Color(245, 250, 255));
+            ligne.add(heure, BorderLayout.WEST);
+            ligne.add(statut, BorderLayout.EAST);
 
-            bloc.addMouseListener(new java.awt.event.MouseAdapter() {
-                @Override
-                public void mouseEntered(java.awt.event.MouseEvent e) {
-                    bloc.setBackground(new Color(230, 244, 255));
-                }
+            ligne.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-                @Override
-                public void mouseExited(java.awt.event.MouseEvent e) {
-                    bloc.setBackground(new Color(245, 250, 255));
-                }
-
-                @Override
+            ligne.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     if (inscrits < PLACES_MAX) {
                         JOptionPane.showMessageDialog(null,
@@ -78,53 +70,50 @@ public class VueHoraireAttraction extends JFrame {
                                 "Créneau sélectionné", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(null,
-                                "Ce créneau est déjà complet !", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                "❌ Ce créneau est déjà complet !",
+                                "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             });
 
-            panelGauche.add(bloc);
-            panelGauche.add(Box.createVerticalStrut(10));
+            planningPanel.add(ligne);
         }
 
-        JScrollPane scrollGauche = new JScrollPane(panelGauche);
-        scrollGauche.setBorder(null);
-        scrollGauche.getVerticalScrollBar().setUnitIncrement(16);
-        mainPanel.add(scrollGauche, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(planningPanel);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(14);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Partie droite : description
-        JPanel panelDroite = new JPanel();
-        panelDroite.setLayout(new BoxLayout(panelDroite, BoxLayout.Y_AXIS));
-        panelDroite.setPreferredSize(new Dimension(400, 0));
-        panelDroite.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
-        panelDroite.setBackground(Color.WHITE);
+        // Bloc description à droite
+        JPanel descriptionPanel = new JPanel();
+        descriptionPanel.setPreferredSize(new Dimension(400, getHeight()));
+        descriptionPanel.setLayout(new BoxLayout(descriptionPanel, BoxLayout.Y_AXIS));
+        descriptionPanel.setBackground(Color.WHITE);
+        descriptionPanel.setBorder(BorderFactory.createEmptyBorder(30, 20, 30, 20));
 
-        JTextArea description = new JTextArea("""
-                À propos de l'attraction \"""" + attraction + """
-
-                Réservez un créneau horaire pour profiter de cette attraction dans les meilleures conditions.
-                Les créneaux sont limités en capacité (max 25 personnes).
-                Une fois complet, le créneau devient indisponible.
-
-                Bon moment garanti à Hop'In !
-                """);
-        description.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        description.setEditable(false);
+        JTextArea description = new JTextArea("📍 À propos de l’attraction \"" + attraction + "\"\n\n"
+                + "🔹 Réservez un créneau horaire pour profiter de cette attraction dans les meilleures conditions.\n"
+                + "🔹 Les créneaux sont limités en capacité (max " + PLACES_MAX + " personnes).\n"
+                + "🔹 Une fois complet, le créneau devient indisponible.\n\n"
+                + "🎢 Bon moment garanti à Hop'In !");
         description.setWrapStyleWord(true);
         description.setLineWrap(true);
+        description.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        description.setEditable(false);
         description.setBackground(Color.WHITE);
-        description.setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        panelDroite.add(description);
-        mainPanel.add(panelDroite, BorderLayout.EAST);
+        descriptionPanel.add(description);
 
+        mainPanel.add(descriptionPanel, BorderLayout.EAST);
         add(mainPanel, BorderLayout.CENTER);
+
         setVisible(true);
     }
 
     private List<String> getCreneauxSelonSaison(LocalDate date) {
         List<String> creneaux = new ArrayList<>();
-        int m = date.getMonthValue(), d = date.getDayOfMonth();
+        int m = date.getMonthValue();
+        int d = date.getDayOfMonth();
 
         if (m == 10 && d >= 25) {
             creneaux.addAll(Arrays.asList("21h - 22h", "22h - 23h", "23h - 00h", "00h - 01h"));
