@@ -120,8 +120,11 @@ public class PageEnregistrementSwing extends JFrame {
                 return;
             }
             if (role=="ADMIN"){
-                VerifAdmin verif=new VerifAdmin();
-                if(verif.getValide()){
+                System.out.println("Avant");
+                VerifAdmin verif=new VerifAdmin(null);
+                System.out.println("Après");
+                /*do{ }while(verif.getValide()==0);*/
+                if(verif.getValide()==1){
                     Utilisateur u=new Admin(
                         nomField.getText(),
                         prenomField.getText(),
@@ -133,6 +136,10 @@ public class PageEnregistrementSwing extends JFrame {
                     controleur.ajouterUtilisateur(u);
                     message.setForeground(new Color(0, 128, 0));
                     message.setText("Utilisateur enregistré avec succès !");
+                }
+                else{
+                    previousFrame.setVisible(true);
+                    dispose();
                 }
             }else {
                 Utilisateur u = new Client(
