@@ -34,6 +34,7 @@ CREATE TABLE creneau (
 CREATE TABLE reservation (
     id_reservation INT AUTO_INCREMENT PRIMARY KEY,
     id INT,  -- FK utilisateur
+    VARCHAR mailUt; -- nul quand pas unvité  
     id_attraction INT,
     id_creneau INT,
     date_reservation DATE NOT NULL,
