@@ -26,6 +26,10 @@ public class HopInGUI extends JFrame {
         label.setForeground(new Color(255, 105, 180));
         gbc.gridy = 0;
         panel.add(label, gbc);
+        
+         JButton btnInvite = createButton("Se connecter invité", new Color(100, 149, 237));
+        gbc.gridy = 3;
+        panel.add(btnInvite, gbc);
 
         JButton btnConnexion = createButton("Se connecter", new Color(126, 214, 223));
         gbc.gridy = 1;
