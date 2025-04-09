@@ -1,5 +1,7 @@
 package Vue.Page;
 import Modele.Admin;
+import Modele.Utilisateur;
+
 import javax.swing.*;
 
 

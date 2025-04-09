@@ -18,6 +18,13 @@ public class Admin extends Utilisateur{
 
         this.modifieur=new ModifAdminDAO();
     }
+    public Admin(Utilisateur u){
+        this.nom=u.getNom();
+        this.prenom = u.getPrenom();
+        this.email = u.getEmail();
+        this.motDePasse = u.getMotDePasse();
+
+    }
     @Override
     public String getRole(){
         return("Admin");

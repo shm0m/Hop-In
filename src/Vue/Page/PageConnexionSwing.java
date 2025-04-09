@@ -1,6 +1,7 @@
 package Vue.Page;
 
 import Controleur.UtilisateurControleur;
+import Modele.Admin;
 import Modele.Utilisateur;
 import javax.swing.*;
 import java.awt.*;
@@ -60,11 +61,12 @@ public class PageConnexionSwing extends JFrame {
             Utilisateur u = new UtilisateurControleur().trouverParEmailEtMotDePasse(email, mdp);
             if (u != null) {
                 dispose();
-                if (u.getRole().compareTo("ADMIN")==0){
-                    new PageConnexionSwing(u);
+                if (u.getRole().compareTo("ADMIN")==0) {
+                    new PageGestionAdmin(new Admin(u));
                 }
-                new PageReservationSwing();
-
+                else {
+                    new PageReservationSwing();
+                }
 
 
             } else {
