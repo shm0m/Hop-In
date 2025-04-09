@@ -20,17 +20,22 @@ public class VueHoraireAttraction extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JLabel titre = new JLabel("Réservation pour le " + date + " | " + attraction, SwingConstants.CENTER);
+        // Bandeau titre
+        JLabel titre = new JLabel("📅 Réservation - " + date + " | " + attraction, SwingConstants.CENTER);
         titre.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        titre.setOpaque(true);
+        titre.setBackground(new Color(240, 240, 240));
         titre.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         add(titre, BorderLayout.NORTH);
 
+        // Panel principal
         JPanel mainPanel = new JPanel(new BorderLayout());
 
-        JPanel panelGauche = new JPanel();
-        panelGauche.setLayout(new BoxLayout(panelGauche, BoxLayout.Y_AXIS));
-        panelGauche.setBackground(new Color(245, 245, 245));
-        panelGauche.setBorder(BorderFactory.createEmptyBorder(20, 30, 20, 30));
+        // Tableau de créneaux (style Pronote)
+        JPanel planningPanel = new JPanel();
+        planningPanel.setLayout(new GridLayout(0, 1, 5, 5));
+        planningPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 30));
+        planningPanel.setBackground(new Color(250, 250, 250));
 
         List<String> creneaux = getCreneauxSelonSaison(date);
         Map<String, Integer> reservations = getReservationsSimulees(creneaux);
@@ -38,22 +43,26 @@ public class VueHoraireAttraction extends JFrame {
         for (String creneau : creneaux) {
             int inscrits = reservations.getOrDefault(creneau, 0);
 
-            JPanel bloc = new JPanel(new BorderLayout());
-            bloc.setMaximumSize(new Dimension(400, 70));
-            bloc.setBackground(inscrits >= PLACES_MAX ? new Color(255, 100, 100) : new Color(204, 229, 255));
-            bloc.setBorder(BorderFactory.createLineBorder(new Color(150, 150, 150)));
+            JPanel ligne = new JPanel(new BorderLayout());
+            ligne.setPreferredSize(new Dimension(700, 50));
+            ligne.setBackground(Color.WHITE);
+            ligne.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
 
-            JLabel heure = new JLabel("🕒 " + creneau, SwingConstants.CENTER);
-            heure.setFont(new Font("Segoe UI", Font.BOLD, 16));
+            JLabel heure = new JLabel("🕒 " + creneau, SwingConstants.LEFT);
+            heure.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            heure.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
-            JLabel info = new JLabel(inscrits + "/" + PLACES_MAX + " inscrits", SwingConstants.CENTER);
-            info.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            JLabel statut = new JLabel(inscrits + "/" + PLACES_MAX + " inscrits", SwingConstants.RIGHT);
+            statut.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            statut.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
+            statut.setForeground(inscrits >= PLACES_MAX ? Color.RED : new Color(50, 150, 50));
 
-            bloc.add(heure, BorderLayout.CENTER);
-            bloc.add(info, BorderLayout.SOUTH);
-            bloc.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            ligne.add(heure, BorderLayout.WEST);
+            ligne.add(statut, BorderLayout.EAST);
 
-            bloc.addMouseListener(new java.awt.event.MouseAdapter() {
+            ligne.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+            ligne.addMouseListener(new java.awt.event.MouseAdapter() {
                 public void mouseClicked(java.awt.event.MouseEvent evt) {
                     if (inscrits < PLACES_MAX) {
                         JOptionPane.showMessageDialog(null,
@@ -61,43 +70,43 @@ public class VueHoraireAttraction extends JFrame {
                                 "Créneau sélectionné", JOptionPane.INFORMATION_MESSAGE);
                     } else {
                         JOptionPane.showMessageDialog(null,
-                                "Ce créneau est déjà complet !", "Erreur", JOptionPane.ERROR_MESSAGE);
+                                "❌ Ce créneau est déjà complet !",
+                                "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             });
 
-            panelGauche.add(bloc);
-            panelGauche.add(Box.createVerticalStrut(10));
+            planningPanel.add(ligne);
         }
 
-        JScrollPane scrollGauche = new JScrollPane(panelGauche);
-        scrollGauche.setBorder(null);
-        scrollGauche.getVerticalScrollBar().setUnitIncrement(16);
-        mainPanel.add(scrollGauche, BorderLayout.CENTER);
+        JScrollPane scrollPane = new JScrollPane(planningPanel);
+        scrollPane.setBorder(null);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(14);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        JPanel panelDroite = new JPanel();
-        panelDroite.setLayout(new BoxLayout(panelDroite, BoxLayout.Y_AXIS));
-        panelDroite.setPreferredSize(new Dimension(400, 0));
-        panelDroite.setBorder(BorderFactory.createEmptyBorder(30, 20, 30, 20));
-        panelDroite.setBackground(Color.WHITE);
+        // Bloc description à droite
+        JPanel descriptionPanel = new JPanel();
+        descriptionPanel.setPreferredSize(new Dimension(400, getHeight()));
+        descriptionPanel.setLayout(new BoxLayout(descriptionPanel, BoxLayout.Y_AXIS));
+        descriptionPanel.setBackground(Color.WHITE);
+        descriptionPanel.setBorder(BorderFactory.createEmptyBorder(30, 20, 30, 20));
 
-
-        JTextArea description = new JTextArea("Bienvenue dans l'univers de l'attraction \"" + attraction + "\" !\n\n" +
-                "Plongez dans une expérience immersive avec des créneaux adaptés à tous les âges. " +
-                "Réservez votre passage dès maintenant et profitez d’un moment inoubliable au parc Hop’In.");
-        description.setEditable(false);
+        JTextArea description = new JTextArea("📍 À propos de l’attraction \"" + attraction + "\"\n\n"
+                + "🔹 Réservez un créneau horaire pour profiter de cette attraction dans les meilleures conditions.\n"
+                + "🔹 Les créneaux sont limités en capacité (max " + PLACES_MAX + " personnes).\n"
+                + "🔹 Une fois complet, le créneau devient indisponible.\n\n"
+                + "🎢 Bon moment garanti à Hop'In !");
         description.setWrapStyleWord(true);
         description.setLineWrap(true);
         description.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        description.setEditable(false);
         description.setBackground(Color.WHITE);
-        description.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        panelDroite.add(Box.createVerticalStrut(20));
-        panelDroite.add(description);
+        descriptionPanel.add(description);
 
-        mainPanel.add(panelDroite, BorderLayout.EAST);
-
+        mainPanel.add(descriptionPanel, BorderLayout.EAST);
         add(mainPanel, BorderLayout.CENTER);
+
         setVisible(true);
     }
 
@@ -111,13 +120,9 @@ public class VueHoraireAttraction extends JFrame {
         } else if (m == 10 && d >= 19 && d <= 24) {
             creneaux.addAll(Arrays.asList("14h - 15h", "15h - 16h"));
         } else if (m >= 4 && m <= 8) {
-            for (int h = 10; h < 19; h++) {
-                creneaux.add(h + "h - " + (h + 1) + "h");
-            }
+            for (int h = 10; h < 19; h++) creneaux.add(h + "h - " + (h + 1) + "h");
         } else if (m == 9 || m == 10) {
-            for (int h = 10; h < 18; h++) {
-                creneaux.add(h + "h - " + (h + 1) + "h");
-            }
+            for (int h = 10; h < 18; h++) creneaux.add(h + "h - " + (h + 1) + "h");
         }
         return creneaux;
     }

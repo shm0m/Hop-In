@@ -2,6 +2,8 @@ package Vue.Page;
 
 import Controleur.UtilisateurControleur;
 import Modele.Utilisateur;
+import Modele.Client;
+import Modele.Admin;
 
 import javax.swing.*;
 import java.awt.*;
@@ -20,7 +22,7 @@ public class PageEnregistrementSwing extends JFrame {
         gbc.insets = new Insets(12, 12, 12, 12);
         gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        JLabel title = new JLabel("Créer un compte Hop'In", SwingConstants.CENTER);
+        JLabel title = new JLabel("Créer un compte Hop'In",SwingConstants.CENTER );
         title.setFont(new Font("Verdana", Font.BOLD, 26));
         title.setForeground(new Color(255, 105, 180));
 
@@ -77,6 +79,8 @@ public class PageEnregistrementSwing extends JFrame {
         JPanel rolePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         ButtonGroup groupeRole = new ButtonGroup();
         String[] roles = {"CLIENT", "ADMIN"};
+        java.util.List<JRadioButton> boutonRoles;
+
         for (String r : roles) {
             JRadioButton rb = new JRadioButton(r);
             rb.setActionCommand(r);
@@ -115,21 +119,42 @@ public class PageEnregistrementSwing extends JFrame {
                 message.setText("Veuillez sélectionner un type de membre et un rôle.");
                 return;
             }
+            if (role=="ADMIN"){
+                System.out.println("Avant");
+                VerifAdmin verif=new VerifAdmin(null);
+                System.out.println("Après");
+                /*do{ }while(verif.getValide()==0);*/
+                if(verif.getValide()==1){
+                    Utilisateur u=new Admin(
+                        nomField.getText(),
+                        prenomField.getText(),
+                        emailField.getText(),
+                        new String(mdpField.getPassword())
+                    );
 
-            UtilisateurControleur controleur = new UtilisateurControleur();
-            Utilisateur u = new Utilisateur(
-                    0,
-                    nomField.getText(),
-                    prenomField.getText(),
-                    emailField.getText(),
-                    new String(mdpField.getPassword()),
-                    dateField.getText(),
-                    typeMembre,
-                    role
-            );
-            controleur.ajouterUtilisateur(u);
-            message.setForeground(new Color(0, 128, 0));
-            message.setText("Utilisateur enregistré avec succès !");
+                    UtilisateurControleur controleur = new UtilisateurControleur();
+                    controleur.ajouterUtilisateur(u);
+                    message.setForeground(new Color(0, 128, 0));
+                    message.setText("Utilisateur enregistré avec succès !");
+                }
+                else{
+                    previousFrame.setVisible(true);
+                    dispose();
+                }
+            }else {
+                Utilisateur u = new Client(
+                        0,
+                        nomField.getText(),
+                        prenomField.getText(),
+                        emailField.getText(),
+                        new String(mdpField.getPassword()),
+                        dateField.getText()
+                );
+                UtilisateurControleur controleur = new UtilisateurControleur();
+                controleur.ajouterUtilisateur(u);
+                message.setForeground(new Color(0, 128, 0));
+                message.setText("Utilisateur enregistré avec succès !");
+            }
         });
 
         btnRetour.addActionListener(e -> {

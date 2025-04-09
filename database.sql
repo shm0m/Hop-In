@@ -1,9 +1,9 @@
--- Création de la base de données
+-- 🌐 Création de la base
 CREATE DATABASE IF NOT EXISTS hop_in;
 USE hop_in;
 
--- Table Utilisateur
-CREATE TABLE Utilisateur (
+-- 👤 Table Utilisateur
+CREATE TABLE utilisateur (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(50),
     prenom VARCHAR(50),
@@ -14,8 +14,8 @@ CREATE TABLE Utilisateur (
     role ENUM('CLIENT', 'ADMIN') NOT NULL DEFAULT 'CLIENT'
 );
 
--- Table Attraction (avec capacite_max pour gérer le quota)
-CREATE TABLE Attraction (
+-- 🎢 Table Attraction
+CREATE TABLE attraction (
     id_attraction INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     description TEXT,
@@ -23,41 +23,34 @@ CREATE TABLE Attraction (
     capacite_max INT NOT NULL DEFAULT 30
 );
 
--- Table Reservation
-CREATE TABLE Reservation (
+-- ⏰ Table Créneau (horaire unique)
+CREATE TABLE creneau (
+    id_creneau INT AUTO_INCREMENT PRIMARY KEY,
+    heure_debut TIME NOT NULL,
+    heure_fin TIME NOT NULL
+);
+
+-- 📅 Table Réservation
+CREATE TABLE reservation (
     id_reservation INT AUTO_INCREMENT PRIMARY KEY,
-    id INT,
+    id INT,  -- FK utilisateur
     id_attraction INT,
+    id_creneau INT,
     date_reservation DATE NOT NULL,
     nb_personnes INT NOT NULL,
-    id_reduction_utilisateur INT references ReductionUtilisateur(id_reduction_utilisateur),
-    prix_total DECIMAL(8,2) NOT NULL,
-    statut ENUM('CONFIRMEE', 'ANNULEE'),
-    FOREIGN KEY (id) REFERENCES Utilisateur(id),
-    FOREIGN KEY (id_attraction) REFERENCES Attraction(id_attraction)
+    statut ENUM('CONFIRMEE', 'ANNULEE') NOT NULL DEFAULT 'CONFIRMEE',
+    FOREIGN KEY (id) REFERENCES utilisateur(id),
+    FOREIGN KEY (id_attraction) REFERENCES attraction(id_attraction),
+    FOREIGN KEY (id_creneau) REFERENCES creneau(id_creneau)
 );
 
--- Table ReductionUtilisateur (réduction personnalisée par user)
-CREATE TABLE ReductionUtilisateur (
-    id_reduction_utilisateur INT AUTO_INCREMENT PRIMARY KEY,
-    nom VARCHAR(100) NOT NULL,
-    pourcentage DECIMAL(4,2) NOT NULL,
-    membre_necessaire BOOLEAN,
-    ageMin DATE,
-    ageMax DATE,
-    dateDeb DATE,
-    dateFin DATE
+-- 💳 Table Paiement (liée à une réservation)
+CREATE TABLE paiement (
+    id_paiement INT AUTO_INCREMENT PRIMARY KEY,
+    id_reservation INT,
+    methode ENUM('CARTE', 'PAYPAL', 'ESPECES') NOT NULL,
+    montant DECIMAL(8,2) NOT NULL,
+    statut ENUM('SUCCES', 'ECHEC') NOT NULL,
+    date_paiement DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_reservation) REFERENCES reservation(id_reservation)
 );
-
-INSERT INTO Attraction (nom, description, prix, capacite_max) VALUES
-('Laser Game', 'Affrontez vos amis dans un labyrinthe lumineux avec des pistolets laser.', 12.00, 25),
-('Exploration', 'Parcours interactif pour découvrir la jungle et les animaux exotiques.', 10.50, 30),
-('Sculpture Citrouille', 'Atelier créatif d’Halloween : sculptez votre propre citrouille !', 8.00, 20),
-('Nocturne Halloween', 'Parc ouvert en nocturne avec ambiance effrayante et shows spéciaux.', 15.00, 40),
-('Train Fantôme', 'Un parcours rempli de frissons et de surprises.', 9.00, 25),
-('Manège Aventure', 'Manège pour enfants et familles avec décors immersifs.', 7.50, 20),
-('Montagnes Russes', 'Les sensations fortes à leur apogée !', 14.00, 35),
-('Salle des Énigmes', 'Escape game immersif en groupe dans l’univers Hop’In.', 11.00, 20);
-
-
-

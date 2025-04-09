@@ -1,5 +1,7 @@
 package Vue;
 
+import Vue.Page.VerifAdmin;
+
 import javax.swing.*;
 import java.awt.*;
 
