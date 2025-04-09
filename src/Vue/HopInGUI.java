@@ -49,6 +49,13 @@ public class HopInGUI extends JFrame {
             setVisible(false);
         });
 
+        btnInvite.addActionListener(e -> {
+            new Vue.Page.PageInviteSwing(this);
+            setVisible(false); // masque la fenêtre principale
+        });
+
+
+
         add(panel);
         setVisible(true);
     }
