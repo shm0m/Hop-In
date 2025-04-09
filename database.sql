@@ -33,14 +33,14 @@ CREATE TABLE creneau (
 -- 📅 Table Réservation
 CREATE TABLE reservation (
     id_reservation INT AUTO_INCREMENT PRIMARY KEY,
-    id INT,  -- FK utilisateur
-    VARCHAR mailUt; -- nul quand pas unvité  
+    id_utilisateur INT,  -- FK utilisateur
+    mailUt VARCHAR(100), -- Email invité (nul si utilisateur connecté)
     id_attraction INT,
     id_creneau INT,
     date_reservation DATE NOT NULL,
     nb_personnes INT NOT NULL,
     statut ENUM('CONFIRMEE', 'ANNULEE') NOT NULL DEFAULT 'CONFIRMEE',
-    FOREIGN KEY (id) REFERENCES utilisateur(id),
+    FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id),
     FOREIGN KEY (id_attraction) REFERENCES attraction(id_attraction),
     FOREIGN KEY (id_creneau) REFERENCES creneau(id_creneau)
 );
