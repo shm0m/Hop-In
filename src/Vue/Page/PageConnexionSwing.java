@@ -60,7 +60,13 @@ public class PageConnexionSwing extends JFrame {
             Utilisateur u = new UtilisateurControleur().trouverParEmailEtMotDePasse(email, mdp);
             if (u != null) {
                 dispose();
+                if (u.getRole().compareTo("ADMIN")==0){
+                    new PageConnexionSwing(u);
+                }
                 new PageReservationSwing();
+
+
+
             } else {
                 message.setForeground(Color.RED);
                 message.setText("Email ou mot de passe incorrect.");
