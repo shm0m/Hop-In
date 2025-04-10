@@ -66,7 +66,7 @@ public class PageInviteSwing extends JFrame {
         btnConnect.addActionListener(e -> {
             String email = emailField.getText();
             if (email != null && !email.trim().isEmpty()) {
-                new PageReservationSwing();
+                new PageReservationSwing(null);
                 setVisible(false);
             } else {
                 message.setText("Veuillez saisir une adresse email valide.");

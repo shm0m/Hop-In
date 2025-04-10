@@ -1,5 +1,6 @@
 package Vue.Page;
 
+import Modele.Utilisateur;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ public class PageReservationSwing extends JFrame {
     private JPanel calendarPanel;
     private JLabel moisLabel;
     private LocalDate currentMonth;
+    private Utilisateur utilisateur; // ✅ utilisateur connecté
 
     private final Color COLOR_HAUTE = new Color(102, 204, 102);
     private final Color COLOR_BASSE = new Color(102, 178, 255);
@@ -17,7 +19,10 @@ public class PageReservationSwing extends JFrame {
     private final Color COLOR_SCULPTURE = new Color(255, 165, 0);
     private final Color COLOR_NORMAL = new Color(224, 224, 224);
 
-    public PageReservationSwing() {
+    // ✅ Constructeur avec utilisateur
+    public PageReservationSwing(Utilisateur utilisateur) {
+        this.utilisateur = utilisateur;
+
         setTitle("📅 Réservation Hop'In");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -111,10 +116,10 @@ public class PageReservationSwing extends JFrame {
                 );
 
                 if (choix != null) {
-                    new VueHoraireAttraction(choix, date); // On ouvre la page avec la date et l’attraction choisies
+                    int idAttraction = getAttractionId(choix);
+                    new VueHoraireAttraction(choix, idAttraction, utilisateur, date);
                 }
             });
-
 
             calendarPanel.add(btn);
         }
@@ -135,11 +140,20 @@ public class PageReservationSwing extends JFrame {
 
     private String getSaison(LocalDate d) {
         int day = d.getDayOfMonth(), month = d.getMonthValue();
-
         if (month == 10 && day >= 25) return "Nocturne Halloween";
         if (month == 10 && day >= 19 && day <= 24) return "Sculpture citrouille";
         if (month >= 4 && month <= 8) return "Haute saison";
         if (month == 9 || month == 10) return "Basse saison";
         return "Normal";
+    }
+
+    private int getAttractionId(String nom) {
+        return switch (nom) {
+            case "Laser Game" -> 1;
+            case "Exploration" -> 2;
+            case "Sculpture Citrouille" -> 3;
+            case "Nocturne Halloween" -> 4;
+            default -> 1;
+        };
     }
 }

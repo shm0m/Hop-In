@@ -1,9 +1,9 @@
--- 🌐 Création de la base
+-- Création de la base de données
 CREATE DATABASE IF NOT EXISTS hop_in;
 USE hop_in;
 
--- 👤 Table Utilisateur
-CREATE TABLE utilisateur (
+-- Table Utilisateur
+CREATE TABLE IF NOT EXISTS utilisateur (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(50),
     prenom VARCHAR(50),
@@ -14,8 +14,8 @@ CREATE TABLE utilisateur (
     role ENUM('CLIENT', 'ADMIN') NOT NULL DEFAULT 'CLIENT'
 );
 
--- 🎢 Table Attraction
-CREATE TABLE attraction (
+-- Table Attraction
+CREATE TABLE IF NOT EXISTS attraction (
     id_attraction INT AUTO_INCREMENT PRIMARY KEY,
     nom VARCHAR(100) NOT NULL,
     description TEXT,
@@ -23,30 +23,29 @@ CREATE TABLE attraction (
     capacite_max INT NOT NULL DEFAULT 30
 );
 
--- ⏰ Table Créneau (horaire unique)
-CREATE TABLE creneau (
+-- Table Creneau (pour horaires standards)
+CREATE TABLE IF NOT EXISTS creneau (
     id_creneau INT AUTO_INCREMENT PRIMARY KEY,
-    heure_debut TIME NOT NULL,
-    heure_fin TIME NOT NULL
+    heure TIME NOT NULL
 );
 
--- 📅 Table Réservation
-CREATE TABLE reservation (
+-- Table Reservation (version simplifiée)
+CREATE TABLE IF NOT EXISTS reservation (
     id_reservation INT AUTO_INCREMENT PRIMARY KEY,
-    id_utilisateur INT,  -- FK utilisateur
-    mailUt VARCHAR(100), -- Email invité (nul si utilisateur connecté)
-    id_attraction INT,
-    id_creneau INT,
+    id_utilisateur INT,         -- Référence à l'utilisateur connecté (NULL pour une réservation invité)
+    mailUt VARCHAR(100),        -- Email, pour réservation d'invité
+    id_attraction INT,          -- Référence à l'attraction réservée
     date_reservation DATE NOT NULL,
+    id_creneau INT NOT NULL,    -- Référence au créneau horaire standard (obligatoire)
     nb_personnes INT NOT NULL,
-    statut ENUM('CONFIRMEE', 'ANNULEE') NOT NULL DEFAULT 'CONFIRMEE',
+    statut ENUM('CONFIRMEE', 'ANNULEE') DEFAULT 'CONFIRMEE',
     FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id),
     FOREIGN KEY (id_attraction) REFERENCES attraction(id_attraction),
     FOREIGN KEY (id_creneau) REFERENCES creneau(id_creneau)
 );
 
--- 💳 Table Paiement (liée à une réservation)
-CREATE TABLE paiement (
+-- Table Paiement
+CREATE TABLE IF NOT EXISTS paiement (
     id_paiement INT AUTO_INCREMENT PRIMARY KEY,
     id_reservation INT,
     methode ENUM('CARTE', 'PAYPAL', 'ESPECES') NOT NULL,

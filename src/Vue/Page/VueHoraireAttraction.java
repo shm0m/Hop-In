@@ -1,26 +1,35 @@
 package Vue.Page;
 
+import Modele.Utilisateur;
+import Modele.Creneau;
+import Controleur.ReservationControleur;
+import DAO.ReservationDAO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.sql.Time;
 import java.time.LocalDate;
-import java.util.*;
-import java.util.List;
+import java.util.Map;
 
 public class VueHoraireAttraction extends JFrame {
     private final int PLACES_MAX = 25;
     private final String attraction;
     private final LocalDate date;
+    private final int id_utilisateur;
+    private final int id_attraction;
 
-    public VueHoraireAttraction(String attraction, LocalDate date) {
+    public VueHoraireAttraction(String attraction, int id_attraction, Utilisateur utilisateur, LocalDate date) {
         this.attraction = attraction;
         this.date = date;
+        this.id_attraction = id_attraction;
+        this.id_utilisateur = utilisateur != null ? utilisateur.getId() : 0;
 
         setTitle("Réserver une attraction - Hop'In");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        // Bandeau titre
         JLabel titre = new JLabel("📅 Réservation - " + date + " | " + attraction, SwingConstants.CENTER);
         titre.setFont(new Font("Segoe UI", Font.BOLD, 22));
         titre.setOpaque(true);
@@ -28,27 +37,30 @@ public class VueHoraireAttraction extends JFrame {
         titre.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         add(titre, BorderLayout.NORTH);
 
-        // Panel principal
         JPanel mainPanel = new JPanel(new BorderLayout());
 
-        // Tableau de créneaux (style Pronote)
-        JPanel planningPanel = new JPanel();
-        planningPanel.setLayout(new GridLayout(0, 1, 5, 5));
+        JPanel planningPanel = new JPanel(new GridLayout(0, 1, 5, 5));
         planningPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 30));
         planningPanel.setBackground(new Color(250, 250, 250));
 
-        List<String> creneaux = getCreneauxSelonSaison(date);
-        Map<String, Integer> reservations = getReservationsSimulees(creneaux);
+        ReservationDAO reservationDAO = new ReservationDAO();
+        Map<Integer, Time> creneauxDispo = reservationDAO.getHeuresCreneauxDepuisBase();
+        Map<Integer, Integer> reservationsMap = reservationDAO.getNbPersonnesParCreneau(id_attraction, date);
 
-        for (String creneau : creneaux) {
-            int inscrits = reservations.getOrDefault(creneau, 0);
+        for (Map.Entry<Integer, Time> entry : creneauxDispo.entrySet()) {
+            int idCreneau = entry.getKey();
+            Time heureDebut = entry.getValue();
+            int heureFin = heureDebut.toLocalTime().plusHours(1).getHour();
+            String label = heureDebut.toString().substring(0, 5) + " - " + heureFin + "h";
+
+            int inscrits = reservationsMap.getOrDefault(idCreneau, 0);
 
             JPanel ligne = new JPanel(new BorderLayout());
             ligne.setPreferredSize(new Dimension(700, 50));
             ligne.setBackground(Color.WHITE);
             ligne.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
 
-            JLabel heure = new JLabel("🕒 " + creneau, SwingConstants.LEFT);
+            JLabel heure = new JLabel("🕒 " + label, SwingConstants.LEFT);
             heure.setFont(new Font("Segoe UI", Font.BOLD, 14));
             heure.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
@@ -59,15 +71,23 @@ public class VueHoraireAttraction extends JFrame {
 
             ligne.add(heure, BorderLayout.WEST);
             ligne.add(statut, BorderLayout.EAST);
-
             ligne.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
-            ligne.addMouseListener(new java.awt.event.MouseAdapter() {
-                public void mouseClicked(java.awt.event.MouseEvent evt) {
+            ligne.addMouseListener(new MouseAdapter() {
+                public void mouseClicked(MouseEvent evt) {
                     if (inscrits < PLACES_MAX) {
-                        JOptionPane.showMessageDialog(null,
-                                "Réservation confirmée pour " + creneau + "\nAttraction : " + attraction,
-                                "Créneau sélectionné", JOptionPane.INFORMATION_MESSAGE);
+                        ReservationControleur controleur = new ReservationControleur();
+                        boolean ok = controleur.reserver(id_utilisateur, id_attraction, idCreneau);
+                        if (ok) {
+                            JOptionPane.showMessageDialog(null,
+                                    "Réservation confirmée pour " + label + "\nAttraction : " + attraction,
+                                    "Succès", JOptionPane.INFORMATION_MESSAGE);
+                        } else {
+                            JOptionPane.showMessageDialog(null,
+                                    "Erreur lors de la réservation.",
+                                    "Erreur", JOptionPane.ERROR_MESSAGE);
+                        }
+                        rechargerAffichage(utilisateur);
                     } else {
                         JOptionPane.showMessageDialog(null,
                                 "❌ Ce créneau est déjà complet !",
@@ -75,7 +95,6 @@ public class VueHoraireAttraction extends JFrame {
                     }
                 }
             });
-
             planningPanel.add(ligne);
         }
 
@@ -84,7 +103,6 @@ public class VueHoraireAttraction extends JFrame {
         scrollPane.getVerticalScrollBar().setUnitIncrement(14);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
-        // Bloc description à droite
         JPanel descriptionPanel = new JPanel();
         descriptionPanel.setPreferredSize(new Dimension(400, getHeight()));
         descriptionPanel.setLayout(new BoxLayout(descriptionPanel, BoxLayout.Y_AXIS));
@@ -103,36 +121,17 @@ public class VueHoraireAttraction extends JFrame {
         description.setBackground(Color.WHITE);
 
         descriptionPanel.add(description);
-
         mainPanel.add(descriptionPanel, BorderLayout.EAST);
         add(mainPanel, BorderLayout.CENTER);
 
         setVisible(true);
     }
 
-    private List<String> getCreneauxSelonSaison(LocalDate date) {
-        List<String> creneaux = new ArrayList<>();
-        int m = date.getMonthValue();
-        int d = date.getDayOfMonth();
-
-        if (m == 10 && d >= 25) {
-            creneaux.addAll(Arrays.asList("21h - 22h", "22h - 23h", "23h - 00h", "00h - 01h"));
-        } else if (m == 10 && d >= 19 && d <= 24) {
-            creneaux.addAll(Arrays.asList("14h - 15h", "15h - 16h"));
-        } else if (m >= 4 && m <= 8) {
-            for (int h = 10; h < 19; h++) creneaux.add(h + "h - " + (h + 1) + "h");
-        } else if (m == 9 || m == 10) {
-            for (int h = 10; h < 18; h++) creneaux.add(h + "h - " + (h + 1) + "h");
-        }
-        return creneaux;
-    }
-
-    private Map<String, Integer> getReservationsSimulees(List<String> creneaux) {
-        Map<String, Integer> map = new HashMap<>();
-        Random rand = new Random();
-        for (String creneau : creneaux) {
-            map.put(creneau, rand.nextInt(PLACES_MAX + 1));
-        }
-        return map;
+    private void rechargerAffichage(Utilisateur utilisateur) {
+        SwingUtilities.invokeLater(() -> {
+            getContentPane().removeAll();
+            new VueHoraireAttraction(this.attraction, this.id_attraction, utilisateur, this.date);
+            dispose();
+        });
     }
 }

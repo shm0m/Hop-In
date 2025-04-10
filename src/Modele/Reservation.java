@@ -1,40 +1,53 @@
 package Modele;
 
+import java.sql.Date;
+import java.time.OffsetDateTime;
+
 public class Reservation {
-    private int id;
-    private int idUtilisateur;
+    private int idReservation;
+    private Integer idUtilisateur; // Peut être null pour un invité
+    private String mailUt;
     private int idAttraction;
-    private String dateReservation;
+    private int idCreneau;
+    private Date dateReservation;
     private int nbPersonnes;
-    private double reductionAppliquee;
-    private double prixTotal;
     private String statut;
 
-    public Reservation(int id, int idUtilisateur, int idAttraction, String dateReservation, int nbPersonnes, double reductionAppliquee, double prixTotal, String statut) {
-        this.id = id;
+    public Reservation() { }
+
+    public Reservation(Integer idUtilisateur, String mailUt, int idAttraction, Date dateReservation,
+                       int idCreneau, int nbPersonnes, String statut) {
         this.idUtilisateur = idUtilisateur;
+        this.mailUt = mailUt;
         this.idAttraction = idAttraction;
         this.dateReservation = dateReservation;
+        this.idCreneau = idCreneau;
         this.nbPersonnes = nbPersonnes;
-        this.reductionAppliquee = reductionAppliquee;
-        this.prixTotal = prixTotal;
         this.statut = statut;
     }
 
-    public int getId() {
-        return id;
+    public int getIdReservation() {
+        return idReservation;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setIdReservation(int idReservation) {
+        this.idReservation = idReservation;
     }
 
-    public int getIdUtilisateur() {
+    public Integer getIdUtilisateur() {
         return idUtilisateur;
     }
 
-    public void setIdUtilisateur(int idUtilisateur) {
+    public void setIdUtilisateur(Integer idUtilisateur) {
         this.idUtilisateur = idUtilisateur;
+    }
+
+    public String getMailUt() {
+        return mailUt;
+    }
+
+    public void setMailUt(String mailUt) {
+        this.mailUt = mailUt;
     }
 
     public int getIdAttraction() {
@@ -45,11 +58,19 @@ public class Reservation {
         this.idAttraction = idAttraction;
     }
 
-    public String getDateReservation() {
+    public int getIdCreneau() {
+        return idCreneau;
+    }
+
+    public void setIdCreneau(int idCreneau) {
+        this.idCreneau = idCreneau;
+    }
+
+    public Date getDateReservation() {
         return dateReservation;
     }
 
-    public void setDateReservation(String dateReservation) {
+    public void setDateReservation(Date dateReservation) {
         this.dateReservation = dateReservation;
     }
 
@@ -61,22 +82,6 @@ public class Reservation {
         this.nbPersonnes = nbPersonnes;
     }
 
-    public double getReductionAppliquee() {
-        return reductionAppliquee;
-    }
-
-    public void setReductionAppliquee(double reductionAppliquee) {
-        this.reductionAppliquee = reductionAppliquee;
-    }
-
-    public double getPrixTotal() {
-        return prixTotal;
-    }
-
-    public void setPrixTotal(double prixTotal) {
-        this.prixTotal = prixTotal;
-    }
-
     public String getStatut() {
         return statut;
     }
@@ -85,4 +90,19 @@ public class Reservation {
         this.statut = statut;
     }
 
+    public int getId_attraction() {
+        return idAttraction;
+    }
+
+    public OffsetDateTime getDate_reservation() {
+        return dateReservation.toLocalDate().atStartOfDay().atOffset(OffsetDateTime.now().getOffset());
+    }
+
+    public Integer getId_creneau() {
+        return idCreneau;
+    }
+
+    public int getNb_personnes() {
+        return nbPersonnes;
+    }
 }
