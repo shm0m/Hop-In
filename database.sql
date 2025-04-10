@@ -54,3 +54,19 @@ CREATE TABLE IF NOT EXISTS paiement (
     date_paiement DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_reservation) REFERENCES reservation(id_reservation)
 );
+
+CREATE TABLE IF NOT EXISTS reduction (
+    id_reduc INT PRIMARY KEY NOT NULL,
+    prc INT NOT NULL,
+    date_deb DATE,
+    date_fin DATE,
+    age_min INT,
+    age_max INT,
+    nb_Reserv_Min INT
+);
+
+CREATE TABLE IF NOT EXISTS hist_reduc (
+    id_paiement INT REFERENCES paiement(id_paiement),
+    id_reduc INT REFERENCES reduction(id_reduc),
+    PRIMARY KEY (id_paiement, id_reduc)
+);reduc PRIMARY KEY REFERENCES reduction(id_reduc)
