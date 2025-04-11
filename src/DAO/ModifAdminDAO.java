@@ -1,8 +1,13 @@
 package DAO;
 
+import java.awt.*;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
+import Modele.Attraction;
 
 public class ModifAdminDAO {
     GestionConnexion gerant;
@@ -40,4 +45,36 @@ public class ModifAdminDAO {
             e.printStackTrace();
         }
     }
+
+    /*public List getAtt(){
+        String sql = "SELECT * FROM attraction";
+
+        try {
+            Connection conn =gerant.getConnection();
+            try (Statement stmt = conn.createStatement()) {
+                ResultSet resultat = stmt.executeQuery(sql);
+
+
+                ArrayList<Attraction> attractions = new ArrayList();
+                while (resultat.next()) {
+                    int id_attraction = resultat.getInt("id_attraction");
+                    String nom = resultat.getString("nom");
+                    String description = resultat.getString("description");
+                    float prix = resultat.getFloat("prix");
+                    int capacite_max = resultat.getInt("capacite_max");
+
+                    attractions.add(new Attraction(id_attraction, nom, description, prix, capacite_max));
+                    }
+                }
+            }
+
+        }  catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+    }*/
 }

@@ -3,6 +3,8 @@ package Vue.Page;
 import Controleur.UtilisateurControleur;
 import Modele.Admin;
 import Modele.Utilisateur;
+import Modele.Client;
+
 
 import javax.swing.*;
 import java.awt.*;
@@ -66,8 +68,12 @@ public class PageInviteSwing extends JFrame {
         btnConnect.addActionListener(e -> {
             String email = emailField.getText();
             if (email != null && !email.trim().isEmpty()) {
-                new PageReservationSwing(null);
+                Utilisateur invitedUser = new Client(0, "Invité", null, email, null, null);
+                //new PageReservationSwing(invitedUser);
+                //setVisible(false);
+                new PageProfileSwing(invitedUser);
                 setVisible(false);
+
             } else {
                 message.setText("Veuillez saisir une adresse email valide.");
             }
