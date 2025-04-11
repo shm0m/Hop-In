@@ -46,35 +46,33 @@ public class ModifAdminDAO {
         }
     }
 
-    /*public List getAtt(){
+    public ArrayList<Attraction> getAtt(){
         String sql = "SELECT * FROM attraction";
 
         try {
             Connection conn =gerant.getConnection();
-            try (Statement stmt = conn.createStatement()) {
-                ResultSet resultat = stmt.executeQuery(sql);
+            Statement stmt = conn.createStatement();
+            ResultSet resultat = stmt.executeQuery(sql);
 
 
-                ArrayList<Attraction> attractions = new ArrayList();
-                while (resultat.next()) {
-                    int id_attraction = resultat.getInt("id_attraction");
-                    String nom = resultat.getString("nom");
-                    String description = resultat.getString("description");
-                    float prix = resultat.getFloat("prix");
-                    int capacite_max = resultat.getInt("capacite_max");
+            ArrayList<Attraction> attractions = new ArrayList();
+            while (resultat.next()) {
+                int id_attraction = resultat.getInt("id_attraction");
+                String nom = resultat.getString("nom");
+                String description = resultat.getString("description");
+                float prix = resultat.getFloat("prix");
+                int capacite_max = resultat.getInt("capacite_max");
 
-                    attractions.add(new Attraction(id_attraction, nom, description, prix, capacite_max));
-                    }
-                }
+                attractions.add(new Attraction(id_attraction, nom, description, prix, capacite_max));
             }
+            return(attractions);
+
+
 
         }  catch (SQLException e) {
             e.printStackTrace();
         }
 
-
-
-
-
-    }*/
+    return(new ArrayList<Attraction>());
+    }
 }

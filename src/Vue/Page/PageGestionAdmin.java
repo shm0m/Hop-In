@@ -1,22 +1,28 @@
 package Vue.Page;
+import DAO.ModifAdminDAO;
 import Modele.Admin;
 import Modele.Utilisateur;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.Serial;
 
 
 public class PageGestionAdmin extends JFrame {
-    Admin uti;
-    JButton ajAttraction;
-    JButton modAttraction;
-    JButton ajReductions;
-    JButton modReduction;
-    JButton modCLi;
+    private JButton ajAttraction;
+    private JButton modAttraction;
+    private JButton ajReductions;
+    private JButton modReduction;
+    private JButton modCLi;
+    private ModifAdminDAO modifieur;
 
-    public PageGestionAdmin(Admin u){
+    public PageGestionAdmin(){
+
         super("Vue Administrateur");
-        this.uti=u;
+        this.modifieur=new ModifAdminDAO();
+        this.modifieur=new ModifAdminDAO();
         setLayout(new GridBagLayout());
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,6 +59,13 @@ public class PageGestionAdmin extends JFrame {
         gbc.gridy = 2;
         gbc.gridwidth = 1; // Ce bouton s'étend sur deux colonnes
         add(modCLi, gbc);
+
+        modAttraction.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                System.out.println(modifieur.getAtt().toString());
+            }
+        });
 
         setSize(500,500);
         setVisible(true);
