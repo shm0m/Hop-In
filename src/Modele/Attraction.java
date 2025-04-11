@@ -4,10 +4,10 @@ public class Attraction {
     private int id_attraction;
     private String nom;
     private String description;
-    private float prix;
+    private double prix;
     private int capacite_max;
 
-    public Attraction(int id_attraction,String nom, String description,float prix,int capacite_max){
+    public Attraction(int id_attraction,String nom, String description,double prix,int capacite_max){
         this.id_attraction=id_attraction;
         this.nom=nom;
         this.description=description;
@@ -31,7 +31,7 @@ public class Attraction {
     public String get_description(){
         return(this.description);
     }
-    public float get_prix(){
+    public double get_prix(){
         return(this.prix);
     }
     public int get_capacite_max(){

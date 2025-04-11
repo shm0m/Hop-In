@@ -18,7 +18,7 @@ import java.awt.*;
             JPanel headerPanel = new JPanel(new BorderLayout());
             headerPanel.setOpaque(false);
 
-            JLabel lblHeader = new JLabel("Bienvenue sur votre profile", SwingConstants.LEFT);
+            JLabel lblHeader = new JLabel("Bienvenue sur votre profil", SwingConstants.LEFT);
             lblHeader.setFont(new Font("Segoe UI", Font.BOLD, 24));
             headerPanel.add(lblHeader, BorderLayout.WEST);
 

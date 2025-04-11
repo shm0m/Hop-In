@@ -62,7 +62,7 @@ public class PageConnexionSwing extends JFrame {
             if (u != null) {
                 dispose();
                 if (u.getRole().compareTo("Admin")==0) {
-                    new PageGestionAdmin();
+                    new PageGestionAdmin(this);
                 }
                 else {
                     new PageProfileSwing(u);

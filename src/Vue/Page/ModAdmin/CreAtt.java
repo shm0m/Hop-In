@@ -9,9 +9,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class ModAtt extends JFrame {
+public class CreAtt extends JFrame {
     private JLabel indicNom;
-    private JComboBox men_attractions;
+    private JTextField modicNom;
     private JLabel indicDescription;
     private JTextField modicDescription;
     private JLabel indicPrix;
@@ -19,15 +19,12 @@ public class ModAtt extends JFrame {
     private JLabel indicCapaciteMax;
     private JTextField modicCapaciteMax;
     private ModifAdminDAO modifieur;
-    private JLabel indicId;
-    private JLabel indicQuelId;
-    private JButton supprimer;
-    private JButton afficherProp;
-    private JButton modifier;
+    private JButton retour;
+    private JButton ajouter;
 
     JFrame previousFrame;
 
-    public ModAtt(JFrame previousFrame){
+    public CreAtt(JFrame previousFrame){
         super("Vue Administrateur");
         this.modifieur=new ModifAdminDAO();
         setLayout(new GridBagLayout());
@@ -38,24 +35,23 @@ public class ModAtt extends JFrame {
 
         this.previousFrame=previousFrame;
 
-        ArrayList<Attraction> attractions = modifieur.getAtts();
-        men_attractions = new JComboBox<>(attractions.toArray(new Attraction[0]));
+        modicNom=new JTextField("Nom de l'attraction");
 
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(10, 10, 10, 10); // Espacement autour des boutons
         gbc.fill = GridBagConstraints.HORIZONTAL; // Remplir horizontalement
         // Ajouter les boutons avec des contraintes
-        indicNom=new JLabel("Choisir attraction à modifier");
+
+
+        indicNom=new JLabel("Nom de l'attraction");
         gbc.gridx = 0;
         gbc.gridy = 0;
         add(indicNom, gbc);
 
-
-        men_attractions = new JComboBox<>(attractions.toArray(new Attraction[0]));
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
-        add(men_attractions, gbc);
+        add(modicNom, gbc);
 
         indicDescription=new JLabel("Description: ");
         gbc.gridx = 0;
@@ -90,70 +86,40 @@ public class ModAtt extends JFrame {
         gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
         add(modicCapaciteMax, gbc);
 
-        indicId=new JLabel("Id de l'attraction");
+        ajouter =new JButton("Ajouter l'attraction");
         gbc.gridx = 0;
         gbc.gridy = 4;
-        add(indicId, gbc);
 
-        indicQuelId=new JLabel("0");
+        gbc.gridwidth = 1; // Limiter à une seule colonne
+        add(ajouter, gbc);
+
+        retour =new JButton("Retour");
         gbc.gridx = 1;
         gbc.gridy = 4;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
-        add(indicQuelId, gbc);
-
-        afficherProp=new JButton("Afficher les propriétés actuelles");
-        gbc.gridx = 0;
-        gbc.gridy = 5;
 
         gbc.gridwidth = 1; // Limiter à une seule colonne
-        add(afficherProp, gbc);
+        add(retour, gbc);
 
-        modifier =new JButton("Appliquer les changements");
-        gbc.gridx = 1;
-        gbc.gridy = 5;
-
-        gbc.gridwidth = 1; // Limiter à une seule colonne
-        add(modifier, gbc);
-
-        supprimer =new JButton("Supprimer l'attraction");
-        gbc.gridx = 2;
-        gbc.gridy = 5;
-
-        gbc.gridwidth = 1; // Limiter à une seule colonne
-        add(supprimer, gbc);
-
-        afficherProp.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Attraction a=getAtt(men_attractions.getSelectedItem().toString(),attractions);
-                modicCapaciteMax.setText(a.get_capacite_max_Str());
-                modicDescription.setText(a.get_description());
-                modicPrix.setText(a.get_prix_Str());
-                indicQuelId.setText(a.get_id_attraction_Str());
-                modicDescription.getText();
-            }
-        });
-
-        modifier.addActionListener(new ActionListener() {
+        ajouter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 previousFrame.setVisible(true);
-                modifieur.changerAttraction(Modele.Trans.toInt(
-                        indicQuelId.getText()),
-                        men_attractions.getSelectedItem().toString(),
-                        modicDescription.getText(),
-                        Modele.Trans.toDouble(modicPrix.getText()),
-                        Modele.Trans.toInt(modicCapaciteMax.getText())
-                        );
+                modifieur.ajouterAttraction(
+                        new Attraction(0,
+                            modicNom.getText(),
+                            modicDescription.getText(),
+                            Modele.Trans.toDouble(modicPrix.getText()),
+                            Modele.Trans.toInt(modicCapaciteMax.getText())
+                        )
+                );
             }
         });
-        supprimer.addActionListener(new ActionListener() {
+        retour.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 previousFrame.setVisible(true);
-                modifieur.delAtt(getAtt(men_attractions.getSelectedItem().toString(),attractions).get_id_attraction());
             }
         });
 
@@ -161,13 +127,4 @@ public class ModAtt extends JFrame {
         setVisible(true);
 
     }
-    private Attraction getAtt(String nom,ArrayList<Attraction> attractions){
-        for(Attraction a: attractions ){
-            if(a.get_nom().compareTo(nom)==0){
-                return(a);
-            }
-        }
-        return(new Attraction(0,"ERREUR","ERREUR", 0,0));
-    }
-
 }
