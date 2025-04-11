@@ -35,30 +35,37 @@ public class PageReservationSwing extends JFrame {
         JButton next = new JButton("➡");
 
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
-        leftPanel.setOpaque(false); // Pour conserver le fond du topPanel
+        leftPanel.setOpaque(false);
         leftPanel.add(prev);
 
 
-        JButton btnMesEvenements = new JButton("Mes événements");
+
+        JButton btnMesEvenements = new JButton("Mes informations");
         btnMesEvenements.setPreferredSize(new Dimension(150, 40));
         btnMesEvenements.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+
         btnMesEvenements.setBackground(new Color(60, 179, 113));
         btnMesEvenements.setForeground(Color.WHITE);
         btnMesEvenements.setFocusPainted(false);
+        btnMesEvenements.setCursor(new Cursor(Cursor.HAND_CURSOR));
         leftPanel.add(btnMesEvenements);
+
+
 
         btnMesEvenements.addActionListener(e -> {
             setVisible(false);
         });
 
-        topPanel.add(leftPanel, BorderLayout.WEST);
-        //topPanel.add(moisLabel, BorderLayout.CENTER); erreur jsp pk
-        topPanel.add(next, BorderLayout.EAST);
-        add(topPanel, BorderLayout.NORTH);
 
 
         moisLabel = new JLabel("", SwingConstants.CENTER);
         moisLabel.setFont(new Font("Segoe UI", Font.BOLD, 24));
+
+        topPanel.add(leftPanel, BorderLayout.WEST);
+        topPanel.add(moisLabel, BorderLayout.CENTER);
+        topPanel.add(next, BorderLayout.EAST);
+        add(topPanel, BorderLayout.NORTH);
+
 
         topPanel.add(prev, BorderLayout.WEST);
         topPanel.add(moisLabel, BorderLayout.CENTER);

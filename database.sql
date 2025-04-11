@@ -55,26 +55,15 @@ CREATE TABLE IF NOT EXISTS paiement (
     FOREIGN KEY (id_reservation) REFERENCES reservation(id_reservation)
 );
 
-CREATE TABLE IF NOT EXISTS reduction (
-    id_reduc INT PRIMARY KEY NOT NULL,
-    prc INT NOT NULL,
-    date_deb DATE,
-    date_fin DATE,
-    age_min INT,
-    age_max INT,
-    nb_Reserv_Min INT
-);
 
-CREATE TABLE IF NOT EXISTS hist_reduc (
-    id_paiement INT REFERENCES paiement(id_paiement),
-    id_reduc INT REFERENCES reduction(id_reduc),
-    PRIMARY KEY (id_paiement, id_reduc)
-);reduc PRIMARY KEY REFERENCES reduction(id_reduc)
+INSERT INTO creneau VALUES (1, '10:00:00');
+INSERT INTO creneau VALUES (2, '11:00:00');
+INSERT INTO creneau VALUES (3, '12:00:00');
+INSERT INTO creneau VALUES (4, '13:00:00');
+INSERT INTO creneau VALUES (5, '14:00:00');
+INSERT INTO creneau VALUES (6, '15:00:00');
+INSERT INTO creneau VALUES (7, '16:00:00');
+INSERT INTO creneau VALUES (8, '17:00:00');
+INSERT INTO creneau VALUES (9, '18:00:00');
+INSERT INTO creneau VALUES (10, '19:00:00');
 
-
-INSERT INTO attraction (nom, description, prix, capacite_max) VALUES
-('Laser-Game', 'Jeu de tir au laser immersif.', 15.00, 20),
-('Grand8 Express', 'Montagnes russes à grande vitesse.', 20.00, 25),
-('Les buches de folie', 'Descente en bûches mouvementée.', 12.00, 18),
-('La maison hantée', 'Parcours effrayant dans une maison hantée.', 10.00, 15),
-('Opération Citrouille', 'Chasse aux citrouilles pour Halloween.', 8.00, 22);
