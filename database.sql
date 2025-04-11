@@ -70,3 +70,11 @@ CREATE TABLE IF NOT EXISTS hist_reduc (
     id_reduc INT REFERENCES reduction(id_reduc),
     PRIMARY KEY (id_paiement, id_reduc)
 );reduc PRIMARY KEY REFERENCES reduction(id_reduc)
+
+
+INSERT INTO attraction (nom, description, prix, capacite_max) VALUES
+('Laser-Game', 'Jeu de tir au laser immersif.', 15.00, 20),
+('Grand8 Express', 'Montagnes russes à grande vitesse.', 20.00, 25),
+('Les buches de folie', 'Descente en bûches mouvementée.', 12.00, 18),
+('La maison hantée', 'Parcours effrayant dans une maison hantée.', 10.00, 15),
+('Opération Citrouille', 'Chasse aux citrouilles pour Halloween.', 8.00, 22);
