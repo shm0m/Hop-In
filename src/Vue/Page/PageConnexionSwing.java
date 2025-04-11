@@ -65,7 +65,8 @@ public class PageConnexionSwing extends JFrame {
                     new PageGestionAdmin(new Admin(u));
                 }
                 else {
-                    new PageReservationSwing(u);
+                    new PageProfileSwing(u);
+                    setVisible(false);
                 }
 
 
