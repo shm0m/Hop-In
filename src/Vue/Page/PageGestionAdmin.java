@@ -2,6 +2,7 @@ package Vue.Page;
 import DAO.ModifAdminDAO;
 import Modele.Admin;
 import Modele.Utilisateur;
+import Vue.Page.ModAdmin.ModAtt;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +22,6 @@ public class PageGestionAdmin extends JFrame {
     public PageGestionAdmin(){
 
         super("Vue Administrateur");
-        this.modifieur=new ModifAdminDAO();
         this.modifieur=new ModifAdminDAO();
         setLayout(new GridBagLayout());
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -57,17 +57,20 @@ public class PageGestionAdmin extends JFrame {
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        gbc.gridwidth = 1; // Ce bouton s'étend sur deux colonnes
         add(modCLi, gbc);
 
         modAttraction.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                System.out.println(modifieur.getAtt().toString());
+                new ModAtt();
+
             }
         });
 
         setSize(500,500);
         setVisible(true);
+    }
+    public static void main(String args[]){
+        new PageGestionAdmin();
     }
 }

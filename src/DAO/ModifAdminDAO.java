@@ -16,8 +16,8 @@ public class ModifAdminDAO {
         gerant=new GestionConnexion();
     }
 
-    public void changerAttraction(int idAtt, String nom,String description, float prix){
-        String sql = "Update Attraction set ";
+    public void changerAttraction(int idAtt, String nom,String description, double prix,int capaMax){
+        String sql = "Update attraction set ";
         if(!(nom.isEmpty())){
             sql=sql+"nom='"+nom+"' ";
         }
@@ -32,6 +32,12 @@ public class ModifAdminDAO {
                 sql=sql+", ";
             }
             sql=sql+"prix="+prix;
+        }
+        if(capaMax!=0){
+            if(!(nom.isEmpty()) || !(description.isEmpty())|| !(prix!=0.0)){
+                sql=sql+", ";
+            }
+            sql=sql+"capacite_max="+capaMax;
         }
         sql=sql+" where id_Attraction="+idAtt+";" ;
         System.out.println(sql);

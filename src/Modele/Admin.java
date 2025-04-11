@@ -30,8 +30,8 @@ public class Admin extends Utilisateur{
         return("Admin");
     }
 
-    public void changerAttraction(int idAtt, String nom,String description, float prix){
-        this.modifieur.changerAttraction(idAtt, nom,description,prix);
+    public void changerAttraction(int idAtt, String nom,String description, float prix,int capaMax){
+        this.modifieur.changerAttraction(idAtt, nom,description,prix,capaMax);
     }
 
 }
