@@ -33,7 +33,28 @@ import java.awt.*;
 
             mainPanel.add(headerPanel, BorderLayout.NORTH);
 
+            JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+            bottomPanel.setOpaque(false);
+            JButton btnCalendar = new JButton("Calendrier");
+            btnCalendar.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+            btnCalendar.setPreferredSize(new Dimension(150, 40));
+            bottomPanel.add(btnCalendar);
+            mainPanel.add(bottomPanel, BorderLayout.SOUTH);
 
+            add(mainPanel);
+            setVisible(true);
+
+
+            btnProfile.addActionListener(e -> {
+                JOptionPane.showMessageDialog(this,
+                        "Affichage du profil de l'utilisateur",
+                        "Profile",
+                        JOptionPane.INFORMATION_MESSAGE);
+            });
+            btnCalendar.addActionListener(e -> {
+                new PageReservationSwing(utilisateur);
+                setVisible(false);
+            });
 
         }
     }

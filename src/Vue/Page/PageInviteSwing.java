@@ -73,6 +73,7 @@ public class PageInviteSwing extends JFrame {
                 //setVisible(false);
                 new PageProfileSwing(invitedUser);
                 setVisible(false);
+
             } else {
                 message.setText("Veuillez saisir une adresse email valide.");
             }
