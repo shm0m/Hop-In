@@ -54,3 +54,16 @@ CREATE TABLE IF NOT EXISTS paiement (
     date_paiement DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (id_reservation) REFERENCES reservation(id_reservation)
 );
+
+
+INSERT INTO creneau VALUES (1, '10:00:00');
+INSERT INTO creneau VALUES (2, '11:00:00');
+INSERT INTO creneau VALUES (3, '12:00:00');
+INSERT INTO creneau VALUES (4, '13:00:00');
+INSERT INTO creneau VALUES (5, '14:00:00');
+INSERT INTO creneau VALUES (6, '15:00:00');
+INSERT INTO creneau VALUES (7, '16:00:00');
+INSERT INTO creneau VALUES (8, '17:00:00');
+INSERT INTO creneau VALUES (9, '18:00:00');
+INSERT INTO creneau VALUES (10, '19:00:00');
+

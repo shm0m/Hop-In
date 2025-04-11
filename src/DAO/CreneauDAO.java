@@ -20,7 +20,7 @@ public class CreneauDAO {
                 c.setIdCreneau(rs.getInt("id_creneau"));
                 Time heureDebut = rs.getTime("heure");
                 c.setHeureDebut(heureDebut);
-                c.setHeureFin(Time.valueOf(heureDebut.toLocalTime().plusHours(1))); // 👈 automatique
+                c.setHeureFin(Time.valueOf(heureDebut.toLocalTime().plusHours(1)));
                 creneaux.add(c);
             }
         } catch (SQLException e) {
