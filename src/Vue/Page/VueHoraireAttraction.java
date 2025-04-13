@@ -3,9 +3,9 @@ package Vue.Page;
 import DAO.AttractionDAO;
 import DAO.ModifAdminDAO;
 import Modele.Utilisateur;
-import Modele.Creneau;
 import Controleur.ReservationControleur;
 import DAO.ReservationDAO;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -86,7 +86,7 @@ public class VueHoraireAttraction extends JFrame {
             int heureFin = heureDebut.toLocalTime().plusHours(1).getHour();
             String label = heureDebut.toString().substring(0, 5) + " - " + heureFin + "h";
 
-            int inscrits = reservationsMap.getOrDefault(idCreneau, 0);
+            int inscrits = reservationsMap.getOrDefault(idCreneau, 0); // 💥 ne plantera plus
 
 
             JPanel ligne = new JPanel(new BorderLayout());
