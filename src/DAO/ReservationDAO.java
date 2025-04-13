@@ -8,13 +8,11 @@ import java.util.Map;
 public class ReservationDAO {
 
     public boolean reserve(int idUser, int idAttraction, int idCreneau) {
-        String sql = "INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut) "
-                + "VALUES (?, ?, CURDATE(), ?, 1, 'CONFIRMEE')";
+        String sql = "INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut) " +
+                "VALUES (?, ?, CURDATE(), ?, 1, 'CONFIRMEE')";
         try (Connection conn = ConnectionProvider.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            // Si l'utilisateur n'est pas identifié (par exemple, invité),
-            // on passe 0 ou une valeur équivalente pour indiquer NULL.
             if (idUser != 0) {
                 ps.setInt(1, idUser);
             } else {
@@ -35,7 +33,6 @@ public class ReservationDAO {
     }
 
     public Map<Integer, Integer> getNbPersonnesParCreneau(int idAttraction, LocalDate date) {
-
         String sql = "SELECT id_creneau, SUM(nb_personnes) AS total_personnes " +
                 "FROM reservation " +
                 "WHERE id_attraction = ? AND date_reservation = ? " +
@@ -53,9 +50,8 @@ public class ReservationDAO {
         } catch (SQLException e) {
             System.err.println("Erreur lors de la récupération du nombre de personnes par créneau:");
             e.printStackTrace();
-            return null;
+            return new HashMap<>(); // ✅ Correction ici
         }
-
     }
 
     public Map<Integer, Time> getHeuresCreneauxDepuisBase() {
@@ -71,7 +67,7 @@ public class ReservationDAO {
         } catch (SQLException e) {
             System.err.println("Erreur lors de la récupération des heures de créneaux:");
             e.printStackTrace();
-            return null;
+            return new HashMap<>(); // ✅ Correction ici aussi
         }
     }
 }
