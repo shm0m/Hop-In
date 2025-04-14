@@ -15,14 +15,15 @@ public class UtilisateurDAO {
     }
 
     public void updateUtilisateur(Utilisateur u) {
-        String sql = "UPDATE utilisateur SET nom = ?, prenom = ?, email = ?, date_naissance = ? WHERE id = ?";
+        String sql = "UPDATE utilisateur SET nom = ?, prenom = ?, email = ?, date_naissance = ?, mot_de_passe = ? WHERE id = ?";
         try (Connection conn = gerant.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, u.getNom());
             stmt.setString(2, u.getPrenom());
             stmt.setString(3, u.getEmail());
             stmt.setString(4, u.getDateNaissance());
-            stmt.setInt(5, u.getId());
+            stmt.setString(5, u.getMotDePasse());
+            stmt.setInt(6, u.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

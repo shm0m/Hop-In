@@ -175,13 +175,11 @@ import java.awt.*;
             btnEnregistrer.addActionListener(e -> {
 
                    utilisateur.setNom(tfNom.getText());
-                 utilisateur.setPrenom(tfPrenom.getText());
+                   utilisateur.setPrenom(tfPrenom.getText());
                 utilisateur.setEmail(tfEmail.getText());
                 utilisateur.setDateNaissance(tfDateNaissance.getText());
                 utilisateur.setMotDePasse(tfmdp.getText());
-
                   UtilisateurControleur controleur = new UtilisateurControleur();
-
                  controleur.modifierUtilisateur(utilisateur);
 
                  JOptionPane.showMessageDialog(this, "Profil mis à jour avec succès !");
