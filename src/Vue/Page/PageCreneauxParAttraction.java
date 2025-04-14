@@ -110,13 +110,11 @@ public class PageCreneauxParAttraction extends JFrame {
                     return;
                 }
 
+                // Utilisation du contrôleur avec la date
                 ReservationControleur controleur = new ReservationControleur();
                 int idUtilisateur = utilisateur != null ? utilisateur.getId() : 0;
 
-                boolean ok = true;
-                for (int i = 0; i < nbPlaces; i++) {
-                    ok = ok && controleur.reserver(idUtilisateur, idAttraction, idCreneau);
-                }
+                boolean ok = controleur.reserver(idUtilisateur, idAttraction, idCreneau, date); // Passer la date à la méthode
 
                 if (ok) {
                     JOptionPane.showMessageDialog(this,
