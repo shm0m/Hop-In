@@ -37,11 +37,12 @@ public class ModifAdminDAO {
             }
             sql=sql+"capacite_max="+capaMax;
         }
-        sql=sql+" where id_Attraction="+idAtt+";" ;
+        sql=sql+" where id_attraction="+idAtt+";" ;
         System.out.println(sql);
 
         try {
             Connection conn =gerant.getConnection();
+            System.out.println(sql);
             try (Statement stmt = conn.createStatement()) {
                 int rs = stmt.executeUpdate(sql);
             }
