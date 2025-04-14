@@ -69,9 +69,7 @@ public class PageInviteSwing extends JFrame {
             String email = emailField.getText();
             if (email != null && !email.trim().isEmpty()) {
                 Utilisateur invitedUser = new Client(0, "Invité", null, email, null, null);
-                //new PageReservationSwing(invitedUser);
-                //setVisible(false);
-                new PageProfileSwing(invitedUser);
+                new PageReservationSwing(invitedUser);
                 setVisible(false);
 
             } else {

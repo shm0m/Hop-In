@@ -9,6 +9,7 @@ public abstract class Utilisateur {
     protected String prenom;
     protected String email;
     protected String motDePasse;
+    protected  String DateNaissance;
 
     /*public Utilisateur(int id, String nom, String prenom, String email, String motDePasse, String role){
         this.id = id;
@@ -65,7 +66,14 @@ public abstract class Utilisateur {
         return("Utilisateur");
     }
 
-    public String getDateNaissance(){return("00-00-2000");}
+    //public String getDateNaissance(){return("00-00-2000");}
+
+    public String getDateNaissance() {
+        return DateNaissance;
+    }
+    public void setDateNaissance(String dateNaissance) {
+        this.DateNaissance = dateNaissance;
+    }
 
     /*public String getTypeMembre(){return("Indéfini");}*/
 }

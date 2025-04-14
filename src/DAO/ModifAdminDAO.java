@@ -79,7 +79,6 @@ public class ModifAdminDAO {
 
     return(new ArrayList<Attraction>());
     }
-
     public void delAtt(int idAtt){
         String sql = "DELETE FROM attraction WHERE id_attraction="+idAtt+";";
         try {

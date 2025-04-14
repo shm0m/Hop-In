@@ -13,5 +13,13 @@ public class UtilisateurControleur {
 
     public Utilisateur trouverParEmailEtMotDePasse(String email, String mdp) {
         return utilisateurDAO.trouverParEmailEtMotDePasse(email, mdp);
+
+
     }
+    public void modifierUtilisateur(Utilisateur utilisateur) {
+        // Créez une instance du DAO et appelez la méthode update
+        UtilisateurDAO dao = new UtilisateurDAO();
+        dao.updateUtilisateur(utilisateur);
+    }
+
 }
