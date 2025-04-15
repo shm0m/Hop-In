@@ -1,12 +1,12 @@
 package Vue.Page;
 
 import Modele.Utilisateur;
-import Vue.HopInGUI;
-import javax.swing.*;
-import java.awt.*;
+import Modele.Reservation;
+import DAO.ReservationDAO;
 import Controleur.UtilisateurControleur;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
     public class PageProfileSwing extends JFrame {
 
@@ -198,7 +198,11 @@ import java.awt.*;
 
 
             btnProfile.addActionListener(e -> {
-
+                // Récupérer la liste des réservations du client via la fonction implémentée dans ReservationDAO
+                ArrayList<Reservation> reservations = new ReservationDAO().getReservationsByClient(utilisateur.getId());
+                // Ouvrir la fenêtre d'historique et passer la liste et la référence de la fenêtre actuelle
+                new PageHistoriqueReservationSwing (reservations,this);
+                setVisible(false);
             });
             btnCalendar.addActionListener(e -> {
                 new PageReservationSwing(utilisateur);
