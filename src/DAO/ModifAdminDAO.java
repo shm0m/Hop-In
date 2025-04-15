@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 import Modele.Attraction;
+import Modele.Client;
 import Modele.Utilisateur;
 
 public class ModifAdminDAO {
@@ -90,7 +91,6 @@ public class ModifAdminDAO {
         }  catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
     public void ajouterAttraction(Attraction a) {
         String sql = "INSERT INTO attraction (nom, description, prix, capacite_max) VALUES (?, ?, ?, ?)";
@@ -104,4 +104,8 @@ public class ModifAdminDAO {
             e.printStackTrace();
         }
     }
+
+
+
+
 }

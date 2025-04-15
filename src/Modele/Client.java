@@ -15,6 +15,14 @@ public class Client extends Utilisateur{
         this.motDePasse = motDePasse;
         this.dateNaissance = dateNaissance;
     }
+    public Client(){
+        this.id = 0;
+        this.nom = "Nom";
+        this.prenom = "Prenom";
+        this.email = "courriel@messagerie.com";
+        this.motDePasse ="J'adoreLeJava";
+        this.dateNaissance = "14/04/1912";
+    }
 
 
     public int getAge() {
@@ -32,6 +40,11 @@ public class Client extends Utilisateur{
     @Override
     public String getRole(){
         return("Client");
+    }
+
+    @Override
+    public String toString(){
+        return(this.id+": "+this.prenom+" "+this.nom);
     }
 
 

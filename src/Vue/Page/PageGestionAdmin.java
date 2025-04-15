@@ -1,8 +1,10 @@
 package Vue.Page;
 import DAO.ModifAdminDAO;
 import Modele.Admin;
+import Modele.Client;
 import Modele.Utilisateur;
 import Vue.Page.ModAdmin.ModAtt;
+import Vue.Page.ModAdmin.ModCli;
 
 import javax.swing.*;
 import java.awt.*;
@@ -76,6 +78,10 @@ public class PageGestionAdmin extends JFrame {
 
         modAttraction.addActionListener(e -> {
             new Vue.Page.ModAdmin.ModAtt(this);
+            setVisible(false);
+        });
+        modCLi.addActionListener(e->{
+            new ModCli(this);
             setVisible(false);
         });
         setSize(500,500);

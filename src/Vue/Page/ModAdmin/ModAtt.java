@@ -65,7 +65,7 @@ public class ModAtt extends JFrame {
         modicDescription=new JTextField("Champ vide                                                                                          ");
         gbc.gridx = 1;
         gbc.gridy = 1;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
+        gbc.gridwidth = 4;
         add(modicDescription, gbc);
 
         indicPrix=new JLabel("Prix");
@@ -139,6 +139,7 @@ public class ModAtt extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 previousFrame.setVisible(true);
+
                 modifieur.changerAttraction(Modele.Trans.toInt(
                         indicQuelId.getText()),
                         men_attractions.getSelectedItem().toString(),
