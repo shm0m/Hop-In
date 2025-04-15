@@ -3,12 +3,13 @@ package Controleur;
 import DAO.UtilisateurDAO;
 import Modele.Utilisateur;
 import java.util.List;
-
+import DAO.UtilisateurchercherDAO;
 public class UtilisateurControleur {
-    private UtilisateurDAO utilisateurDAO = new UtilisateurDAO();
+    private UtilisateurchercherDAO utilisateurDAO = new UtilisateurchercherDAO();
+    private UtilisateurDAO utilisateur = new UtilisateurDAO();
 
     public void ajouterUtilisateur(Utilisateur u) {
-        utilisateurDAO.ajouterUtilisateur(u);
+        utilisateur.ajouterUtilisateur(u);
     }
 
     public Utilisateur trouverParEmailEtMotDePasse(String email, String mdp) {

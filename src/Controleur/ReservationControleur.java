@@ -1,12 +1,13 @@
 package Controleur;
 
 import DAO.ReservationDAO;
+import DAO.ReservationmodifDAO;
 
 
 public class ReservationControleur {
-    private ReservationDAO reservationDAO = new ReservationDAO();
+    private ReservationmodifDAO reservationmodifDAO = new ReservationmodifDAO();
     public boolean reserver(int id, int idAttraction, int idCreneau) {
         System.out.println("iuhdfiudbhgfuiudfhssgiuidfhgf");
-        return reservationDAO.reserve(id, idAttraction, idCreneau);
+        return reservationmodifDAO.reserve(id, idAttraction, idCreneau);
     }
 }

@@ -51,6 +51,32 @@ public class ModifAdminDAO {
         }
     }
 
+
+    public void delAtt(int idAtt){
+        String sql = "DELETE FROM attraction WHERE id_attraction="+idAtt+";";
+        try {
+            Connection conn =gerant.getConnection();
+            try (Statement stmt = conn.createStatement()) {
+                stmt.executeUpdate(sql);
+            }
+        }  catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void ajouterAttraction(Attraction a) {
+        String sql = "INSERT INTO attraction (nom, description, prix, capacite_max) VALUES (?, ?, ?, ?)";
+        try (Connection conn = this.gerant.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, a.get_nom());
+            stmt.setString(2, a.get_description());
+            stmt.setString(3, a.get_prix_Str());
+            stmt.setString(4, a.get_capacite_max_Str());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        
+    }
     public ArrayList<Attraction> getAtts(){
         String sql = "SELECT * FROM attraction";
 
@@ -78,30 +104,7 @@ public class ModifAdminDAO {
             e.printStackTrace();
         }
 
-    return(new ArrayList<Attraction>());
-    }
-    public void delAtt(int idAtt){
-        String sql = "DELETE FROM attraction WHERE id_attraction="+idAtt+";";
-        try {
-            Connection conn =gerant.getConnection();
-            try (Statement stmt = conn.createStatement()) {
-                stmt.executeUpdate(sql);
-            }
-        }  catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-    }
-    public void ajouterAttraction(Attraction a) {
-        String sql = "INSERT INTO attraction (nom, description, prix, capacite_max) VALUES (?, ?, ?, ?)";
-        try (Connection conn = this.gerant.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, a.get_nom());
-            stmt.setString(2, a.get_description());
-            stmt.setString(3, a.get_prix_Str());
-            stmt.setString(4, a.get_capacite_max_Str());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        return(new ArrayList<Attraction>());
     }
 }
+

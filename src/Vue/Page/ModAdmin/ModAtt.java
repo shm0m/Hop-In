@@ -2,7 +2,6 @@ package Vue.Page.ModAdmin;
 
 import DAO.ModifAdminDAO;
 import Modele.Attraction;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
