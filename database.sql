@@ -56,6 +56,25 @@ CREATE TABLE IF NOT EXISTS paiement (
 );
 
 
+CREATE TABLE IF NOT EXISTS reduction (
+    id_reduction INT AUTO_INCREMENT PRIMARY KEY,
+    prc_reduction FLOAT NOT NULL,
+    age_min INT,
+    age_max INT,
+    date_min DATE,
+    date_max DATE
+);
+
+CREATE TABLE IF NOT EXISTS reduction_appliquee (
+    id_reduction INT NOT NULL,
+    id_paiement INT NOT NULL,
+    PRIMARY KEY (id_reduction, id_paiement),
+    FOREIGN KEY (id_reduction) REFERENCES reduction(id_reduction) ON DELETE CASCADE,
+    FOREIGN KEY (id_paiement)  REFERENCES paiement(id_paiement) ON DELETE CASCADE
+);
+
+
+
 INSERT INTO creneau VALUES (1, '10:00:00');
 INSERT INTO creneau VALUES (2, '11:00:00');
 INSERT INTO creneau VALUES (3, '12:00:00');
