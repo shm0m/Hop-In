@@ -72,7 +72,8 @@ public class VueHoraireAttraction extends JFrame {
         btnPaiement.setPreferredSize(new Dimension(180, 40));
 
         btnPaiement.addActionListener(e -> {
-            // passer a la page payement
+            new Pagepayement(this);
+            setVisible(false);
         });
 
         bottomRightPanel.add(btnRetour);
