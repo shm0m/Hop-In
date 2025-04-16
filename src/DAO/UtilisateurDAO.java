@@ -32,15 +32,15 @@ public class UtilisateurDAO {
 
 
     public void ajouterUtilisateur(Utilisateur u) {
-        String sql = "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, date_naissance, type_membre, role) VALUES (?, ?, ?, ?, CURDATE(), ?, ?)";
+        String sql = "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, date_naissance, type_membre, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = this.gerant.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, u.getNom());
             stmt.setString(2, u.getPrenom());
             stmt.setString(3, u.getEmail());
             stmt.setString(4, u.getMotDePasse());
-            /*Date*/
-            stmt.setString(5, "aucun");
-            stmt.setString(6, u.getRole());
+            stmt.setString(5, u.getDateNaissance());
+            stmt.setString(6,"AUCUN");
+            stmt.setString(7, u.getRole());
 
             stmt.executeUpdate();
         } catch (SQLException e) {
