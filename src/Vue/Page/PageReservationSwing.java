@@ -1,5 +1,6 @@
 package Vue.Page;
 
+import DAO.AttractionDAO;
 import DAO.ModifAdminDAO;
 import Modele.Attraction;
 import Modele.Utilisateur;
@@ -152,7 +153,9 @@ public class PageReservationSwing extends JFrame {
 
                 if (choix != null) {
                     int idAttraction = getAttIdfromNom(attractions,choix) ;
-                    new VueHoraireAttraction(choix, idAttraction, utilisateur, date);
+                    int capaciteMax = new AttractionDAO().getCapaciteAttraction(idAttraction);
+                    new VueHoraireAttraction(choix, idAttraction, utilisateur, date, capaciteMax);
+
                 }
             });
 

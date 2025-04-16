@@ -12,8 +12,6 @@ import java.sql.Statement;
 
 public class ReservationDAO {
 
-
-
     public Map<Integer, Integer> getNbPersonnesParCreneau(int idAttraction, LocalDate date) {
         String sql = "SELECT id_creneau, SUM(nb_personnes) AS total_personnes " +
                 "FROM reservation " +
@@ -32,7 +30,7 @@ public class ReservationDAO {
         } catch (SQLException e) {
             System.err.println("Erreur lors de la récupération du nombre de personnes par créneau:");
             e.printStackTrace();
-            return new HashMap<>(); // ✅ Correction ici
+            return new HashMap<>();
         }
     }
 
@@ -49,7 +47,7 @@ public class ReservationDAO {
         } catch (SQLException e) {
             System.err.println("Erreur lors de la récupération des heures de créneaux:");
             e.printStackTrace();
-            return new HashMap<>(); // ✅ Correction ici aussi
+            return new HashMap<>();
         }
     }
 

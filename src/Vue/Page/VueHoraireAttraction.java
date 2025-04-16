@@ -1,5 +1,7 @@
 package Vue.Page;
 
+import DAO.AttractionDAO;
+import DAO.ModifAdminDAO;
 import Modele.Utilisateur;
 import Modele.Creneau;
 import Controleur.ReservationControleur;
@@ -13,17 +15,24 @@ import java.time.LocalDate;
 import java.util.Map;
 
 public class VueHoraireAttraction extends JFrame {
-    private final int PLACES_MAX = 25;
+    private final int capaciteMax;
     private final String attraction;
     private final LocalDate date;
     private final int id_utilisateur;
     private final int id_attraction;
 
-    public VueHoraireAttraction(String attraction, int id_attraction, Utilisateur utilisateur, LocalDate date) {
+    public VueHoraireAttraction(String attraction, int id_attraction, Utilisateur utilisateur, LocalDate date, int capaciteMax) {
+        this.capaciteMax = capaciteMax;
         this.attraction = attraction;
         this.date = date;
         this.id_attraction = id_attraction;
         this.id_utilisateur = utilisateur != null ? utilisateur.getId() : 0;
+
+        String descriptionFromDB = new ModifAdminDAO().getDescriptionById(id_attraction);
+        if (descriptionFromDB == null || descriptionFromDB.isBlank()) {
+            descriptionFromDB = "Pas de description disponible pour cette attraction.";
+        }
+
 
         setTitle("Réserver une attraction - Hop'In");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -64,10 +73,10 @@ public class VueHoraireAttraction extends JFrame {
             heure.setFont(new Font("Segoe UI", Font.BOLD, 14));
             heure.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
-            JLabel statut = new JLabel(inscrits + "/" + PLACES_MAX + " inscrits", SwingConstants.RIGHT);
+            JLabel statut = new JLabel(inscrits + "/" + capaciteMax + " inscrits", SwingConstants.RIGHT);
             statut.setFont(new Font("Segoe UI", Font.PLAIN, 14));
             statut.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
-            statut.setForeground(inscrits >= PLACES_MAX ? Color.RED : new Color(50, 150, 50));
+            statut.setForeground(inscrits >= capaciteMax ? Color.RED : new Color(50, 150, 50));
 
             ligne.add(heure, BorderLayout.WEST);
             ligne.add(statut, BorderLayout.EAST);
@@ -75,7 +84,7 @@ public class VueHoraireAttraction extends JFrame {
 
             ligne.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent evt) {
-                    if (inscrits < PLACES_MAX) {
+                    if (inscrits < capaciteMax) {
                         ReservationControleur controleur = new ReservationControleur();
                         boolean ok = controleur.reserver(id_utilisateur, id_attraction, idCreneau);
                         if (ok) {
@@ -110,10 +119,11 @@ public class VueHoraireAttraction extends JFrame {
         descriptionPanel.setBorder(BorderFactory.createEmptyBorder(30, 20, 30, 20));
 
         JTextArea description = new JTextArea("📍 À propos de l’attraction \"" + attraction + "\"\n\n"
-                + "🔹 Réservez un créneau horaire pour profiter de cette attraction dans les meilleures conditions.\n"
-                + "🔹 Les créneaux sont limités en capacité (max " + PLACES_MAX + " personnes).\n"
-                + "🔹 Une fois complet, le créneau devient indisponible.\n\n"
-                + "🎢 Bon moment garanti à Hop'In !");
+                + descriptionFromDB + "\n\n"
+                + "Les créneaux sont limités en capacité (max " + capaciteMax + " personnes).\n"
+                + "Une fois complet, le créneau devient indisponible.\n\n"
+                + "Bon moment garanti à Hop'In !");
+
         description.setWrapStyleWord(true);
         description.setLineWrap(true);
         description.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -129,9 +139,11 @@ public class VueHoraireAttraction extends JFrame {
 
     private void rechargerAffichage(Utilisateur utilisateur) {
         SwingUtilities.invokeLater(() -> {
-            getContentPane().removeAll();
-            new VueHoraireAttraction(this.attraction, this.id_attraction, utilisateur, this.date);
             dispose();
+            int capaciteMax = new AttractionDAO().getCapaciteAttraction(id_attraction); // récupère capacité réelle
+            new VueHoraireAttraction(attraction, id_attraction, utilisateur, date, capaciteMax); // réaffiche la nouvelle
         });
     }
+
+
 }

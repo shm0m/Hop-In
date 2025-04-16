@@ -23,4 +23,5 @@ public class AttractionDAO {
         }
         return capacite;
     }
+
 }

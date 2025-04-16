@@ -51,8 +51,6 @@ public class HopInGUI extends JFrame {
             setVisible(false); 
         });
 
-
-
         add(panel);
         setVisible(true);
     }
