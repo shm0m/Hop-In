@@ -4,6 +4,8 @@ import DAO.AttractionDAO;
 import DAO.ModifAdminDAO;
 import Modele.Attraction;
 import Modele.Utilisateur;
+import Vue.HopInGUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
@@ -37,12 +39,11 @@ public class PageReservationSwing extends JFrame {
         JPanel topPanel = new JPanel(new BorderLayout());
         JButton prev = new JButton("⬅");
         JButton next = new JButton("➡");
+        JButton deco = new JButton("deconexion");
 
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         leftPanel.setOpaque(false);
         leftPanel.add(prev);
-
-
 
         JButton btnMesEvenements = new JButton("Mes informations");
         btnMesEvenements.setPreferredSize(new Dimension(150, 40));
@@ -68,12 +69,14 @@ public class PageReservationSwing extends JFrame {
         topPanel.add(leftPanel, BorderLayout.WEST);
         topPanel.add(moisLabel, BorderLayout.CENTER);
         topPanel.add(next, BorderLayout.EAST);
+        topPanel.add(deco,BorderLayout.SOUTH);
         add(topPanel, BorderLayout.NORTH);
 
 
         topPanel.add(prev, BorderLayout.WEST);
         topPanel.add(moisLabel, BorderLayout.CENTER);
         topPanel.add(next, BorderLayout.EAST);
+        topPanel.add(deco,BorderLayout.SOUTH);
         add(topPanel, BorderLayout.NORTH);
 
         calendarPanel = new JPanel(new GridLayout(0, 7, 5, 5));
@@ -91,6 +94,11 @@ public class PageReservationSwing extends JFrame {
         prev.addActionListener(e -> {
             currentMonth = currentMonth.minusMonths(1);
             refreshCalendar();
+        });
+
+        deco.addActionListener(e -> {
+            new Vue.HopInGUI();
+            dispose();
         });
 
         next.addActionListener(e -> {
