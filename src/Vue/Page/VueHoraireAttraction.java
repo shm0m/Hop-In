@@ -39,7 +39,7 @@ public class VueHoraireAttraction extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JLabel titre = new JLabel("📅 Réservation - " + date + " | " + attraction, SwingConstants.CENTER);
+        JLabel titre = new JLabel(" Réservation - " + date + " | " + attraction, SwingConstants.CENTER);
         titre.setFont(new Font("Segoe UI", Font.BOLD, 22));
         titre.setOpaque(true);
         titre.setBackground(new Color(240, 240, 240));
@@ -69,7 +69,7 @@ public class VueHoraireAttraction extends JFrame {
             ligne.setBackground(Color.WHITE);
             ligne.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
 
-            JLabel heure = new JLabel("🕒 " + label, SwingConstants.LEFT);
+            JLabel heure = new JLabel(" " + label, SwingConstants.LEFT);
             heure.setFont(new Font("Segoe UI", Font.BOLD, 14));
             heure.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
@@ -99,7 +99,7 @@ public class VueHoraireAttraction extends JFrame {
                         rechargerAffichage(utilisateur);
                     } else {
                         JOptionPane.showMessageDialog(null,
-                                "❌ Ce créneau est déjà complet !",
+                                "Ce créneau est déjà complet !",
                                 "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
                 }
@@ -118,7 +118,7 @@ public class VueHoraireAttraction extends JFrame {
         descriptionPanel.setBackground(Color.WHITE);
         descriptionPanel.setBorder(BorderFactory.createEmptyBorder(30, 20, 30, 20));
 
-        JTextArea description = new JTextArea("📍 À propos de l’attraction \"" + attraction + "\"\n\n"
+        JTextArea description = new JTextArea("À propos de l’attraction \"" + attraction + "\"\n\n"
                 + descriptionFromDB + "\n\n"
                 + "Les créneaux sont limités en capacité (max " + capaciteMax + " personnes).\n"
                 + "Une fois complet, le créneau devient indisponible.\n\n"
@@ -140,8 +140,8 @@ public class VueHoraireAttraction extends JFrame {
     private void rechargerAffichage(Utilisateur utilisateur) {
         SwingUtilities.invokeLater(() -> {
             dispose();
-            int capaciteMax = new AttractionDAO().getCapaciteAttraction(id_attraction); // récupère capacité réelle
-            new VueHoraireAttraction(attraction, id_attraction, utilisateur, date, capaciteMax); // réaffiche la nouvelle
+            int capaciteMax = new AttractionDAO().getCapaciteAttraction(id_attraction);
+            new VueHoraireAttraction(attraction, id_attraction, utilisateur, date, capaciteMax);
         });
     }
 
