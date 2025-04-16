@@ -56,6 +56,30 @@ public class VueHoraireAttraction extends JFrame {
         Map<Integer, Time> creneauxDispo = reservationDAO.getHeuresCreneauxDepuisBase();
         Map<Integer, Integer> reservationsMap = reservationDAO.getNbPersonnesParCreneau(id_attraction, date);
 
+        JPanel bottomRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomRightPanel.setOpaque(false);  // Pour conserver le fond transparent
+
+        JButton btnRetour = new JButton("Retour");
+        btnRetour.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        btnRetour.setPreferredSize(new Dimension(120, 40));
+
+        btnRetour.addActionListener(e -> {
+            setVisible(false);
+        });
+
+        JButton btnPaiement = new JButton("Passer au paiement");
+        btnPaiement.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        btnPaiement.setPreferredSize(new Dimension(180, 40));
+
+        btnPaiement.addActionListener(e -> {
+            // passer a la page payement
+        });
+
+        bottomRightPanel.add(btnRetour);
+        bottomRightPanel.add(btnPaiement);
+
+        add(bottomRightPanel, BorderLayout.SOUTH);
+
         for (Map.Entry<Integer, Time> entry : creneauxDispo.entrySet()) {
             int idCreneau = entry.getKey();
             Time heureDebut = entry.getValue();
@@ -63,6 +87,7 @@ public class VueHoraireAttraction extends JFrame {
             String label = heureDebut.toString().substring(0, 5) + " - " + heureFin + "h";
 
             int inscrits = reservationsMap.getOrDefault(idCreneau, 0);
+
 
             JPanel ligne = new JPanel(new BorderLayout());
             ligne.setPreferredSize(new Dimension(700, 50));
