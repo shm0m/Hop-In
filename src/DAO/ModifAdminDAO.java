@@ -106,5 +106,6 @@ public class ModifAdminDAO {
 
         return(new ArrayList<Attraction>());
     }
+
 }
 

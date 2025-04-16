@@ -1,10 +1,13 @@
 package Vue.Page;
 
+import DAO.ModifAdminDAO;
+import Modele.Attraction;
 import Modele.Utilisateur;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class PageReservationSwing extends JFrame {
@@ -134,19 +137,21 @@ public class PageReservationSwing extends JFrame {
             btn.setToolTipText(getSaison(date));
 
             btn.addActionListener(e -> {
-                String[] attractions = {"Laser Game", "Exploration", "Sculpture Citrouille", "Nocturne Halloween"};
+                /*String[] attractions = {"Laser Game", "Exploration", "Sculpture Citrouille", "Nocturne Halloween"};*/
+                ArrayList<Attraction> attractions = new ModifAdminDAO().getAtts();
+                String[] attractionsArr=AttToArray(attractions);
                 String choix = (String) JOptionPane.showInputDialog(
                         this,
                         "Choisissez une attraction :",
                         "Attraction",
                         JOptionPane.QUESTION_MESSAGE,
                         null,
-                        attractions,
-                        attractions[0]
+                        attractionsArr,
+                        attractionsArr[0]
                 );
 
                 if (choix != null) {
-                    int idAttraction = getAttractionId(choix);
+                    int idAttraction = getAttIdfromNom(attractions,choix) ;
                     new VueHoraireAttraction(choix, idAttraction, utilisateur, date);
                 }
             });
@@ -186,4 +191,23 @@ public class PageReservationSwing extends JFrame {
             default -> 1;
         };
     }
+    private int getAttIdfromNom(ArrayList<Attraction> attractions, String  nom){
+        for(Attraction a: attractions  ){
+            if(a.toString().compareTo(nom)==0){
+                return(a.get_id_attraction());
+            }
+        }
+        return(0);
+    }
+
+    private String[] AttToArray(ArrayList<Attraction> atts){
+        String[] ret=new String[atts.size()];
+        for (int i = 0; i < atts.size(); i++) {
+            ret[i]=atts.get(i).toString();
+
+        }
+        return(ret);
+    }
+
+
 }
