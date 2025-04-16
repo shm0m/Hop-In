@@ -112,7 +112,8 @@ public class VueHoraireAttraction extends JFrame {
                 public void mouseClicked(MouseEvent evt) {
                     if (inscrits < capaciteMax) {
                         ReservationControleur controleur = new ReservationControleur();
-                        boolean ok = controleur.reserver(id_utilisateur, id_attraction, idCreneau);
+                        boolean ok = controleur.reserver(id_utilisateur, id_attraction, idCreneau, date);
+
                         if (ok) {
                             JOptionPane.showMessageDialog(null,
                                     "Réservation confirmée pour " + label + "\nAttraction : " + attraction,
