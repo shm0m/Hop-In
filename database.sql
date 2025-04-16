@@ -86,3 +86,9 @@ INSERT INTO creneau VALUES (8, '17:00:00');
 INSERT INTO creneau VALUES (9, '18:00:00');
 INSERT INTO creneau VALUES (10, '19:00:00');
 
+INSERT INTO attraction (id_attraction, nom, description, prix, capacite_max) VALUES
+(1, 'Laser Game', 'Combat laser entre amis dans un labyrinthe immersif.', 5.00, 20),
+(2, 'Exploration', 'Parcours d’énigmes et d’obstacles pour les plus téméraires.', 4.50, 25),
+(3, 'Sculpture Citrouille', 'Atelier Halloween de sculpture sur citrouille.', 3.00, 15),
+(4, 'Nocturne Halloween', 'Parc transformé en manoir hanté de nuit.', 7.50, 50),
+(5, 'Skibidi Toilet', 'Défi insolite et rigolo avec toilettes géantes.', 6.00, 70);
