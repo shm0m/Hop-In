@@ -91,4 +91,4 @@ INSERT INTO attraction (id_attraction, nom, description, prix, capacite_max) VAL
 (2, 'Exploration', 'Parcours d’énigmes et d’obstacles pour les plus téméraires.', 4.50, 25),
 (3, 'Sculpture Citrouille', 'Atelier Halloween de sculpture sur citrouille.', 3.00, 15),
 (4, 'Nocturne Halloween', 'Parc transformé en manoir hanté de nuit.', 7.50, 50),
-(5, 'Skibidi Toilet', 'Défi insolite et rigolo avec toilettes géantes.', 6.00, 70);
+(5, 'Skibidi Toilet', 'Défi insolite et rigolo avec toilettes géantes  .', 6.00, 70);
