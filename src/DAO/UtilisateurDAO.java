@@ -31,7 +31,7 @@ public class UtilisateurDAO {
     }
 
 
-    public void ajouterUtilisateur(Utilisateur u) {
+    public int ajouterUtilisateur(Utilisateur u) {
         String sql = "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, date_naissance, type_membre, role) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = this.gerant.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, u.getNom());
@@ -42,10 +42,11 @@ public class UtilisateurDAO {
             stmt.setString(6,"AUCUN");
             stmt.setString(7, u.getRole());
 
-            stmt.executeUpdate();
+            return(stmt.executeUpdate());
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return(-1);
     }
 
 }
