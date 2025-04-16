@@ -1,4 +1,5 @@
 package Modele;
+import DAO.AttractionDAO;
 import DAO.GestionConnexion;
 import DAO.ModifAdminDAO;
 import DAO.UtilisateurDAO;
@@ -9,14 +10,14 @@ import DAO.ModifAdminDAO.*;
 import java.sql.*;
 
 public class Admin extends Utilisateur{
-    ModifAdminDAO modifieur;
+    AttractionDAO modifieur;
     public Admin(String nom, String prenom, String email, String motDePasse) {
         this.nom = nom;
         this.prenom = prenom;
         this.email = email;
         this.motDePasse = motDePasse;
 
-        this.modifieur=new ModifAdminDAO();
+        this.modifieur=new AttractionDAO();
     }
     public Admin(Utilisateur u){
         this.nom=u.getNom();

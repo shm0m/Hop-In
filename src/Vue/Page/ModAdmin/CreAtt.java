@@ -1,5 +1,6 @@
 package Vue.Page.ModAdmin;
 
+import DAO.AttractionDAO;
 import DAO.ModifAdminDAO;
 import Modele.Attraction;
 
@@ -18,7 +19,7 @@ public class CreAtt extends JFrame {
     private JTextField modicPrix;
     private JLabel indicCapaciteMax;
     private JTextField modicCapaciteMax;
-    private ModifAdminDAO modifieur;
+    private AttractionDAO modifieur;
     private JButton retour;
     private JButton ajouter;
 
@@ -26,7 +27,7 @@ public class CreAtt extends JFrame {
 
     public CreAtt(JFrame previousFrame){
         super("Vue Administrateur");
-        this.modifieur=new ModifAdminDAO();
+        this.modifieur=new AttractionDAO();
         setLayout(new GridBagLayout());
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

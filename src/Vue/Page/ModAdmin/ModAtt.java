@@ -1,8 +1,8 @@
 package Vue.Page.ModAdmin;
 
+import DAO.AttractionDAO;
 import DAO.ModifAdminDAO;
 import Modele.Attraction;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -18,18 +18,20 @@ public class ModAtt extends JFrame {
     private JTextField modicPrix;
     private JLabel indicCapaciteMax;
     private JTextField modicCapaciteMax;
-    private ModifAdminDAO modifieur;
+    private AttractionDAO modifieur;
     private JLabel indicId;
     private JLabel indicQuelId;
     private JButton supprimer;
     private JButton afficherProp;
     private JButton modifier;
+    private JLabel indicAff;
+    private JLabel affichAff;
 
     JFrame previousFrame;
 
     public ModAtt(JFrame previousFrame){
         super("Vue Administrateur");
-        this.modifieur=new ModifAdminDAO();
+        this.modifieur=new AttractionDAO();
         setLayout(new GridBagLayout());
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,23 +103,32 @@ public class ModAtt extends JFrame {
         gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
         add(indicQuelId, gbc);
 
+        indicAff=new JLabel("Affluence:");
+        gbc.gridx=0;
+        gbc.gridy=5;
+        add(indicAff,gbc);
+        affichAff=new JLabel();
+        gbc.gridx=1;
+        gbc.gridy=5;
+        add(affichAff,gbc);
+
         afficherProp=new JButton("Afficher les propriétés actuelles");
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
 
         gbc.gridwidth = 1; // Limiter à une seule colonne
         add(afficherProp, gbc);
 
-        modifier =new JButton("Appliquer les changements");
+        modifier =new JButton("Appliquer les changements et quitter");
         gbc.gridx = 1;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
 
         gbc.gridwidth = 1; // Limiter à une seule colonne
         add(modifier, gbc);
 
         supprimer =new JButton("Supprimer l'attraction");
         gbc.gridx = 2;
-        gbc.gridy = 5;
+        gbc.gridy = 6;
 
         gbc.gridwidth = 1; // Limiter à une seule colonne
         add(supprimer, gbc);
@@ -131,6 +142,7 @@ public class ModAtt extends JFrame {
                 modicPrix.setText(a.get_prix_Str());
                 indicQuelId.setText(a.get_id_attraction_Str());
                 modicDescription.getText();
+                affichAff.setText(modifieur.getAffluence(a.get_id_attraction_Str()));
             }
         });
 

@@ -1,7 +1,4 @@
 package Vue;
-
-import Vue.Page.VerifAdmin;
-
 import javax.swing.*;
 import java.awt.*;
 
@@ -53,8 +50,6 @@ public class HopInGUI extends JFrame {
             new Vue.Page.PageInviteSwing(this);
             setVisible(false); 
         });
-
-
 
         add(panel);
         setVisible(true);

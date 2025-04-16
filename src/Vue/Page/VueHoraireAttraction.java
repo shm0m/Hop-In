@@ -1,9 +1,11 @@
 package Vue.Page;
 
+import DAO.AttractionDAO;
+import DAO.ModifAdminDAO;
 import Modele.Utilisateur;
-import Modele.Creneau;
 import Controleur.ReservationControleur;
 import DAO.ReservationDAO;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -13,24 +15,31 @@ import java.time.LocalDate;
 import java.util.Map;
 
 public class VueHoraireAttraction extends JFrame {
-    private final int PLACES_MAX = 25;
+    private final int capaciteMax;
     private final String attraction;
     private final LocalDate date;
     private final int id_utilisateur;
     private final int id_attraction;
 
-    public VueHoraireAttraction(String attraction, int id_attraction, Utilisateur utilisateur, LocalDate date) {
+    public VueHoraireAttraction(String attraction, int id_attraction, Utilisateur utilisateur, LocalDate date, int capaciteMax) {
+        this.capaciteMax = capaciteMax;
         this.attraction = attraction;
         this.date = date;
         this.id_attraction = id_attraction;
         this.id_utilisateur = utilisateur != null ? utilisateur.getId() : 0;
+
+        String descriptionFromDB = new ModifAdminDAO().getDescriptionById(id_attraction);
+        if (descriptionFromDB == null || descriptionFromDB.isBlank()) {
+            descriptionFromDB = "Pas de description disponible pour cette attraction.";
+        }
+
 
         setTitle("Réserver une attraction - Hop'In");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JLabel titre = new JLabel("📅 Réservation - " + date + " | " + attraction, SwingConstants.CENTER);
+        JLabel titre = new JLabel(" Réservation - " + date + " | " + attraction, SwingConstants.CENTER);
         titre.setFont(new Font("Segoe UI", Font.BOLD, 22));
         titre.setOpaque(true);
         titre.setBackground(new Color(240, 240, 240));
@@ -47,27 +56,53 @@ public class VueHoraireAttraction extends JFrame {
         Map<Integer, Time> creneauxDispo = reservationDAO.getHeuresCreneauxDepuisBase();
         Map<Integer, Integer> reservationsMap = reservationDAO.getNbPersonnesParCreneau(id_attraction, date);
 
+        JPanel bottomRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        bottomRightPanel.setOpaque(false);  // Pour conserver le fond transparent
+
+        JButton btnRetour = new JButton("Retour");
+        btnRetour.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        btnRetour.setPreferredSize(new Dimension(120, 40));
+
+        btnRetour.addActionListener(e -> {
+            setVisible(false);
+        });
+
+        JButton btnPaiement = new JButton("Passer au paiement");
+        btnPaiement.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        btnPaiement.setPreferredSize(new Dimension(180, 40));
+
+        btnPaiement.addActionListener(e -> {
+            new Pagepayement(this);
+            setVisible(false);
+        });
+
+        bottomRightPanel.add(btnRetour);
+        bottomRightPanel.add(btnPaiement);
+
+        add(bottomRightPanel, BorderLayout.SOUTH);
+
         for (Map.Entry<Integer, Time> entry : creneauxDispo.entrySet()) {
             int idCreneau = entry.getKey();
             Time heureDebut = entry.getValue();
             int heureFin = heureDebut.toLocalTime().plusHours(1).getHour();
             String label = heureDebut.toString().substring(0, 5) + " - " + heureFin + "h";
 
-            int inscrits = reservationsMap.getOrDefault(idCreneau, 0);
+            int inscrits = reservationsMap.getOrDefault(idCreneau, 0); // 💥 ne plantera plus
+
 
             JPanel ligne = new JPanel(new BorderLayout());
             ligne.setPreferredSize(new Dimension(700, 50));
             ligne.setBackground(Color.WHITE);
             ligne.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
 
-            JLabel heure = new JLabel("🕒 " + label, SwingConstants.LEFT);
+            JLabel heure = new JLabel(" " + label, SwingConstants.LEFT);
             heure.setFont(new Font("Segoe UI", Font.BOLD, 14));
             heure.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
 
-            JLabel statut = new JLabel(inscrits + "/" + PLACES_MAX + " inscrits", SwingConstants.RIGHT);
+            JLabel statut = new JLabel(inscrits + "/" + capaciteMax + " inscrits", SwingConstants.RIGHT);
             statut.setFont(new Font("Segoe UI", Font.PLAIN, 14));
             statut.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 15));
-            statut.setForeground(inscrits >= PLACES_MAX ? Color.RED : new Color(50, 150, 50));
+            statut.setForeground(inscrits >= capaciteMax ? Color.RED : new Color(50, 150, 50));
 
             ligne.add(heure, BorderLayout.WEST);
             ligne.add(statut, BorderLayout.EAST);
@@ -75,9 +110,10 @@ public class VueHoraireAttraction extends JFrame {
 
             ligne.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent evt) {
-                    if (inscrits < PLACES_MAX) {
+                    if (inscrits < capaciteMax) {
                         ReservationControleur controleur = new ReservationControleur();
-                        boolean ok = controleur.reserver(id_utilisateur, id_attraction, idCreneau);
+                        boolean ok = controleur.reserver(id_utilisateur, id_attraction, idCreneau, date);
+
                         if (ok) {
                             JOptionPane.showMessageDialog(null,
                                     "Réservation confirmée pour " + label + "\nAttraction : " + attraction,
@@ -90,7 +126,7 @@ public class VueHoraireAttraction extends JFrame {
                         rechargerAffichage(utilisateur);
                     } else {
                         JOptionPane.showMessageDialog(null,
-                                "❌ Ce créneau est déjà complet !",
+                                "Ce créneau est déjà complet !",
                                 "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
                 }
@@ -109,11 +145,12 @@ public class VueHoraireAttraction extends JFrame {
         descriptionPanel.setBackground(Color.WHITE);
         descriptionPanel.setBorder(BorderFactory.createEmptyBorder(30, 20, 30, 20));
 
-        JTextArea description = new JTextArea("📍 À propos de l’attraction \"" + attraction + "\"\n\n"
-                + "🔹 Réservez un créneau horaire pour profiter de cette attraction dans les meilleures conditions.\n"
-                + "🔹 Les créneaux sont limités en capacité (max " + PLACES_MAX + " personnes).\n"
-                + "🔹 Une fois complet, le créneau devient indisponible.\n\n"
-                + "🎢 Bon moment garanti à Hop'In !");
+        JTextArea description = new JTextArea("À propos de l’attraction \"" + attraction + "\"\n\n"
+                + descriptionFromDB + "\n\n"
+                + "Les créneaux sont limités en capacité (max " + capaciteMax + " personnes).\n"
+                + "Une fois complet, le créneau devient indisponible.\n\n"
+                + "Bon moment garanti à Hop'In !");
+
         description.setWrapStyleWord(true);
         description.setLineWrap(true);
         description.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -129,9 +166,11 @@ public class VueHoraireAttraction extends JFrame {
 
     private void rechargerAffichage(Utilisateur utilisateur) {
         SwingUtilities.invokeLater(() -> {
-            getContentPane().removeAll();
-            new VueHoraireAttraction(this.attraction, this.id_attraction, utilisateur, this.date);
             dispose();
+            int capaciteMax = new AttractionDAO().getCapaciteAttraction(id_attraction);
+            new VueHoraireAttraction(attraction, id_attraction, utilisateur, date, capaciteMax);
         });
     }
+
+
 }

@@ -115,7 +115,8 @@ public class PageCreneauxParAttraction extends JFrame {
 
                 boolean ok = true;
                 for (int i = 0; i < nbPlaces; i++) {
-                    ok = ok && controleur.reserver(idUtilisateur, idAttraction, idCreneau);
+                    ok = ok && controleur.reserver(idUtilisateur, idAttraction, idCreneau, date);
+
                 }
 
                 if (ok) {

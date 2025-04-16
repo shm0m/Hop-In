@@ -1,10 +1,16 @@
 package Vue.Page;
 
+import DAO.AttractionDAO;
+import DAO.ModifAdminDAO;
+import Modele.Attraction;
 import Modele.Utilisateur;
+import Vue.HopInGUI;
+
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.Locale;
 
 public class PageReservationSwing extends JFrame {
@@ -33,12 +39,11 @@ public class PageReservationSwing extends JFrame {
         JPanel topPanel = new JPanel(new BorderLayout());
         JButton prev = new JButton("⬅");
         JButton next = new JButton("➡");
+        JButton deco = new JButton("deconexion");
 
         JPanel leftPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
         leftPanel.setOpaque(false);
         leftPanel.add(prev);
-
-
 
         JButton btnMesEvenements = new JButton("Mes informations");
         btnMesEvenements.setPreferredSize(new Dimension(150, 40));
@@ -64,12 +69,14 @@ public class PageReservationSwing extends JFrame {
         topPanel.add(leftPanel, BorderLayout.WEST);
         topPanel.add(moisLabel, BorderLayout.CENTER);
         topPanel.add(next, BorderLayout.EAST);
+        topPanel.add(deco,BorderLayout.SOUTH);
         add(topPanel, BorderLayout.NORTH);
 
 
         topPanel.add(prev, BorderLayout.WEST);
         topPanel.add(moisLabel, BorderLayout.CENTER);
         topPanel.add(next, BorderLayout.EAST);
+        topPanel.add(deco,BorderLayout.SOUTH);
         add(topPanel, BorderLayout.NORTH);
 
         calendarPanel = new JPanel(new GridLayout(0, 7, 5, 5));
@@ -87,6 +94,11 @@ public class PageReservationSwing extends JFrame {
         prev.addActionListener(e -> {
             currentMonth = currentMonth.minusMonths(1);
             refreshCalendar();
+        });
+
+        deco.addActionListener(e -> {
+            new Vue.HopInGUI();
+            dispose();
         });
 
         next.addActionListener(e -> {
@@ -134,20 +146,24 @@ public class PageReservationSwing extends JFrame {
             btn.setToolTipText(getSaison(date));
 
             btn.addActionListener(e -> {
-                String[] attractions = {"Laser Game", "Exploration", "Sculpture Citrouille", "Nocturne Halloween"};
+                /*String[] attractions = {"Laser Game", "Exploration", "Sculpture Citrouille", "Nocturne Halloween"};*/
+                ArrayList<Attraction> attractions = new AttractionDAO().getAtts();
+                String[] attractionsArr=AttToArray(attractions);
                 String choix = (String) JOptionPane.showInputDialog(
                         this,
                         "Choisissez une attraction :",
                         "Attraction",
                         JOptionPane.QUESTION_MESSAGE,
                         null,
-                        attractions,
-                        attractions[0]
+                        attractionsArr,
+                        attractionsArr[0]
                 );
 
                 if (choix != null) {
-                    int idAttraction = getAttractionId(choix);
-                    new VueHoraireAttraction(choix, idAttraction, utilisateur, date);
+                    int idAttraction = getAttIdfromNom(attractions,choix) ;
+                    int capaciteMax = new AttractionDAO().getCapaciteAttraction(idAttraction);
+                    new VueHoraireAttraction(choix, idAttraction, utilisateur, date, capaciteMax);
+
                 }
             });
 
@@ -186,4 +202,23 @@ public class PageReservationSwing extends JFrame {
             default -> 1;
         };
     }
+    private int getAttIdfromNom(ArrayList<Attraction> attractions, String  nom){
+        for(Attraction a: attractions  ){
+            if(a.toString().compareTo(nom)==0){
+                return(a.get_id_attraction());
+            }
+        }
+        return(0);
+    }
+
+    private String[] AttToArray(ArrayList<Attraction> atts){
+        String[] ret=new String[atts.size()];
+        for (int i = 0; i < atts.size(); i++) {
+            ret[i]=atts.get(i).toString();
+
+        }
+        return(ret);
+    }
+
+
 }

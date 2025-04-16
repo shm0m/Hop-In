@@ -25,7 +25,7 @@ public class PageInviteSwing extends JFrame {
         gbc.anchor = GridBagConstraints.CENTER;
 
         JLabel title = new JLabel("Connexion en tant qu'invité");
-        title.setFont(new Font("Verdana", Font.BOLD, 28));
+        title.setFont(new Font("Segoe UI", Font.BOLD, 28));
         title.setForeground(new Color(126, 214, 223));
         title.setHorizontalAlignment(SwingConstants.CENTER);
         gbc.gridx = 0;
