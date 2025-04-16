@@ -114,9 +114,9 @@ public class PageEnregistrementSwing extends JFrame {
             String typeMembre = (groupeMembre.getSelection() != null) ? groupeMembre.getSelection().getActionCommand() : null;
             String role = (groupeRole.getSelection() != null) ? groupeRole.getSelection().getActionCommand() : null;
 
-            if (!dateField.getText().matches("\\d{4}/\\d{2}/\\d{2}")) {
+            if (!dateField.getText().matches("\\d{4}-\\d{2}-\\d{2}")) {
                 message.setForeground(Color.RED);
-                message.setText("Le format de la date doit être xxxx/xx/xx, avec seulement des chiffres.");
+                message.setText("Le format de la date doit être xxxx-xx-xx, avec seulement des chiffres.");
                 return;
             }
 
