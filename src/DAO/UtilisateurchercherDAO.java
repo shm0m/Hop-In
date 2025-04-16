@@ -49,25 +49,32 @@ public class UtilisateurchercherDAO {
         return null;
     }
 
-    public List<Utilisateur> getAll() {
-        List<Utilisateur> utilisateurs = new ArrayList<>();
-        String sql = "SELECT * FROM utilisateur WHERE role='CLIENT'; ";
-        try (Connection conn = this.gerant.getConnection(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
-            while (rs.next()) {
-                Utilisateur u = new Client(
-                        rs.getInt("id"),
-                        rs.getString("nom"),
-                        rs.getString("prenom"),
-                        rs.getString("email"),
-                        rs.getString("mot_de_passe"),
-                        rs.getString("date_naissance")
-                );
-                utilisateurs.add(u);
+    public ArrayList<Client> getClis() {
+        String sql = "select * from utilisateur where role=\"CLIENT\";";
+
+        try {
+            Connection conn = gerant.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet resultat = stmt.executeQuery(sql);
+
+
+            ArrayList<Client> clients = new ArrayList();
+            while (resultat.next()) {
+                int id = resultat.getInt("id");
+                String nom = resultat.getString("nom");
+                String prenom = resultat.getString("prenom");
+                String email = resultat.getString("email");
+                String mot_de_passe = resultat.getString("mot_de_passe");
+                String date_naissance = resultat.getString("date_naissance");
+
+                clients.add(new Client(id, nom, prenom, email, mot_de_passe, date_naissance));
             }
+            return (clients);
+
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
-        return utilisateurs;
+        return(new ArrayList<Client>());
     }
 }

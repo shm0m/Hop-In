@@ -2,6 +2,7 @@ package Vue.Page.ModAdmin;
 
 import DAO.ModifAdminDAO;
 import DAO.UtilisateurDAO;
+import DAO.UtilisateurchercherDAO;
 import Modele.Attraction;
 import Modele.Client;
 
@@ -28,12 +29,14 @@ public class ModCli extends JFrame {
     private JButton enregistrer;
     private JButton quitter;
     private UtilisateurDAO modifieur;
-    private JFrame previousFrame;
+    private UtilisateurchercherDAO getter;
+        private JFrame previousFrame;
 
 
     public ModCli(JFrame previousFrame) {
         super("Modification clients");
         this.modifieur = new UtilisateurDAO();
+        this.getter =new UtilisateurchercherDAO();
         setLayout(new GridBagLayout());
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -51,7 +54,7 @@ public class ModCli extends JFrame {
         gbc.gridy = 0;
         add(indic_choixCli, gbc);
 
-        ArrayList<Client> clients=modifieur.getClis();
+        ArrayList<Client> clients=getter.getClis();
         men_choixCli = new JComboBox<>(clients.toArray(new Client[0]));
         gbc.gridx = 1;
         gbc.gridy = 0;

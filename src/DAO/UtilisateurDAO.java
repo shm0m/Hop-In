@@ -14,7 +14,7 @@ public class UtilisateurDAO {
         gerant=new GestionConnexion();
     }
 
-    public void updateUtilisateur(Utilisateur u) {
+    public int updateUtilisateur(Utilisateur u) {
         String sql = "UPDATE utilisateur SET nom = ?, prenom = ?, email = ?, date_naissance = ?, mot_de_passe = ? WHERE id = ?";
         try (Connection conn = gerant.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -24,10 +24,11 @@ public class UtilisateurDAO {
             stmt.setString(4, u.getDateNaissance());
             stmt.setString(5, u.getMotDePasse());
             stmt.setInt(6, u.getId());
-            stmt.executeUpdate();
+            return(stmt.executeUpdate());
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return (-1);
     }
 
 
