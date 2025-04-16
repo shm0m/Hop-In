@@ -22,6 +22,7 @@ public class Attraction {
     public int get_id_attraction(){
         return(this.id_attraction);
     }
+
     public String get_id_attraction_Str(){
         return(this.id_attraction+"");
     }

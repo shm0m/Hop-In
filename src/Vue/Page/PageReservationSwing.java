@@ -139,7 +139,7 @@ public class PageReservationSwing extends JFrame {
 
             btn.addActionListener(e -> {
                 /*String[] attractions = {"Laser Game", "Exploration", "Sculpture Citrouille", "Nocturne Halloween"};*/
-                ArrayList<Attraction> attractions = new ModifAdminDAO().getAtts();
+                ArrayList<Attraction> attractions = new AttractionDAO().getAtts();
                 String[] attractionsArr=AttToArray(attractions);
                 String choix = (String) JOptionPane.showInputDialog(
                         this,
