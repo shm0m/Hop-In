@@ -1,6 +1,8 @@
 package Vue.Page;
 
 import DAO.ReservationDAO;
+import DAO.CreneauDAO;
+import DAO.AttractionDAO;
 import Modele.Reservation;
 import Modele.Utilisateur;
 import Controleur.UtilisateurControleur;
@@ -21,7 +23,6 @@ public class PageProfileSwing extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel content = new JPanel() {
-            @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
@@ -39,7 +40,7 @@ public class PageProfileSwing extends JFrame {
 
         Color accentColor = new Color(76, 215, 179);
         Color labelColor = new Color(62, 15, 76);
-        Color inputColor = new Color(255, 245, 250);
+        Color inputColor = new Color(255, 240, 245);
         Font labelFont = new Font("Segoe UI", Font.BOLD, 15);
         Font fieldFont = new Font("Segoe UI", Font.PLAIN, 16);
 
@@ -47,11 +48,9 @@ public class PageProfileSwing extends JFrame {
         navBar.setAlignmentX(Component.CENTER_ALIGNMENT);
         content.add(navBar);
 
-        ImageIcon icon = new ImageIcon("assets/profil.jpg");
+        ImageIcon icon = new ImageIcon("assets/profil.png");
         Image img = icon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-        ImageIcon roundIcon = new ImageIcon(img);
-
-        JLabel picLabel = new JLabel(roundIcon);
+        JLabel picLabel = new JLabel(new ImageIcon(img));
         picLabel.setPreferredSize(new Dimension(80, 80));
 
         JLabel bienvenueLabel = new JLabel("Bienvenue, " + utilisateur.getPrenom() + " !");
@@ -68,7 +67,7 @@ public class PageProfileSwing extends JFrame {
 
         JPanel formPanel = new RoundedPanel(20);
         formPanel.setLayout(new GridBagLayout());
-        formPanel.setBackground(Color.WHITE);
+        formPanel.setBackground(new Color(255, 255, 255, 160));
         formPanel.setBorder(new EmptyBorder(30, 40, 30, 40));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -88,7 +87,6 @@ public class PageProfileSwing extends JFrame {
         for (int i = 0; i < labels.length; i++) {
             gbc.gridx = 0;
             gbc.gridy = i;
-
             JLabel lbl = new JLabel(labels[i] + " :");
             lbl.setFont(labelFont);
             lbl.setForeground(labelColor);
@@ -143,17 +141,18 @@ public class PageProfileSwing extends JFrame {
         titreHistorique.setBorder(new EmptyBorder(20, 0, 10, 0));
         content.add(titreHistorique);
 
-        String[] colonnes = {"Client ID", "Attraction ID", "Date de Réservation", "Nb Personnes", "ID Créneau", "Statut"};
+        String[] colonnes = {"Attraction", "Date", "Heure", "Nb Pers.", "Statut"};
         DefaultTableModel model = new DefaultTableModel(colonnes, 0);
         ArrayList<Reservation> reservations = new ReservationDAO().getReservationsByClient(utilisateur.getId());
 
         for (Reservation res : reservations) {
+            String nomAtt = new AttractionDAO().getNomAttractionById(res.getIdAttraction());
+            String horaire = new CreneauDAO().getHoraireById(res.getIdCreneau());
             Object[] row = {
-                    res.getIdUtilisateur(),
-                    res.getIdAttraction(),
+                    nomAtt,
                     res.getDateReservation(),
+                    horaire,
                     res.getNbPersonnes(),
-                    res.getIdCreneau(),
                     res.getStatut()
             };
             model.addRow(row);
@@ -161,16 +160,16 @@ public class PageProfileSwing extends JFrame {
 
         JTable table = new JTable(model);
         table.setFont(fieldFont);
-        table.setRowHeight(28);
+        table.setRowHeight(26);
         table.setGridColor(new Color(230, 230, 230));
         table.setShowGrid(true);
         table.setFillsViewportHeight(true);
         table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
-        table.getTableHeader().setBackground(new Color(200, 200, 255));
+        table.getTableHeader().setBackground(new Color(235, 230, 255));
         table.setBackground(Color.WHITE);
 
         JScrollPane scroll = new JScrollPane(table);
-        scroll.setPreferredSize(new Dimension(900, 150));
+        scroll.setPreferredSize(new Dimension(800, 140));
         scroll.setBorder(BorderFactory.createLineBorder(labelColor, 1, true));
         scroll.setAlignmentX(Component.CENTER_ALIGNMENT);
         content.add(scroll);
@@ -199,12 +198,10 @@ public class PageProfileSwing extends JFrame {
         private final int cornerRadius;
 
         public RoundedPanel(int radius) {
-            super();
             this.cornerRadius = radius;
             setOpaque(false);
         }
 
-        @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2 = (Graphics2D) g;

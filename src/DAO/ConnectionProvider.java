@@ -6,8 +6,8 @@ import java.sql.SQLException;
 
 public class ConnectionProvider {
     private static final String URL = "jdbc:mysql://localhost:3306/hop_in";
-    private static final String USER = "root";         // Ajuste selon ton environnement
-    private static final String PASSWORD = ""; // Ajuste selon ton environnement
+    private static final String USER = "root";
+    private static final String PASSWORD = "";
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);

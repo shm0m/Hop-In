@@ -59,8 +59,8 @@ public class PageReservationSwing extends JFrame {
 
         JPanel monthPanel = new JPanel(new BorderLayout());
         monthPanel.setOpaque(false);
-        JButton prev = new JButton("⬅");
-        JButton next = new JButton("➡");
+        JButton prev = new JButton("<");
+        JButton next = new JButton(">");
         prev.setFont(new Font("Segoe UI", Font.BOLD, 18));
         next.setFont(new Font("Segoe UI", Font.BOLD, 18));
         monthPanel.add(prev, BorderLayout.WEST);

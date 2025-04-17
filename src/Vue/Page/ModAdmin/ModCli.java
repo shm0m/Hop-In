@@ -1,151 +1,90 @@
 package Vue.Page.ModAdmin;
 
-import DAO.ModifAdminDAO;
 import DAO.UtilisateurDAO;
 import DAO.UtilisateurchercherDAO;
-import Modele.Attraction;
 import Modele.Client;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.util.ArrayList;
 
 public class ModCli extends JFrame {
-    private JLabel  indic_nom;
-    private JTextField mod_nom;
-    private JLabel  indic_prenom;
-    private JTextField mod_prenom;
-    private JLabel  indic_mot_de_passe;
-    private JTextField mod_mot_de_passe;
-    private JLabel  indic_email;
-    private JTextField mod_email;
-    private JLabel  indic_date_naissance;
-    private JTextField mod_date_naissance;
-    private JLabel  indic_choixCli;
-    private JComboBox men_choixCli;
+    private JTextField mod_nom, mod_prenom, mod_email, mod_mot_de_passe, mod_date_naissance;
+    private JComboBox<Client> men_choixCli;
     private JLabel indication;
-
-    private JButton actualiser;
-    private JButton enregistrer;
-    private JButton quitter;
     private UtilisateurDAO modifieur;
     private UtilisateurchercherDAO getter;
-        private JFrame previousFrame;
-
+    private JFrame previousFrame;
 
     public ModCli(JFrame previousFrame) {
         super("Modification clients");
+        this.previousFrame = previousFrame;
         this.modifieur = new UtilisateurDAO();
-        this.getter =new UtilisateurchercherDAO();
-        setLayout(new GridBagLayout());
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.getter = new UtilisateurchercherDAO();
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
 
-
-        this.previousFrame=previousFrame;
+        JPanel panel = new JPanel(new GridBagLayout()) {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                GradientPaint gp = new GradientPaint(0, 0, new Color(255, 248, 230), getWidth(), getHeight(), new Color(255, 240, 245));
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        panel.setBorder(new EmptyBorder(30, 50, 30, 50));
+        panel.setOpaque(false);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Espacement autour des boutons
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplir horizontalement
-        // Ajouter les boutons avec des contraintes
-        indic_choixCli=new JLabel("Choisir client à modifier");
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        add(indic_choixCli, gbc);
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        ArrayList<Client> clients=getter.getClis();
+        ArrayList<Client> clients = getter.getClis();
         men_choixCli = new JComboBox<>(clients.toArray(new Client[0]));
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
-        add(men_choixCli, gbc);
+        addField(panel, gbc, "Choisir un client :", men_choixCli, 0);
 
+        mod_nom = new JTextField();
+        addField(panel, gbc, "Nom :", mod_nom, 1);
 
-        mod_nom=new JTextField("Champ vide                                                                                          ");
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.gridwidth = 4;
-        add(mod_nom, gbc);
+        mod_prenom = new JTextField();
+        addField(panel, gbc, "Prénom :", mod_prenom, 2);
 
-        indic_nom=new JLabel("nom");
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        add(indic_nom, gbc);
+        mod_email = new JTextField();
+        addField(panel, gbc, "Email :", mod_email, 3);
 
+        mod_mot_de_passe = new JTextField();
+        addField(panel, gbc, "Mot de passe :", mod_mot_de_passe, 4);
 
-        mod_prenom=new JTextField("Champ vide                                                                                          ");
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        gbc.gridwidth = 4;
-        add(mod_prenom, gbc);
+        mod_date_naissance = new JTextField();
+        addField(panel, gbc, "Date de naissance :", mod_date_naissance, 5);
 
-        indic_prenom=new JLabel("prenom");
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        add(indic_prenom, gbc);
-
-
-        mod_email=new JTextField("Champ vide                                                                                          ");
-        gbc.gridx = 1;
-        gbc.gridy = 3;
-        gbc.gridwidth = 4;
-        add(mod_email, gbc);
-
-        indic_email=new JLabel("email");
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        add(indic_email, gbc);
-
-
-        mod_mot_de_passe=new JTextField("Champ vide                                                                                          ");
-        gbc.gridx = 1;
-        gbc.gridy = 4;
-        gbc.gridwidth = 4;
-        add(mod_mot_de_passe, gbc);
-
-        indic_mot_de_passe=new JLabel("mot_de_passe");
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        add(indic_mot_de_passe, gbc);
-
-
-        mod_date_naissance=new JTextField("Champ vide                                                                                          ");
-        gbc.gridx = 1;
-        gbc.gridy = 5;
-        gbc.gridwidth = 4;
-        add(mod_date_naissance, gbc);
-
-        indic_date_naissance=new JLabel("Date de naissance");
-        gbc.gridx = 0;
-        gbc.gridy = 5;
-        add(indic_date_naissance, gbc);
-
-        indication=new JLabel("");
+        indication = new JLabel(" ");
+        indication.setForeground(Color.RED);
         gbc.gridx = 0;
         gbc.gridy = 6;
-        add(indication, gbc);
+        gbc.gridwidth = 2;
+        panel.add(indication, gbc);
 
-        actualiser=new JButton("actualiser");
-        gbc.gridx=0;
-        gbc.gridy=7;
-        gbc.gridwidth = 1;
-        add(actualiser,gbc);
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        btnPanel.setOpaque(false);
 
-        enregistrer=new JButton("enregistrer");
-        gbc.gridx=1;
-        gbc.gridy=7;
-        gbc.gridwidth = 1;
-        add(enregistrer,gbc);
+        JButton actualiser = createButton("Actualiser", new Color(62, 15, 76));
+        JButton enregistrer = createButton("Enregistrer", new Color(76, 215, 179));
+        JButton quitter = createButton("Quitter", new Color(249, 78, 139));
 
-        quitter=new JButton("quitter");
-        gbc.gridx=2;
-        gbc.gridy=7;
-        gbc.gridwidth = 1;
-        add(quitter,gbc);
+        btnPanel.add(actualiser);
+        btnPanel.add(enregistrer);
+        btnPanel.add(quitter);
 
-        actualiser.addActionListener(e->{
-            Client c=getCli(clients,men_choixCli.getSelectedItem().toString());
+        gbc.gridy = 7;
+        panel.add(btnPanel, gbc);
+
+        actualiser.addActionListener(e -> {
+            Client c = getCli(clients, men_choixCli.getSelectedItem().toString());
             mod_nom.setText(c.getNom());
             mod_prenom.setText(c.getPrenom());
             mod_mot_de_passe.setText(c.getMotDePasse());
@@ -153,9 +92,9 @@ public class ModCli extends JFrame {
             mod_date_naissance.setText(c.getDateNaissance());
         });
 
-        enregistrer.addActionListener(e->{
-            int id=getCli(clients,men_choixCli.getSelectedItem().toString()).getId();
-            int resultat=modifieur.updateUtilisateur(new Client(
+        enregistrer.addActionListener(e -> {
+            int id = getCli(clients, men_choixCli.getSelectedItem().toString()).getId();
+            int resultat = modifieur.updateUtilisateur(new Client(
                     id,
                     mod_nom.getText(),
                     mod_prenom.getText(),
@@ -163,36 +102,58 @@ public class ModCli extends JFrame {
                     mod_mot_de_passe.getText(),
                     mod_date_naissance.getText()
             ));
-            if(resultat==1){
+            if (resultat == 1) {
                 previousFrame.setVisible(true);
                 setVisible(false);
-
-            }
-            else{
-                indication.setText("Problème lors de la modification "+resultat);
+            } else {
+                indication.setText("Erreur lors de la modification");
             }
         });
 
-        quitter.addActionListener(e->{
+        quitter.addActionListener(e -> {
             previousFrame.setVisible(true);
             setVisible(false);
         });
 
-
-        setSize(1000,500);
+        setContentPane(panel);
         setVisible(true);
     }
 
-    private Client getCli(ArrayList<Client> clients,String nom){
-        for(Client client: clients){
-            if(client.toString().compareTo(nom)==0){
-                return(client);
-            }
-        }
-        return(new Client());
+    private void addField(JPanel panel, GridBagConstraints gbc, String label, JComponent field, int y) {
+        JLabel lbl = new JLabel(label);
+        lbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        lbl.setForeground(new Color(62, 15, 76));
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        gbc.gridwidth = 1;
+        panel.add(lbl, gbc);
+
+        field.setPreferredSize(new Dimension(280, 30));
+        if (field instanceof JTextField)
+            ((JTextField) field).setBorder(BorderFactory.createLineBorder(new Color(199, 199, 199), 1, true));
+        gbc.gridx = 1;
+        gbc.gridy = y;
+        panel.add(field, gbc);
     }
 
+    private JButton createButton(String text, Color color) {
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btn.setPreferredSize(new Dimension(140, 40));
+        btn.setBackground(color);
+        btn.setForeground(Color.WHITE);
+        btn.setBorder(BorderFactory.createLineBorder(new Color(62, 15, 76), 1, true));
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return btn;
+    }
 
-
-
+    private Client getCli(ArrayList<Client> clients, String nom) {
+        for (Client client : clients) {
+            if (client.toString().equals(nom)) {
+                return client;
+            }
+        }
+        return new Client();
+    }
 }

@@ -135,4 +135,23 @@ public class AttractionDAO {
         return(new ArrayList<Attraction>());
     }
 
+    public String getNomAttractionById(int idAttraction) {
+        String nom = null;
+        try (Connection conn = ConnectionProvider.getConnection();
+             PreparedStatement stmt = conn.prepareStatement("SELECT nom FROM attraction WHERE id_attraction = ?")) {
+            stmt.setInt(1, idAttraction);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                nom = rs.getString("nom");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return nom;
+    }
+
+
+
+
+
 }

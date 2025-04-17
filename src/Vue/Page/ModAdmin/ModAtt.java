@@ -1,186 +1,147 @@
 package Vue.Page.ModAdmin;
 
 import DAO.AttractionDAO;
-import DAO.ModifAdminDAO;
 import Modele.Attraction;
+
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class ModAtt extends JFrame {
-    private JLabel indicNom;
-    private JComboBox men_attractions;
-    private JLabel indicDescription;
-    private JTextField modicDescription;
-    private JLabel indicPrix;
-    private JTextField modicPrix;
-    private JLabel indicCapaciteMax;
-    private JTextField modicCapaciteMax;
+    private JTextField modicDescription, modicPrix, modicCapaciteMax;
+    private JLabel indicQuelId, affichAff;
+    private JComboBox<Attraction> men_attractions;
     private AttractionDAO modifieur;
-    private JLabel indicId;
-    private JLabel indicQuelId;
-    private JButton supprimer;
-    private JButton afficherProp;
-    private JButton modifier;
-    private JLabel indicAff;
-    private JLabel affichAff;
+    private JFrame previousFrame;
 
-    JFrame previousFrame;
+    public ModAtt(JFrame previousFrame) {
+        super("Modifier Attraction");
+        this.previousFrame = previousFrame;
+        this.modifieur = new AttractionDAO();
 
-    public ModAtt(JFrame previousFrame){
-        super("Vue Administrateur");
-        this.modifieur=new AttractionDAO();
-        setLayout(new GridBagLayout());
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
 
-
-        this.previousFrame=previousFrame;
-
         ArrayList<Attraction> attractions = modifieur.getAtts();
-        men_attractions = new JComboBox<>(attractions.toArray(new Attraction[0]));
+
+        JPanel panel = new JPanel(new GridBagLayout()) {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                GradientPaint gp = new GradientPaint(0, 0, new Color(255, 248, 230), getWidth(), getHeight(), new Color(255, 240, 245));
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        panel.setBorder(new EmptyBorder(30, 50, 30, 50));
+        panel.setOpaque(false);
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Espacement autour des boutons
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplir horizontalement
-        // Ajouter les boutons avec des contraintes
-        indicNom=new JLabel("Choisir attraction à modifier");
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        add(indicNom, gbc);
-
+        gbc.insets = new Insets(15, 15, 15, 15);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
         men_attractions = new JComboBox<>(attractions.toArray(new Attraction[0]));
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
-        add(men_attractions, gbc);
+        addField(panel, gbc, "Choisir une attraction :", men_attractions, 0);
 
-        indicDescription=new JLabel("Description: ");
-        gbc.gridx = 0;
-        gbc.gridy = 1;
-        add(indicDescription, gbc);
+        modicDescription = new JTextField();
+        addField(panel, gbc, "Description :", modicDescription, 1);
 
-        modicDescription=new JTextField("Champ vide                                                                                          ");
-        gbc.gridx = 1;
-        gbc.gridy = 1;
-        gbc.gridwidth = 4;
-        add(modicDescription, gbc);
+        modicPrix = new JTextField();
+        addField(panel, gbc, "Prix :", modicPrix, 2);
 
-        indicPrix=new JLabel("Prix");
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        add(indicPrix, gbc);
+        modicCapaciteMax = new JTextField();
+        addField(panel, gbc, "Capacité max :", modicCapaciteMax, 3);
 
-        modicPrix=new JTextField("00.00");
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
-        add(modicPrix, gbc);
+        indicQuelId = new JLabel("0");
+        addField(panel, gbc, "ID de l'attraction :", indicQuelId, 4);
 
-        indicCapaciteMax=new JLabel("Capacité maximum");
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        add(indicCapaciteMax, gbc);
+        affichAff = new JLabel();
+        addField(panel, gbc, "Affluence :", affichAff, 5);
 
-        modicCapaciteMax=new JTextField("00");
-        gbc.gridx = 1;
-        gbc.gridy = 3;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
-        add(modicCapaciteMax, gbc);
+        JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        btnPanel.setOpaque(false);
 
-        indicId=new JLabel("Id de l'attraction");
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        add(indicId, gbc);
+        JButton afficherProp = createButton("Afficher", new Color(62, 15, 76));
+        JButton modifier = createButton("Modifier & Quitter", new Color(76, 215, 179));
+        JButton supprimer = createButton("Supprimer", new Color(249, 78, 139));
 
-        indicQuelId=new JLabel("0");
-        gbc.gridx = 1;
-        gbc.gridy = 4;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
-        add(indicQuelId, gbc);
+        btnPanel.add(afficherProp);
+        btnPanel.add(modifier);
+        btnPanel.add(supprimer);
 
-        indicAff=new JLabel("Affluence:");
-        gbc.gridx=0;
-        gbc.gridy=5;
-        add(indicAff,gbc);
-        affichAff=new JLabel();
-        gbc.gridx=1;
-        gbc.gridy=5;
-        add(affichAff,gbc);
-
-        afficherProp=new JButton("Afficher les propriétés actuelles");
-        gbc.gridx = 0;
         gbc.gridy = 6;
+        gbc.gridx = 0;
+        gbc.gridwidth = 2;
+        panel.add(btnPanel, gbc);
 
-        gbc.gridwidth = 1; // Limiter à une seule colonne
-        add(afficherProp, gbc);
-
-        modifier =new JButton("Appliquer les changements et quitter");
-        gbc.gridx = 1;
-        gbc.gridy = 6;
-
-        gbc.gridwidth = 1; // Limiter à une seule colonne
-        add(modifier, gbc);
-
-        supprimer =new JButton("Supprimer l'attraction");
-        gbc.gridx = 2;
-        gbc.gridy = 6;
-
-        gbc.gridwidth = 1; // Limiter à une seule colonne
-        add(supprimer, gbc);
-
-        afficherProp.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Attraction a=getAtt(men_attractions.getSelectedItem().toString(),attractions);
-                modicCapaciteMax.setText(a.get_capacite_max_Str());
-                modicDescription.setText(a.get_description());
-                modicPrix.setText(a.get_prix_Str());
-                indicQuelId.setText(a.get_id_attraction_Str());
-                modicDescription.getText();
-                affichAff.setText(modifieur.getAffluence(a.get_id_attraction_Str()));
-            }
+        afficherProp.addActionListener(e -> {
+            Attraction a = getAtt(men_attractions.getSelectedItem().toString(), attractions);
+            modicDescription.setText(a.get_description());
+            modicPrix.setText(a.get_prix_Str());
+            modicCapaciteMax.setText(a.get_capacite_max_Str());
+            indicQuelId.setText(a.get_id_attraction_Str());
+            affichAff.setText(modifieur.getAffluence(a.get_id_attraction_Str()));
         });
 
-        modifier.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                previousFrame.setVisible(true);
-
-                modifieur.changerAttraction(Modele.Trans.toInt(
-                        indicQuelId.getText()),
-                        men_attractions.getSelectedItem().toString(),
-                        modicDescription.getText(),
-                        Modele.Trans.toDouble(modicPrix.getText()),
-                        Modele.Trans.toInt(modicCapaciteMax.getText())
-                        );
-            }
-        });
-        supprimer.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                previousFrame.setVisible(true);
-                modifieur.delAtt(getAtt(men_attractions.getSelectedItem().toString(),attractions).get_id_attraction());
-            }
+        modifier.addActionListener(e -> {
+            setVisible(false);
+            previousFrame.setVisible(true);
+            modifieur.changerAttraction(
+                    Modele.Trans.toInt(indicQuelId.getText()),
+                    men_attractions.getSelectedItem().toString(),
+                    modicDescription.getText(),
+                    Modele.Trans.toDouble(modicPrix.getText()),
+                    Modele.Trans.toInt(modicCapaciteMax.getText())
+            );
         });
 
-        setSize(1000,500);
+        supprimer.addActionListener(e -> {
+            setVisible(false);
+            previousFrame.setVisible(true);
+            modifieur.delAtt(getAtt(men_attractions.getSelectedItem().toString(), attractions).get_id_attraction());
+        });
+
+        setContentPane(panel);
         setVisible(true);
-
     }
-    private Attraction getAtt(String nom,ArrayList<Attraction> attractions){
-        for(Attraction a: attractions ){
-            if(a.get_nom().compareTo(nom)==0){
-                return(a);
+
+    private void addField(JPanel panel, GridBagConstraints gbc, String label, JComponent field, int y) {
+        JLabel lbl = new JLabel(label);
+        lbl.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        lbl.setForeground(new Color(62, 15, 76));
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        gbc.gridwidth = 1;
+        panel.add(lbl, gbc);
+
+        field.setPreferredSize(new Dimension(280, 30));
+        if (field instanceof JTextField)
+            ((JTextField) field).setBorder(BorderFactory.createLineBorder(new Color(199, 199, 199), 1, true));
+        gbc.gridx = 1;
+        gbc.gridy = y;
+        panel.add(field, gbc);
+    }
+
+    private JButton createButton(String text, Color color) {
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        btn.setPreferredSize(new Dimension(160, 40));
+        btn.setBackground(color);
+        btn.setForeground(Color.WHITE);
+        btn.setBorder(BorderFactory.createLineBorder(new Color(62, 15, 76), 1, true));
+        btn.setFocusPainted(false);
+        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return btn;
+    }
+
+    private Attraction getAtt(String nom, ArrayList<Attraction> attractions) {
+        for (Attraction a : attractions) {
+            if (a.get_nom().equals(nom)) {
+                return a;
             }
         }
-        return(new Attraction(0,"ERREUR","ERREUR", 0,0));
+        return new Attraction(0, "ERREUR", "ERREUR", 0, 0);
     }
-
 }

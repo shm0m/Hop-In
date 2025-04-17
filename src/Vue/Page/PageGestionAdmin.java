@@ -1,75 +1,67 @@
 package Vue.Page;
+
 import DAO.ModifAdminDAO;
-import Modele.Admin;
-import Modele.Client;
-import Modele.Utilisateur;
 import Vue.Page.ModAdmin.ModAtt;
 import Vue.Page.ModAdmin.ModCli;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.Serial;
-
 
 public class PageGestionAdmin extends JFrame {
-    private JButton ajAttraction;
-    private JButton modAttraction;
-    private JButton ajReductions;
-    private JButton modReduction;
-    private JButton modCLi;
+    private JButton ajAttraction, modAttraction, ajReductions, modReduction, modCLi, quitter;
     private ModifAdminDAO modifieur;
-    private JButton quitter;
     private JFrame previousFrame;
 
-    public PageGestionAdmin(JFrame previousFrame){
-
+    public PageGestionAdmin(JFrame previousFrame) {
         super("Vue Administrateur");
-        this.modifieur=new ModifAdminDAO();
-        setLayout(new GridBagLayout());
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.previousFrame = previousFrame;
+        this.modifieur = new ModifAdminDAO();
+
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
 
-        this.previousFrame=previousFrame;
-
-        ajAttraction= new JButton("Ajouter Attraction");
-        modAttraction= new JButton("Modifier Attraction");
-        ajReductions= new JButton("Ajouter Reductions");
-        modReduction= new JButton("Modifier Reduction");
-        modCLi= new JButton("Modifier Client");
-        quitter=new JButton("Quitter");
-
+        JPanel panel = new JPanel(new GridBagLayout()) {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                GradientPaint gp = new GradientPaint(0, 0, new Color(255, 248, 230), getWidth(), getHeight(), new Color(255, 240, 245));
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Espacement autour des boutons
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplir horizontalement
-        // Ajouter les boutons avec des contraintes
+        gbc.insets = new Insets(20, 20, 20, 20);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        ajAttraction = createButton("Ajouter Attraction", new Color(76, 215, 179));
+        modAttraction = createButton("Modifier Attraction", new Color(255, 206, 86));
+        ajReductions = createButton("Ajouter Reductions", new Color(100, 149, 237));
+        modReduction = createButton("Modifier Reduction", new Color(186, 85, 211));
+        modCLi = createButton("Modifier Client", new Color(255, 160, 122));
+        quitter = createButton("Quitter", new Color(249, 78, 139));
+
         gbc.gridx = 0;
         gbc.gridy = 0;
-        add(ajAttraction, gbc);
+        panel.add(ajAttraction, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 0;
-        add(modAttraction, gbc);
+        panel.add(modAttraction, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 1;
-        add(ajReductions, gbc);
+        panel.add(ajReductions, gbc);
 
         gbc.gridx = 1;
-        gbc.gridy = 1;
-        add(modReduction, gbc);
+        panel.add(modReduction, gbc);
 
         gbc.gridx = 0;
         gbc.gridy = 2;
-        add(modCLi, gbc);
+        panel.add(modCLi, gbc);
 
-        gbc.gridx =1;
-        gbc.gridy = 2;
-        add(quitter, gbc);
-
+        gbc.gridx = 1;
+        panel.add(quitter, gbc);
 
         ajAttraction.addActionListener(e -> {
             new Vue.Page.ModAdmin.CreAtt(this);
@@ -77,22 +69,37 @@ public class PageGestionAdmin extends JFrame {
         });
 
         modAttraction.addActionListener(e -> {
-            new Vue.Page.ModAdmin.ModAtt(this);
+            new ModAtt(this);
             setVisible(false);
         });
-        modCLi.addActionListener(e->{
+
+        modCLi.addActionListener(e -> {
             new ModCli(this);
             setVisible(false);
         });
-        setSize(500,500);
-        setVisible(true);
 
         quitter.addActionListener(e -> {
             this.previousFrame.setVisible(true);
             setVisible(false);
         });
+
+        setContentPane(panel);
+        setVisible(true);
     }
-    public static void main(String args[]){
+
+    private JButton createButton(String text, Color bgColor) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        button.setPreferredSize(new Dimension(220, 50));
+        button.setBackground(bgColor);
+        button.setForeground(Color.WHITE);
+        button.setBorder(BorderFactory.createLineBorder(new Color(62, 15, 76), 1, true));
+        button.setFocusPainted(false);
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        return button;
+    }
+
+    public static void main(String[] args) {
         new PageGestionAdmin(new JFrame());
     }
 }
