@@ -33,7 +33,6 @@ public class VueHoraireAttraction extends JFrame {
             descriptionFromDB = "Pas de description disponible pour cette attraction.";
         }
 
-
         setTitle("Réserver une attraction - Hop'In");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -41,54 +40,65 @@ public class VueHoraireAttraction extends JFrame {
 
         JLabel titre = new JLabel(" Réservation - " + date + " | " + attraction, SwingConstants.CENTER);
         titre.setFont(new Font("Segoe UI", Font.BOLD, 22));
-        titre.setOpaque(true);
-        titre.setBackground(new Color(240, 240, 240));
+        titre.setForeground(new Color(62, 15, 76));
+        titre.setOpaque(false);
         titre.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
         add(titre, BorderLayout.NORTH);
 
-        JPanel mainPanel = new JPanel(new BorderLayout());
+        JPanel mainPanel = new JPanel(new BorderLayout()) {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                GradientPaint gp = new GradientPaint(0, 0, new Color(255, 248, 230), getWidth(), getHeight(), new Color(255, 240, 245));
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
 
         JPanel planningPanel = new JPanel(new GridLayout(0, 1, 5, 5));
         planningPanel.setBorder(BorderFactory.createEmptyBorder(20, 50, 20, 30));
-        planningPanel.setBackground(new Color(250, 250, 250));
+        planningPanel.setOpaque(false);
 
         ReservationDAO reservationDAO = new ReservationDAO();
         Map<Integer, Time> creneauxDispo = reservationDAO.getHeuresCreneauxDepuisBase();
         Map<Integer, Integer> reservationsMap = reservationDAO.getNbPersonnesParCreneau(id_attraction, date);
 
-        JPanel bottomRightPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        bottomRightPanel.setOpaque(false);  // Pour conserver le fond transparent
-
-        JButton btnRetour = new JButton("Retour");
-        btnRetour.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        btnRetour.setPreferredSize(new Dimension(120, 40));
-
-        btnRetour.addActionListener(e -> {
-            setVisible(false);
-        });
+        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        bottomPanel.setOpaque(false);
 
         JButton btnPaiement = new JButton("Passer au paiement");
-        btnPaiement.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        btnPaiement.setPreferredSize(new Dimension(180, 40));
+        btnPaiement.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        btnPaiement.setPreferredSize(new Dimension(200, 45));
+        btnPaiement.setBackground(new Color(76, 215, 179));
+        btnPaiement.setForeground(Color.WHITE);
+        btnPaiement.setFocusPainted(false);
+        btnPaiement.setBorder(BorderFactory.createLineBorder(new Color(62, 15, 76), 2, true));
+        btnPaiement.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        btnPaiement.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent evt) {
+                btnPaiement.setBackground(new Color(62, 15, 76));
+            }
+
+            public void mouseExited(MouseEvent evt) {
+                btnPaiement.setBackground(new Color(76, 215, 179));
+            }
+        });
 
         btnPaiement.addActionListener(e -> {
             new Pagepayement(this);
             setVisible(false);
         });
 
-        bottomRightPanel.add(btnRetour);
-        bottomRightPanel.add(btnPaiement);
-
-        add(bottomRightPanel, BorderLayout.SOUTH);
+        bottomPanel.add(btnPaiement);
+        add(bottomPanel, BorderLayout.SOUTH);
 
         for (Map.Entry<Integer, Time> entry : creneauxDispo.entrySet()) {
             int idCreneau = entry.getKey();
             Time heureDebut = entry.getValue();
             int heureFin = heureDebut.toLocalTime().plusHours(1).getHour();
             String label = heureDebut.toString().substring(0, 5) + " - " + heureFin + "h";
-
-            int inscrits = reservationsMap.getOrDefault(idCreneau, 0); // 💥 ne plantera plus
-
+            int inscrits = reservationsMap.getOrDefault(idCreneau, 0);
 
             JPanel ligne = new JPanel(new BorderLayout());
             ligne.setPreferredSize(new Dimension(700, 50));
@@ -111,23 +121,15 @@ public class VueHoraireAttraction extends JFrame {
             ligne.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent evt) {
                     if (inscrits < capaciteMax) {
-                        ReservationControleur controleur = new ReservationControleur();
-                        boolean ok = controleur.reserver(id_utilisateur, id_attraction, idCreneau, date);
-
+                        boolean ok = new ReservationControleur().reserver(id_utilisateur, id_attraction, idCreneau, date);
                         if (ok) {
-                            JOptionPane.showMessageDialog(null,
-                                    "Réservation confirmée pour " + label + "\nAttraction : " + attraction,
-                                    "Succès", JOptionPane.INFORMATION_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Réservation confirmée pour " + label + "\nAttraction : " + attraction, "Succès", JOptionPane.INFORMATION_MESSAGE);
                         } else {
-                            JOptionPane.showMessageDialog(null,
-                                    "Erreur lors de la réservation.",
-                                    "Erreur", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(null, "Erreur lors de la réservation.", "Erreur", JOptionPane.ERROR_MESSAGE);
                         }
                         rechargerAffichage(utilisateur);
                     } else {
-                        JOptionPane.showMessageDialog(null,
-                                "Ce créneau est déjà complet !",
-                                "Erreur", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null, "Ce créneau est déjà complet !", "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             });
@@ -137,12 +139,13 @@ public class VueHoraireAttraction extends JFrame {
         JScrollPane scrollPane = new JScrollPane(planningPanel);
         scrollPane.setBorder(null);
         scrollPane.getVerticalScrollBar().setUnitIncrement(14);
+        scrollPane.setOpaque(false);
         mainPanel.add(scrollPane, BorderLayout.CENTER);
 
         JPanel descriptionPanel = new JPanel();
         descriptionPanel.setPreferredSize(new Dimension(400, getHeight()));
         descriptionPanel.setLayout(new BoxLayout(descriptionPanel, BoxLayout.Y_AXIS));
-        descriptionPanel.setBackground(Color.WHITE);
+        descriptionPanel.setOpaque(false);
         descriptionPanel.setBorder(BorderFactory.createEmptyBorder(30, 20, 30, 20));
 
         JTextArea description = new JTextArea("À propos de l’attraction \"" + attraction + "\"\n\n"
@@ -155,7 +158,7 @@ public class VueHoraireAttraction extends JFrame {
         description.setLineWrap(true);
         description.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         description.setEditable(false);
-        description.setBackground(Color.WHITE);
+        description.setOpaque(false);
 
         descriptionPanel.add(description);
         mainPanel.add(descriptionPanel, BorderLayout.EAST);
@@ -167,10 +170,8 @@ public class VueHoraireAttraction extends JFrame {
     private void rechargerAffichage(Utilisateur utilisateur) {
         SwingUtilities.invokeLater(() -> {
             dispose();
-            int capaciteMax = new AttractionDAO().getCapaciteAttraction(id_attraction);
-            new VueHoraireAttraction(attraction, id_attraction, utilisateur, date, capaciteMax);
+            int capMax = new AttractionDAO().getCapaciteAttraction(id_attraction);
+            new VueHoraireAttraction(attraction, id_attraction, utilisateur, date, capMax);
         });
     }
-
-
 }
