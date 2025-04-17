@@ -1,214 +1,216 @@
 package Vue.Page;
 
-import Modele.Utilisateur;
-import Modele.Reservation;
 import DAO.ReservationDAO;
+import Modele.Reservation;
+import Modele.Utilisateur;
 import Controleur.UtilisateurControleur;
+import Vue.NavBarUtil;
+
 import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 
-    public class PageProfileSwing extends JFrame {
+public class PageProfileSwing extends JFrame {
 
-        private JTextField tfID;
-        private JTextField tfTypeMembre;
-        private JTextField tfNom;
-        private JTextField tfPrenom;
-        private JTextField tfEmail;
-        private JTextField tfDateNaissance;
+    public PageProfileSwing(Utilisateur utilisateur) {
+        setTitle("Profil utilisateur");
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null);
 
+        JPanel content = new JPanel() {
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                GradientPaint gp = new GradientPaint(
+                        0, 0,
+                        new Color(255, 248, 230),
+                        getWidth(), getHeight(),
+                        new Color(255, 240, 245)
+                );
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-        public PageProfileSwing(Utilisateur utilisateur) {
-            setTitle("Page intermédiaire");
-            setExtendedState(JFrame.MAXIMIZED_BOTH);
-            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            setLocationRelativeTo(null);
+        Color accentColor = new Color(76, 215, 179);
+        Color labelColor = new Color(62, 15, 76);
+        Color inputColor = new Color(255, 245, 250);
+        Font labelFont = new Font("Segoe UI", Font.BOLD, 15);
+        Font fieldFont = new Font("Segoe UI", Font.PLAIN, 16);
 
-            JPanel mainPanel = new JPanel(new BorderLayout());
-            mainPanel.setBackground(Color.WHITE);
+        JPanel navBar = NavBarUtil.createNavBar(this, utilisateur);
+        navBar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        content.add(navBar);
 
-            JPanel headerPanel = new JPanel(new BorderLayout());
-            headerPanel.setOpaque(false);
+        ImageIcon icon = new ImageIcon("assets/profil.jpg");
+        Image img = icon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
+        ImageIcon roundIcon = new ImageIcon(img);
 
-            JLabel lblHeader = new JLabel("Bienvenue sur votre profil", SwingConstants.CENTER);
-            lblHeader.setFont(new Font("Segoe UI", Font.BOLD, 24));
-            headerPanel.add(lblHeader, BorderLayout.CENTER);
-            mainPanel.add(headerPanel, BorderLayout.NORTH);
+        JLabel picLabel = new JLabel(roundIcon);
+        picLabel.setPreferredSize(new Dimension(80, 80));
 
-            JPanel contentPanel = new JPanel(new GridBagLayout());
-            contentPanel.setBackground(new Color(245, 245, 245));
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.insets = new Insets(10, 10, 10, 10);
-            gbc.anchor = GridBagConstraints.WEST;
+        JLabel bienvenueLabel = new JLabel("Bienvenue, " + utilisateur.getPrenom() + " !");
+        bienvenueLabel.setFont(new Font("Segoe UI", Font.BOLD, 26));
+        bienvenueLabel.setForeground(labelColor);
 
+        JPanel header = new JPanel();
+        header.setOpaque(false);
+        header.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
+        header.add(picLabel);
+        header.add(bienvenueLabel);
+        header.setAlignmentX(Component.CENTER_ALIGNMENT);
+        content.add(header);
+
+        JPanel formPanel = new RoundedPanel(20);
+        formPanel.setLayout(new GridBagLayout());
+        formPanel.setBackground(Color.WHITE);
+        formPanel.setBorder(new EmptyBorder(30, 40, 30, 40));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(10, 15, 10, 15);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        String[] labels = {"Nom", "Prénom", "Email", "Date de naissance", "Mot de passe", "ID"};
+        JComponent[] champs = {
+                new JTextField(utilisateur.getNom(), 22),
+                new JTextField(utilisateur.getPrenom(), 22),
+                new JTextField(utilisateur.getEmail(), 22),
+                new JTextField(utilisateur.getDateNaissance(), 22),
+                new JTextField(utilisateur.getMotDePasse(), 22),
+                new JLabel(String.valueOf(utilisateur.getId()))
+        };
+
+        for (int i = 0; i < labels.length; i++) {
             gbc.gridx = 0;
-            gbc.gridy = 0;
-            JLabel lblNom = new JLabel("Nom :");
-            lblNom.setFont(new Font("Segoe UI", Font.BOLD, 16));
-            contentPanel.add(lblNom, gbc);
+            gbc.gridy = i;
+
+            JLabel lbl = new JLabel(labels[i] + " :");
+            lbl.setFont(labelFont);
+            lbl.setForeground(labelColor);
+            formPanel.add(lbl, gbc);
 
             gbc.gridx = 1;
-            JTextField tfNom = new JTextField(utilisateur.getNom());
-            tfNom.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            tfNom.setColumns(15);
-            contentPanel.add(tfNom, gbc);
-
-
-            gbc.gridx = 0;
-            gbc.gridy = 1;
-            JLabel lblPrenom = new JLabel("Prénom :");
-            lblPrenom.setFont(new Font("Segoe UI", Font.BOLD, 16));
-            contentPanel.add(lblPrenom, gbc);
-
-            gbc.gridx = 1;
-            JTextField tfPrenom = new JTextField(utilisateur.getPrenom());
-            tfPrenom.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            tfPrenom.setColumns(15);
-            contentPanel.add(tfPrenom, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 2;
-            JLabel lblEmail = new JLabel("Email :");
-            lblEmail.setFont(new Font("Segoe UI", Font.BOLD, 16));
-            contentPanel.add(lblEmail, gbc);
-
-            gbc.gridx = 1;
-            JTextField tfEmail = new JTextField(utilisateur.getEmail());
-            tfEmail.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            tfEmail.setColumns(15);
-            contentPanel.add(tfEmail, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 3;
-            JLabel lblDateNaissance = new JLabel("Date de naissance :");
-            lblDateNaissance.setFont(new Font("Segoe UI", Font.BOLD, 16));
-            contentPanel.add(lblDateNaissance, gbc);
-
-            gbc.gridx = 1;
-            JTextField tfDateNaissance = new JTextField(utilisateur.getDateNaissance());
-            tfDateNaissance.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            tfDateNaissance.setColumns(15);
-            contentPanel.add(tfDateNaissance, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 4;
-            JLabel lblMdp = new JLabel("mot de passe:");
-            lblMdp.setFont(new Font("Segoe UI", Font.BOLD, 16));
-            contentPanel.add(lblMdp, gbc);
-
-            gbc.gridx = 1;
-            JTextField tfmdp = new JTextField(utilisateur.getMotDePasse());
-            tfmdp.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            tfmdp.setColumns(15);
-            contentPanel.add(tfmdp, gbc);
-
-            JLabel valMdp = new JLabel(utilisateur.getMotDePasse());
-            valMdp.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            contentPanel.add(valMdp, gbc);
-
-            gbc.gridx = 0;
-            gbc.gridy = 5;
-            JLabel lblId = new JLabel("ID :");
-            lblId.setFont(new Font("Segoe UI", Font.BOLD, 16));
-            contentPanel.add(lblId, gbc);
-
-            gbc.gridx = 1;
-            JLabel valId = new JLabel(String.valueOf(utilisateur.getId()));
-            valId.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            contentPanel.add(valId, gbc);
-
-// quand on aura un getteur pour le type member /*
-        /*    gbc.gridx = 0;
-            gbc.gridy = 6;
-            JLabel lblTypeMembre = new JLabel("Type de membre :");
-            lblTypeMembre.setFont(new Font("Segoe UI", Font.BOLD, 16));
-            contentPanel.add(lblTypeMembre, gbc);
-
-            gbc.gridx = 1;
-            JLabel valTypeMembre = new JLabel(utilisateur.get type membre ());
-            valTypeMembre.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            contentPanel.add(valTypeMembre, gbc);
-*/
-
-
-
-
-                mainPanel.add(contentPanel, BorderLayout.CENTER);
-
-            JButton btnProfile = new JButton(" historique ");
-            btnProfile.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            btnProfile.setPreferredSize(new Dimension(120, 40));
-
-            JPanel profileBtnPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            profileBtnPanel.setOpaque(false);
-            profileBtnPanel.add(btnProfile);
-            headerPanel.add(profileBtnPanel, BorderLayout.EAST);
-
-            mainPanel.add(headerPanel, BorderLayout.NORTH);
-
-            JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-
-
-
-            bottomPanel.setOpaque(false);
-            JButton btnEnregistrer = new JButton("Enregistrer");
-            btnEnregistrer.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            btnEnregistrer.setPreferredSize(new Dimension(120, 40));
-            bottomPanel.add(btnEnregistrer);
-
-            bottomPanel.setOpaque(false);
-            JButton btnCalendar = new JButton("Calendrier");
-            btnCalendar.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            btnCalendar.setPreferredSize(new Dimension(150, 40));
-            bottomPanel.add(btnCalendar);
-
-            JButton btnRetour = new JButton("Retour");
-            btnRetour.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-            btnRetour.setPreferredSize(new Dimension(120, 40));
-            bottomPanel.add(btnRetour);
-
-            mainPanel.add(bottomPanel, BorderLayout.SOUTH);
-
-            add(mainPanel);
-            setVisible(true);
-
-            btnEnregistrer.addActionListener(e -> {
-
-                   utilisateur.setNom(tfNom.getText());
-                   utilisateur.setPrenom(tfPrenom.getText());
-                utilisateur.setEmail(tfEmail.getText());
-                utilisateur.setDateNaissance(tfDateNaissance.getText());
-                utilisateur.setMotDePasse(tfmdp.getText());
-                  UtilisateurControleur controleur = new UtilisateurControleur();
-                 controleur.modifierUtilisateur(utilisateur);
-
-                 JOptionPane.showMessageDialog(this, "Profil mis à jour avec succès !");
-            });
-
-            btnRetour.addActionListener(e -> {
-                new Vue.HopInGUI();
-                dispose();
-            });
-
-
-
-
-            add(mainPanel);
-            setVisible(true);
-
-
-            btnProfile.addActionListener(e -> {
-                // Récupérer la liste des réservations du client via la fonction implémentée dans ReservationDAO
-                ArrayList<Reservation> reservations = new ReservationDAO().getReservationsByClient(utilisateur.getId());
-                // Ouvrir la fenêtre d'historique et passer la liste et la référence de la fenêtre actuelle
-                new PageHistoriqueReservationSwing (reservations,this);
-                setVisible(false);
-            });
-            btnCalendar.addActionListener(e -> {
-                new PageReservationSwing(utilisateur);
-                setVisible(false);
-            });
-
+            JComponent champ = champs[i];
+            champ.setFont(fieldFont);
+            if (champ instanceof JTextField) {
+                champ.setBackground(inputColor);
+                champ.setPreferredSize(new Dimension(260, 34));
+                ((JTextField) champ).setBorder(BorderFactory.createCompoundBorder(
+                        new LineBorder(new Color(220, 220, 220), 1, true),
+                        new EmptyBorder(6, 10, 6, 10)
+                ));
+            }
+            formPanel.add(champ, gbc);
         }
+
+        JPanel formWrapper = new JPanel();
+        formWrapper.setOpaque(false);
+        formWrapper.add(formPanel);
+        content.add(formWrapper);
+
+        JButton btnEnregistrer = new JButton("Enregistrer");
+        btnEnregistrer.setFont(fieldFont);
+        btnEnregistrer.setPreferredSize(new Dimension(160, 45));
+        btnEnregistrer.setFocusPainted(false);
+        btnEnregistrer.setBackground(accentColor);
+        btnEnregistrer.setForeground(Color.WHITE);
+        btnEnregistrer.setBorder(new LineBorder(accentColor, 1, true));
+        btnEnregistrer.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnEnregistrer.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        btnEnregistrer.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btnEnregistrer.setBackground(new Color(62, 15, 76));
+            }
+
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btnEnregistrer.setBackground(accentColor);
+            }
+        });
+
+        content.add(Box.createRigidArea(new Dimension(0, 10)));
+        content.add(btnEnregistrer);
+
+        JLabel titreHistorique = new JLabel("Mes réservations");
+        titreHistorique.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        titreHistorique.setForeground(labelColor);
+        titreHistorique.setAlignmentX(Component.CENTER_ALIGNMENT);
+        titreHistorique.setBorder(new EmptyBorder(20, 0, 10, 0));
+        content.add(titreHistorique);
+
+        String[] colonnes = {"Client ID", "Attraction ID", "Date de Réservation", "Nb Personnes", "ID Créneau", "Statut"};
+        DefaultTableModel model = new DefaultTableModel(colonnes, 0);
+        ArrayList<Reservation> reservations = new ReservationDAO().getReservationsByClient(utilisateur.getId());
+
+        for (Reservation res : reservations) {
+            Object[] row = {
+                    res.getIdUtilisateur(),
+                    res.getIdAttraction(),
+                    res.getDateReservation(),
+                    res.getNbPersonnes(),
+                    res.getIdCreneau(),
+                    res.getStatut()
+            };
+            model.addRow(row);
+        }
+
+        JTable table = new JTable(model);
+        table.setFont(fieldFont);
+        table.setRowHeight(28);
+        table.setGridColor(new Color(230, 230, 230));
+        table.setShowGrid(true);
+        table.setFillsViewportHeight(true);
+        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
+        table.getTableHeader().setBackground(new Color(200, 200, 255));
+        table.setBackground(Color.WHITE);
+
+        JScrollPane scroll = new JScrollPane(table);
+        scroll.setPreferredSize(new Dimension(900, 150));
+        scroll.setBorder(BorderFactory.createLineBorder(labelColor, 1, true));
+        scroll.setAlignmentX(Component.CENTER_ALIGNMENT);
+        content.add(scroll);
+
+        setContentPane(content);
+        setVisible(true);
+
+        JTextField tfNom = (JTextField) champs[0];
+        JTextField tfPrenom = (JTextField) champs[1];
+        JTextField tfEmail = (JTextField) champs[2];
+        JTextField tfDateNaissance = (JTextField) champs[3];
+        JTextField tfmdp = (JTextField) champs[4];
+
+        btnEnregistrer.addActionListener(e -> {
+            utilisateur.setNom(tfNom.getText());
+            utilisateur.setPrenom(tfPrenom.getText());
+            utilisateur.setEmail(tfEmail.getText());
+            utilisateur.setDateNaissance(tfDateNaissance.getText());
+            utilisateur.setMotDePasse(tfmdp.getText());
+            new UtilisateurControleur().modifierUtilisateur(utilisateur);
+            JOptionPane.showMessageDialog(this, "Profil mis à jour !");
+        });
     }
 
+    class RoundedPanel extends JPanel {
+        private final int cornerRadius;
+
+        public RoundedPanel(int radius) {
+            super();
+            this.cornerRadius = radius;
+            setOpaque(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            Graphics2D g2 = (Graphics2D) g;
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setColor(getBackground());
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), cornerRadius, cornerRadius);
+        }
+    }
+}
