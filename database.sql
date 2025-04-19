@@ -63,7 +63,7 @@ CREATE TABLE IF NOT EXISTS reduction (
     age_max INT,
     date_min DATE,
     date_max DATE,
-    nom VARCHAR(50),
+    nom VARCHAR(50)
 );
 
 CREATE TABLE IF NOT EXISTS reduction_appliquee (
