@@ -1,6 +1,7 @@
 package Vue.Page;
 
 import DAO.ModifAdminDAO;
+import Vue.Page.ModAdmin.CreRed;
 import Vue.Page.ModAdmin.ModAtt;
 import Vue.Page.ModAdmin.ModCli;
 
@@ -72,6 +73,10 @@ public class PageGestionAdmin extends JFrame {
             new ModAtt(this);
             setVisible(false);
         });
+        ajReductions.addActionListener(e ->{
+            new CreRed(this);
+            this.setVisible(false);
+        });
 
         modCLi.addActionListener(e -> {
             new ModCli(this);
@@ -82,6 +87,7 @@ public class PageGestionAdmin extends JFrame {
             this.previousFrame.setVisible(true);
             setVisible(false);
         });
+
 
         setContentPane(panel);
         setVisible(true);

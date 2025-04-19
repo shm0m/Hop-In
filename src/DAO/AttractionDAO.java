@@ -125,13 +125,9 @@ public class AttractionDAO {
                 attractions.add(new Attraction(id_attraction, nom, description, prix, capacite_max));
             }
             return(attractions);
-
-
-
         }  catch (SQLException e) {
             e.printStackTrace();
         }
-
         return(new ArrayList<Attraction>());
     }
 
