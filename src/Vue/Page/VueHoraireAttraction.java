@@ -63,36 +63,6 @@ public class VueHoraireAttraction extends JFrame {
         Map<Integer, Time> creneauxDispo = reservationDAO.getHeuresCreneauxDepuisBase();
         Map<Integer, Integer> reservationsMap = reservationDAO.getNbPersonnesParCreneau(id_attraction, date);
 
-        JPanel bottomPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        bottomPanel.setOpaque(false);
-
-        JButton btnPaiement = new JButton("Passer au paiement");
-        btnPaiement.setFont(new Font("Segoe UI", Font.BOLD, 16));
-        btnPaiement.setPreferredSize(new Dimension(200, 45));
-        btnPaiement.setBackground(new Color(76, 215, 179));
-        btnPaiement.setForeground(Color.WHITE);
-        btnPaiement.setFocusPainted(false);
-        btnPaiement.setBorder(BorderFactory.createLineBorder(new Color(62, 15, 76), 2, true));
-        btnPaiement.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        btnPaiement.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent evt) {
-                btnPaiement.setBackground(new Color(62, 15, 76));
-            }
-
-            public void mouseExited(MouseEvent evt) {
-                btnPaiement.setBackground(new Color(76, 215, 179));
-            }
-        });
-
-        btnPaiement.addActionListener(e -> {
-            new Pagepayement(this);
-            setVisible(false);
-        });
-
-        bottomPanel.add(btnPaiement);
-        add(bottomPanel, BorderLayout.SOUTH);
-
         for (Map.Entry<Integer, Time> entry : creneauxDispo.entrySet()) {
             int idCreneau = entry.getKey();
             Time heureDebut = entry.getValue();
@@ -121,18 +91,13 @@ public class VueHoraireAttraction extends JFrame {
             ligne.addMouseListener(new MouseAdapter() {
                 public void mouseClicked(MouseEvent evt) {
                     if (inscrits < capaciteMax) {
-                        boolean ok = new ReservationControleur().reserver(id_utilisateur, id_attraction, idCreneau, date);
-                        if (ok) {
-                            JOptionPane.showMessageDialog(null, "Réservation confirmée pour " + label + "\nAttraction : " + attraction, "Succès", JOptionPane.INFORMATION_MESSAGE);
-                        } else {
-                            JOptionPane.showMessageDialog(null, "Erreur lors de la réservation.", "Erreur", JOptionPane.ERROR_MESSAGE);
-                        }
-                        rechargerAffichage(utilisateur);
+                        new FormulairePaiement(VueHoraireAttraction.this, id_utilisateur, id_attraction, idCreneau, date, label, attraction);
                     } else {
                         JOptionPane.showMessageDialog(null, "Ce créneau est déjà complet !", "Erreur", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             });
+
             planningPanel.add(ligne);
         }
 
@@ -167,7 +132,7 @@ public class VueHoraireAttraction extends JFrame {
         setVisible(true);
     }
 
-    private void rechargerAffichage(Utilisateur utilisateur) {
+    public void rechargerAffichage(Utilisateur utilisateur) {
         SwingUtilities.invokeLater(() -> {
             dispose();
             int capMax = new AttractionDAO().getCapaciteAttraction(id_attraction);
