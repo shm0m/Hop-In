@@ -18,6 +18,15 @@ public class Reduction {
         this.dateMax = dateMax;
         this.nom=nom;
     }
+    public Reduction() {
+        this.id = 0;
+        this.prcRed = 0;
+        this.ageMin = 0;
+        this.ageMax = 0;
+        this.dateMin = "err";
+        this.dateMax = "err";
+        this.nom="err";
+    }
     public int getid(){
         return(this.id);
     }
@@ -38,6 +47,10 @@ public class Reduction {
     }
     public String getNom(){
         return(this.nom);
+    }
+    @Override
+    public String toString(){
+        return(id+": "+this.nom);
     }
 
 }

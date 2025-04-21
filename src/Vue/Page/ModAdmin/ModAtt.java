@@ -66,10 +66,12 @@ public class ModAtt extends JFrame {
         JButton afficherProp = createButton("Afficher", new Color(62, 15, 76));
         JButton modifier = createButton("Modifier & Quitter", new Color(76, 215, 179));
         JButton supprimer = createButton("Supprimer", new Color(249, 78, 139));
+        JButton quitter = createButton("Quitter", new Color(239, 53, 53));
 
         btnPanel.add(afficherProp);
         btnPanel.add(modifier);
         btnPanel.add(supprimer);
+        btnPanel.add(quitter);
 
         gbc.gridy = 6;
         gbc.gridx = 0;
@@ -102,6 +104,10 @@ public class ModAtt extends JFrame {
             previousFrame.setVisible(true);
             modifieur.delAtt(getAtt(men_attractions.getSelectedItem().toString(), attractions).get_id_attraction());
         });
+        quitter.addActionListener(e -> {
+            previousFrame.setVisible(true);
+            setVisible(false);
+        });
 
         setContentPane(panel);
         setVisible(true);
@@ -127,7 +133,7 @@ public class ModAtt extends JFrame {
     private JButton createButton(String text, Color color) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("Segoe UI", Font.BOLD, 14));
-        btn.setPreferredSize(new Dimension(160, 40));
+        btn.setPreferredSize(new Dimension(100, 40));
         btn.setBackground(color);
         btn.setForeground(Color.WHITE);
         btn.setBorder(BorderFactory.createLineBorder(new Color(62, 15, 76), 1, true));
