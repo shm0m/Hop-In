@@ -4,6 +4,7 @@ import DAO.ModifAdminDAO;
 import Vue.Page.ModAdmin.CreRed;
 import Vue.Page.ModAdmin.ModAtt;
 import Vue.Page.ModAdmin.ModCli;
+import Vue.Page.ModAdmin.ModRed;
 
 import javax.swing.*;
 import java.awt.*;
@@ -75,6 +76,10 @@ public class PageGestionAdmin extends JFrame {
         });
         ajReductions.addActionListener(e ->{
             new CreRed(this);
+            this.setVisible(false);
+        });
+        modReduction.addActionListener(e->{
+            new ModRed(this);
             this.setVisible(false);
         });
 
