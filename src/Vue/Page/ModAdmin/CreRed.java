@@ -23,6 +23,8 @@ public class CreRed extends JFrame {
     private JTextField ajDateMin;
     private JLabel indDateMax;
     private JTextField ajDateMax;
+    private JLabel indMinVis;
+    private JTextField ajMinVis;
 
     private ReductionDAO modifieur;
 
@@ -124,15 +126,25 @@ public class CreRed extends JFrame {
         gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
        panel.add(ajDateMax, gbc);
 
-        output=new JLabel("");
+        indMinVis=new JLabel("Nombre minimum de réservations");
         gbc.gridx = 0;
         gbc.gridy = 7;
+        panel.add(indMinVis, gbc);
+        ajMinVis= new JTextField("null");
+        gbc.gridx = 1;
+        gbc.gridy = 7;
+        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
+        panel.add(ajMinVis, gbc);
+
+        output=new JLabel("");
+        gbc.gridx = 0;
+        gbc.gridy = 8;
        panel.add(output, gbc);
 
         JButton ajouter = createButton("Ajouter", new Color(62, 15, 76));
         JButton quitter = createButton("Quitter", new Color(249, 78, 139));
 
-        gbc.gridy=8;
+        gbc.gridy=9;
 
         gbc.gridx = 0;
         gbc.gridwidth = 1;
@@ -155,7 +167,8 @@ public class CreRed extends JFrame {
                     Trans.toInt(ajAgeMax.getText()),
                     ajDateMin.getText(),
                     ajDateMax.getText(),
-                    ajNom.getText()
+                    ajNom.getText(),
+                    Trans.toInt(ajMinVis.getText())
             ));
             if(resultat==1){
                 previousFrame.setVisible(true);

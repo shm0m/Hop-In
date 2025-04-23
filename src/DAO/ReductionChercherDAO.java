@@ -33,8 +33,9 @@ public class ReductionChercherDAO {
                 String date_min=resultat.getString("date_min");
                 String date_max=resultat.getString("date_max");
                 String nom=resultat.getString("nom");
+                int nb_visites_min=resultat.getInt("nb_visites_min");
 
-                reductions.add(new Reduction(id,prc_reduction,age_min,age_max,date_min,date_max,nom));
+                reductions.add(new Reduction(id,prc_reduction,age_min,age_max,date_min,date_max,nom,nb_visites_min));
             }
             return (reductions);
 

@@ -8,8 +8,9 @@ public class Reduction {
     private String dateMin;
     private String dateMax;
     private String nom;
+    private int nb_visites_min;
 
-    public Reduction(int id, double prcRed,int ageMin,int ageMax,String dateMin,String dateMax,String nom) {
+    public Reduction(int id, double prcRed,int ageMin,int ageMax,String dateMin,String dateMax,String nom,int nb_visites_min) {
         this.id = id;
         this.prcRed = prcRed;
         this.ageMin = ageMin;
@@ -17,6 +18,8 @@ public class Reduction {
         this.dateMin = dateMin;
         this.dateMax = dateMax;
         this.nom=nom;
+
+        this.nb_visites_min=nb_visites_min;
     }
     public Reduction() {
         this.id = 0;
@@ -26,6 +29,7 @@ public class Reduction {
         this.dateMin = "err";
         this.dateMax = "err";
         this.nom="err";
+        nb_visites_min=0;
     }
     public int getid(){
         return(this.id);
@@ -48,6 +52,10 @@ public class Reduction {
     public String getNom(){
         return(this.nom);
     }
+    public int getMinVis(){
+        return(this.nb_visites_min);
+    }
+
     @Override
     public String toString(){
         return(id+": "+this.nom);

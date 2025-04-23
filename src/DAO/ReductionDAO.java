@@ -14,9 +14,10 @@ public class ReductionDAO {
     }
 
     public int ajouterReduction(Reduction reduction){
-        String sql = "INSERT INTO reduction (prc_reduction,age_min,age_max,date_min,date_max,nom) VALUES (?, ?, ?, ?, ?,?)";
+        String sql = "INSERT INTO reduction (prc_reduction,age_min,age_max,date_min,date_max,nom,nb_visites_min) VALUES (?, ?, ? , ? , ? , ? , ?)";
         try (Connection conn = this.gerant.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setDouble(1, reduction.getprcRed());
+
             if(reduction.getageMin()!=0){
                 stmt.setInt(2, reduction.getageMin());
             }
@@ -31,14 +32,14 @@ public class ReductionDAO {
                 stmt.setNull(3, Types.INTEGER);
             }
 
-            if(reduction.getdateMin().compareTo("null")!=0){
+            if(reduction.getdateMin().compareTo("null")!=0  && reduction.getdateMin().compareTo("")!=0){
                 stmt.setString(4, reduction.getdateMin());
             }
             else{
                 stmt.setNull(4, Types.DATE);
             }
 
-            if(reduction.getdateMax().compareTo("null")!=0){
+            if(reduction.getdateMax().compareTo("null")!=0 &&  reduction.getdateMin().compareTo("")!=0){
                 stmt.setString(5, reduction.getdateMax());
             }
             else{
@@ -46,6 +47,13 @@ public class ReductionDAO {
             }
 
             stmt.setString(6, reduction.getNom());
+
+            if(reduction.getMinVis()!=0){
+                stmt.setInt(7, reduction.getMinVis());
+            }
+            else{
+                stmt.setNull(7, Types.INTEGER);
+            }
             System.out.println(stmt);
             return(stmt.executeUpdate());
         } catch (SQLException e) {
@@ -57,7 +65,7 @@ public class ReductionDAO {
     //wString sql = "UPDATE utilisateur age_min= ?, age_min = ?, prc_reduction= ?,date_min = ?, date_max = ? WHERE id = ?";
 
     public int updateReduc(Reduction reduction){
-        String sql = "UPDATE reduction set age_min= ?, age_max = ?, prc_reduction= ?,date_min = ?, date_max = ? WHERE id_reduction = ?";
+        String sql = "UPDATE reduction set age_min= ?, age_max = ?, prc_reduction= ?,date_min = ?, date_max = ?, nb_visites_min= ? WHERE id_reduction = ?";
         try (Connection conn = this.gerant.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             if(reduction.getageMin()!=0){
                 stmt.setInt(1, reduction.getageMin());
@@ -74,20 +82,27 @@ public class ReductionDAO {
             }
             stmt.setDouble(3,reduction.getprcRed());
 
-            if(reduction.getdateMin().compareTo("null")!=0){
+            if(reduction.getdateMin().compareTo("null")!=0 && reduction.getdateMin().compareTo("")!=0){
                 stmt.setString(4, reduction.getdateMin());
             }
             else{
                 stmt.setNull(4, Types.DATE);
             }
 
-            if(reduction.getdateMax().compareTo("null")!=0){
+            if(reduction.getdateMax().compareTo("null")!=0 && reduction.getdateMin().compareTo("")!=0){
                 stmt.setString(5, reduction.getdateMax());
             }
             else{
                 stmt.setNull(5, Types.DATE);
             }
-            stmt.setInt(6,reduction.getid());
+            if(reduction.getMinVis()!=0){
+                stmt.setInt(6, reduction.getMinVis());
+            }
+            else{
+                stmt.setNull(6, Types.INTEGER);
+            }
+
+            stmt.setInt(7,reduction.getid());
             System.out.println(stmt);
             return(stmt.executeUpdate());
         } catch (SQLException e) {
