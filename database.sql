@@ -63,6 +63,7 @@ CREATE TABLE IF NOT EXISTS reduction (
     age_max INT,
     date_min DATE,
     date_max DATE,
+    nb_visites_min INT,
     nom VARCHAR(50)
 );
 
