@@ -58,7 +58,7 @@ public class PageEnregistrementSwing extends JFrame {
         addField(panel, gbc, "Mot de passe", mdpField, 4);
         addField(panel, gbc, "Date de naissance (AAAA-MM-JJ)", dateField, 5);
 
-        JLabel membreLabel = new JLabel("Type de membre :");
+        /*JLabel membreLabel = new JLabel("Type de membre :");
         membreLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
         membreLabel.setForeground(new Color(62, 15, 76));
         gbc.gridx = 0;
@@ -81,7 +81,7 @@ public class PageEnregistrementSwing extends JFrame {
             membrePanel.add(rb);
         }
         gbc.gridx = 1;
-        panel.add(membrePanel, gbc);
+        panel.add(membrePanel, gbc);*/
 
         JLabel roleLabel = new JLabel("Rôle :");
         roleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
@@ -126,7 +126,7 @@ public class PageEnregistrementSwing extends JFrame {
         panel.add(btnRetour, gbc);
 
         btn.addActionListener(e -> {
-            String typeMembre = (groupeMembre.getSelection() != null) ? groupeMembre.getSelection().getActionCommand() : null;
+            /*String typeMembre = (groupeMembre.getSelection() != null) ? groupeMembre.getSelection().getActionCommand() : null;*/
             String role = (groupeRole.getSelection() != null) ? groupeRole.getSelection().getActionCommand() : null;
 
             if (!dateField.getText().matches("\\d{4}-\\d{2}-\\d{2}")) {
@@ -135,11 +135,11 @@ public class PageEnregistrementSwing extends JFrame {
                 return;
             }
 
-            if (typeMembre == null || role == null) {
+            /*if (typeMembre == null || role == null) {
                 message.setForeground(Color.RED);
                 message.setText("Veuillez sélectionner un type de membre et un rôle.");
                 return;
-            }
+            }*/
 
             if (role.equals("ADMIN")) {
                 VerifAdmin verif = new VerifAdmin(null);

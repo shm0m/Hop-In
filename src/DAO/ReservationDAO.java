@@ -54,7 +54,7 @@ public class ReservationDAO {
     public ArrayList<Reservation> getReservationsByClient(int idClient) {
         ArrayList<Reservation> reservations = new ArrayList<>();
 
-        String sql = "SELECT * FROM Reservation WHERE id_utilisateur = ?";
+        String sql = "SELECT * FROM reservation WHERE id_utilisateur = ?";
 
             try (Connection conn = ConnectionProvider.getConnection();
                  PreparedStatement ps = conn.prepareStatement(sql)) {
