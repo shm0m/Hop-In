@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS utilisateur (
     email VARCHAR(100) NOT NULL UNIQUE,
     mot_de_passe VARCHAR(100) NOT NULL,
     date_naissance DATE,
-    type_membre ENUM('AUCUN', 'REGULIER', 'SENIOR', 'ENFANT') DEFAULT 'AUCUN',
     role ENUM('CLIENT', 'ADMIN') NOT NULL DEFAULT 'CLIENT'
 );
 
