@@ -8,8 +8,8 @@ public class UtilisateurControleur {
     private UtilisateurchercherDAO utilisateurDAO = new UtilisateurchercherDAO();
     private UtilisateurDAO utilisateur = new UtilisateurDAO();
 
-    public void ajouterUtilisateur(Utilisateur u) {
-        utilisateur.ajouterUtilisateur(u);
+    public int ajouterUtilisateur(Utilisateur u) {
+       return( utilisateur.ajouterUtilisateur(u));
     }
 
     public Utilisateur trouverParEmailEtMotDePasse(String email, String mdp) {

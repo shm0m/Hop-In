@@ -166,9 +166,14 @@ public class PageEnregistrementSwing extends JFrame {
                         new String(mdpField.getPassword()),
                         dateField.getText()
                 );
-                new UtilisateurControleur().ajouterUtilisateur(u);
-                message.setForeground(new Color(0, 128, 0));
-                message.setText("Utilisateur enregistré avec succès !");
+                int resultat = new UtilisateurControleur().ajouterUtilisateur(u);
+                if(resultat==1){
+                    message.setForeground(new Color(0, 128, 0));
+                    message.setText("Utilisateur enregistré avec succès !");
+                }else{
+                    message.setForeground(new Color(239, 74, 74));
+                    message.setText("Une erreur est survenue. Tous vos champs sont-ils corrects ?");
+                }
             }
         });
 
