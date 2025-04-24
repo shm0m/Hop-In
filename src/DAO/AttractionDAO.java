@@ -147,6 +147,20 @@ public class AttractionDAO {
     }
 
 
+    public float getPrixById(int idAttraction) {
+        String sql = "SELECT prix FROM attraction WHERE id_attraction = ?";
+        try (Connection conn = ConnectionProvider.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, idAttraction);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getFloat("prix");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0.0f;
+    }
 
 
 

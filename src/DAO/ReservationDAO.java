@@ -83,5 +83,17 @@ public class ReservationDAO {
 
         return reservations;
     }
+    public static int getDernierIdReservation() {
+        String sql = "SELECT MAX(id_reservation) FROM reservation";
+        try (Connection conn = ConnectionProvider.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.next()) return rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
 
 }

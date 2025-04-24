@@ -46,4 +46,16 @@ public class ReductionChercherDAO {
         return(new ArrayList<Reduction>());
     }
 
+    public Reduction getReductionApplicable(int age) {
+        for (Reduction r : getReducs()) {
+            boolean minValide = (r.getageMin() == 0 || age >= r.getageMin());
+            boolean maxValide = (r.getageMax() == 0 || age <= r.getageMax());
+            if (minValide && maxValide) {
+                return r;
+            }
+        }
+        return null;
+    }
+
+
 }
