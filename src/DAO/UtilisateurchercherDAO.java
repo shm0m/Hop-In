@@ -1,6 +1,8 @@
 package DAO;
 
+import Modele.Admin;
 import Modele.Client;
+import Modele.Utilisateur;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +16,7 @@ public class UtilisateurchercherDAO {
         gerant = new GestionConnexion();
     }
 
-    public Client trouverParEmailEtMotDePasse(String email, String motDePasse) {
+    public Utilisateur trouverParEmailEtMotDePasse(String email, String motDePasse) {
         String sql = "SELECT * FROM utilisateur WHERE email = ? AND mot_de_passe = ?";
         try (Connection conn = gerant.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -22,14 +24,23 @@ public class UtilisateurchercherDAO {
             stmt.setString(2, motDePasse);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                return new Client(
-                        rs.getInt("id"),
-                        rs.getString("nom"),
-                        rs.getString("prenom"),
-                        rs.getString("email"),
-                        rs.getString("mot_de_passe"),
-                        rs.getString("date_naissance")
-                );
+                if(rs.getString("role").equals("CLIENT")) {
+                    return new Client(
+                            rs.getInt("id"),
+                            rs.getString("nom"),
+                            rs.getString("prenom"),
+                            rs.getString("email"),
+                            rs.getString("mot_de_passe"),
+                            rs.getString("date_naissance")
+                    );
+
+                }
+                else{
+                    return new Admin(rs.getString("nom"),
+                            rs.getString("prenom"),
+                            rs.getString("email"),
+                            rs.getString("mot_de_passe"));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();

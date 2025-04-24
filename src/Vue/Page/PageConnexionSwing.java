@@ -70,6 +70,7 @@ public class PageConnexionSwing extends JFrame {
             Utilisateur u = new UtilisateurControleur().trouverParEmailEtMotDePasse(email, mdp);
             if (u != null) {
                 dispose();
+                System.out.println(u.getRole());
                 if (u.getRole().equals("Admin")) {
                     new PageGestionAdmin(this);
                 } else {
