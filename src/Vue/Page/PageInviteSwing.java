@@ -18,7 +18,10 @@ public class PageInviteSwing extends JFrame {
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
-                GradientPaint gp = new GradientPaint(0, 0, new Color(255, 248, 230), getWidth(), getHeight(), new Color(255, 240, 245));
+                GradientPaint gp = new GradientPaint(
+                        0, 0, new Color(255, 248, 230),
+                        getWidth(), getHeight(), new Color(255, 240, 245)
+                );
                 g2d.setPaint(gp);
                 g2d.fillRect(0, 0, getWidth(), getHeight());
             }
@@ -28,35 +31,41 @@ public class PageInviteSwing extends JFrame {
         gbc.insets = new Insets(15, 15, 15, 15);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.anchor = GridBagConstraints.CENTER;
+        gbc.gridx = 0;
+
+        ImageIcon logoIcon = new ImageIcon("assets/hop_in.png");
+        Image img = logoIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        JLabel logoLabel = new JLabel(new ImageIcon(img));
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        panel.add(logoLabel, gbc);
 
         JLabel title = new JLabel("Connexion en tant qu'invité");
         title.setFont(new Font("Segoe UI", Font.BOLD, 32));
         title.setForeground(new Color(62, 15, 76));
         title.setHorizontalAlignment(SwingConstants.CENTER);
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
+        gbc.gridy = 1;
         panel.add(title, gbc);
         gbc.gridwidth = 1;
 
         JTextField emailField = new JTextField();
         styleField(emailField);
-        addField(panel, gbc, "Email", emailField, 1);
+        addField(panel, gbc, "Email", emailField, 2);
 
         JLabel message = new JLabel(" ");
         message.setHorizontalAlignment(SwingConstants.CENTER);
         message.setForeground(Color.RED);
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         gbc.gridwidth = 2;
         panel.add(message, gbc);
 
         JButton btnConnect = createButton("Continuer", new Color(76, 215, 179));
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         panel.add(btnConnect, gbc);
 
         JButton btnRetour = createButton("Retour", new Color(249, 78, 139));
-        gbc.gridy = 4;
+        gbc.gridy = 5;
         panel.add(btnRetour, gbc);
 
         btnConnect.addActionListener(e -> {
@@ -110,6 +119,7 @@ public class PageInviteSwing extends JFrame {
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(new Color(62, 15, 76), 2, true));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setOpaque(true);
 
         button.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseEntered(java.awt.event.MouseEvent evt) {

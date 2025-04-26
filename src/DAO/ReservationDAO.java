@@ -13,26 +13,42 @@ import java.sql.Statement;
 public class ReservationDAO {
 
     public Map<Integer, Integer> getNbPersonnesParCreneau(int idAttraction, LocalDate date) {
-        String sql = "SELECT id_creneau, SUM(nb_personnes) AS total_personnes " +
-                "FROM reservation " +
-                "WHERE id_attraction = ? AND date_reservation = ? " +
-                "GROUP BY id_creneau";
+        Map<Integer, Integer> map = new HashMap<>();
         try (Connection conn = ConnectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(
+                     "SELECT id_creneau, SUM(nb_personnes) AS total " +
+                             "FROM reservation " +
+                             "WHERE id_attraction = ? AND date_reservation = ? AND statut = 'CONFIRMÉE' " +
+                             "GROUP BY id_creneau"
+             )) {
             ps.setInt(1, idAttraction);
             ps.setDate(2, java.sql.Date.valueOf(date));
-            var rs = ps.executeQuery();
-            Map<Integer, Integer> resultMap = new HashMap<>();
+            ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                resultMap.put(rs.getInt("id_creneau"), rs.getInt("total_personnes"));
+                map.put(rs.getInt("id_creneau"), rs.getInt("total"));
             }
-            return resultMap;
-        } catch (SQLException e) {
-            System.err.println("Erreur lors de la récupération du nombre de personnes par créneau:");
+        } catch (Exception e) {
             e.printStackTrace();
-            return new HashMap<>();
+        }
+        return map;
+    }
+
+    public boolean annulerReservation(int idReservation) {
+        System.out.println("Suppression reservation ID : " + idReservation);
+        try (Connection conn = ConnectionProvider.getConnection()) {
+            String query = "UPDATE reservation SET statut = 'ANNULEE' WHERE id_reservation = ?";
+            PreparedStatement ps = conn.prepareStatement(query);
+            ps.setInt(1, idReservation);
+            int rowsAffected = ps.executeUpdate();
+            System.out.println("Nombre de lignes affectées : " + rowsAffected);
+            return rowsAffected > 0;
+        } catch (SQLException e) {
+            System.out.println("Exception SQL rencontrée !");
+            e.printStackTrace();
+            return false;
         }
     }
+
 
     public Map<Integer, Time> getHeuresCreneauxDepuisBase() {
         String sql = "SELECT id_creneau, heure FROM creneau";
@@ -62,20 +78,21 @@ public class ReservationDAO {
             ps.setInt(1, idClient);
             ResultSet rs = ps.executeQuery();
 
-            while (rs.next()) {
+                while (rs.next()) {
+                    int idReservation = rs.getInt("id_reservation");
+                    int clientId = rs.getInt("id_utilisateur");
+                    int idAttraction = rs.getInt("id_attraction");
+                    Date dateReservation = rs.getDate("date_reservation");
+                    String mailUt = rs.getString("mailUt");
+                    int nbPersonnes = rs.getInt("nb_personnes");
+                    int idCreneau = rs.getInt("id_creneau");
+                    String statut = rs.getString("statut");
 
-                int clientId = rs.getInt("id_utilisateur");
-                int idAttraction = rs.getInt("id_attraction");
-                Date dateReservation = rs.getDate("date_reservation");
-                String mailUt = rs.getString("mailUt");
-                int nbPersonnes = rs.getInt("nb_personnes");
-                int idCreneau = rs.getInt("id_creneau");
-                String statut = rs.getString("statut");
+                    Reservation res = new Reservation(clientId, mailUt, idAttraction, dateReservation, idCreneau, nbPersonnes, statut);
+                    res.setIdReservation(idReservation);
 
-                Reservation res = new Reservation(clientId, mailUt,idAttraction, dateReservation, idCreneau, nbPersonnes,  statut);
-
-                reservations.add(res);
-            }
+                    reservations.add(res);
+                }
             rs.close();
         } catch (SQLException e) {
             e.printStackTrace();

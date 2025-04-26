@@ -21,7 +21,7 @@ public class ReservationmodifDAO {
             }
 
             ps.setInt(2, idAttraction);
-            ps.setDate(3, Date.valueOf(date)); // <-- date passée ici
+            ps.setDate(3, Date.valueOf(date));
             ps.setInt(4, idCreneau);
 
             int affectedRows = ps.executeUpdate();
@@ -33,4 +33,7 @@ public class ReservationmodifDAO {
             return false;
         }
     }
+
+
+
 }

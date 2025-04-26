@@ -17,7 +17,6 @@ public class PageEnregistrementSwing extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel(new GridBagLayout()) {
-            @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
@@ -30,13 +29,19 @@ public class PageEnregistrementSwing extends JFrame {
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(12, 12, 12, 12);
         gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridx = 0;
+
+        ImageIcon logoIcon = new ImageIcon("assets/hop_in.png");
+        Image img = logoIcon.getImage().getScaledInstance(220, 150, Image.SCALE_SMOOTH);
+        JLabel logoLabel = new JLabel(new ImageIcon(img));
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        panel.add(logoLabel, gbc);
 
         JLabel title = new JLabel("Créer un compte Hop'In", SwingConstants.CENTER);
         title.setFont(new Font("Segoe UI", Font.BOLD, 32));
         title.setForeground(new Color(62, 15, 76));
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
+        gbc.gridy = 1;
         panel.add(title, gbc);
         gbc.gridwidth = 1;
 
@@ -52,39 +57,14 @@ public class PageEnregistrementSwing extends JFrame {
         styleField(mdpField);
         styleField(dateField);
 
-        addField(panel, gbc, "Nom", nomField, 1);
-        addField(panel, gbc, "Prénom", prenomField, 2);
-        addField(panel, gbc, "Email", emailField, 3);
-        addField(panel, gbc, "Mot de passe", mdpField, 4);
-        addField(panel, gbc, "Date de naissance (AAAA-MM-JJ)", dateField, 5);
-
-        /*JLabel membreLabel = new JLabel("Type de membre :");
-        membreLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
-        membreLabel.setForeground(new Color(62, 15, 76));
-        gbc.gridx = 0;
-        gbc.gridy = 6;
-        panel.add(membreLabel, gbc);
-
-        JPanel membrePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        membrePanel.setOpaque(false);
-        ButtonGroup groupeMembre = new ButtonGroup();
-        String[] membres = {"AUCUN", "REGULIER", "SENIOR", "ENFANT"};
-        for (String m : membres) {
-            JRadioButton rb = new JRadioButton(m);
-            rb.setActionCommand(m);
-            rb.setBackground(new Color(255, 248, 230));
-            rb.setForeground(new Color(62, 15, 76));
-            rb.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-            rb.setFocusPainted(false);
-            rb.setOpaque(true);
-            groupeMembre.add(rb);
-            membrePanel.add(rb);
-        }
-        gbc.gridx = 1;
-        panel.add(membrePanel, gbc);*/
+        addField(panel, gbc, "Nom", nomField, 2);
+        addField(panel, gbc, "Prénom", prenomField, 3);
+        addField(panel, gbc, "Email", emailField, 4);
+        addField(panel, gbc, "Mot de passe", mdpField, 5);
+        addField(panel, gbc, "Date de naissance (AAAA-MM-JJ)", dateField, 6);
 
         JLabel roleLabel = new JLabel("Rôle :");
-        roleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        roleLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
         roleLabel.setForeground(new Color(62, 15, 76));
         gbc.gridx = 0;
         gbc.gridy = 7;
@@ -126,20 +106,18 @@ public class PageEnregistrementSwing extends JFrame {
         panel.add(btnRetour, gbc);
 
         btn.addActionListener(e -> {
-            /*String typeMembre = (groupeMembre.getSelection() != null) ? groupeMembre.getSelection().getActionCommand() : null;*/
             String role = (groupeRole.getSelection() != null) ? groupeRole.getSelection().getActionCommand() : null;
-
             if (!dateField.getText().matches("\\d{4}-\\d{2}-\\d{2}")) {
                 message.setForeground(Color.RED);
                 message.setText("Le format de la date doit être xxxx-xx-xx, avec seulement des chiffres.");
                 return;
             }
 
-            /*if (typeMembre == null || role == null) {
+            if (role == null) {
                 message.setForeground(Color.RED);
-                message.setText("Veuillez sélectionner un type de membre et un rôle.");
+                message.setText("Veuillez sélectionner un rôle.");
                 return;
-            }*/
+            }
 
             if (role.equals("ADMIN")) {
                 VerifAdmin verif = new VerifAdmin(null);
@@ -167,12 +145,12 @@ public class PageEnregistrementSwing extends JFrame {
                         dateField.getText()
                 );
                 int resultat = new UtilisateurControleur().ajouterUtilisateur(u);
-                if(resultat==1){
+                if (resultat == 1) {
                     message.setForeground(new Color(0, 128, 0));
                     message.setText("Utilisateur enregistré avec succès !");
-                }else{
+                } else {
                     message.setForeground(new Color(239, 74, 74));
-                    message.setText("Une erreur est survenue. Tous vos champs sont-ils corrects ?");
+                    message.setText("Erreur dans l'enregistrement. Vérifiez vos champs !");
                 }
             }
         });
@@ -190,7 +168,7 @@ public class PageEnregistrementSwing extends JFrame {
 
     private void addField(JPanel panel, GridBagConstraints gbc, String label, JComponent field, int y) {
         JLabel jLabel = new JLabel(label + " :");
-        jLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        jLabel.setFont(new Font("Segoe UI", Font.BOLD, 16));
         jLabel.setForeground(new Color(62, 15, 76));
         gbc.gridx = 0;
         gbc.gridy = y;

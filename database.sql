@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS reservation (
     date_reservation DATE NOT NULL,
     id_creneau INT NOT NULL,    -- Référence au créneau horaire standard (obligatoire)
     nb_personnes INT NOT NULL,
-    statut ENUM('CONFIRMEE', 'ANNULEE') DEFAULT 'CONFIRMEE',
+    statut ENUM('CONFIRMEE','EN ATTENTE' ,'ANNULEE') DEFAULT 'EN ATTENTE',
     FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id),
     FOREIGN KEY (id_attraction) REFERENCES attraction(id_attraction),
     FOREIGN KEY (id_creneau) REFERENCES creneau(id_creneau)

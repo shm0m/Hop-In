@@ -105,4 +105,5 @@ public class Reservation {
     public int getNb_personnes() {
         return nbPersonnes;
     }
+
 }

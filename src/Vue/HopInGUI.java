@@ -12,11 +12,13 @@ public class HopInGUI extends JFrame {
         setLocationRelativeTo(null);
 
         JPanel panel = new JPanel(new GridBagLayout()) {
-            @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
-                GradientPaint gp = new GradientPaint(0, 0, new Color(255, 248, 230), getWidth(), getHeight(), new Color(255, 240, 245));
+                GradientPaint gp = new GradientPaint(
+                        0, 0, new Color(255, 248, 230),
+                        getWidth(), getHeight(), new Color(255, 240, 245)
+                );
                 g2d.setPaint(gp);
                 g2d.fillRect(0, 0, getWidth(), getHeight());
             }
@@ -28,22 +30,28 @@ public class HopInGUI extends JFrame {
         gbc.fill = GridBagConstraints.NONE;
         gbc.anchor = GridBagConstraints.CENTER;
 
+        ImageIcon logoIcon = new ImageIcon("assets/hop_in.png");
+        Image img = logoIcon.getImage().getScaledInstance(200, 200, Image.SCALE_SMOOTH);
+        JLabel logoLabel = new JLabel(new ImageIcon(img));
+        gbc.gridy = 0;
+        panel.add(logoLabel, gbc);
+
         JLabel label = new JLabel("Bienvenue sur Hop'In");
         label.setFont(new Font("Segoe UI", Font.BOLD, 40));
         label.setForeground(new Color(62, 15, 76));
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         panel.add(label, gbc);
 
         JButton btnConnexion = createButton("Se connecter", new Color(76, 215, 179));
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         panel.add(btnConnexion, gbc);
 
         JButton btnInscription = createButton("S'enregistrer", new Color(249, 78, 139));
-        gbc.gridy = 2;
+        gbc.gridy = 3;
         panel.add(btnInscription, gbc);
 
         JButton btnInvite = createButton("Se connecter en tant qu'invité", new Color(255, 236, 110));
-        gbc.gridy = 3;
+        gbc.gridy = 4;
         panel.add(btnInvite, gbc);
 
         btnConnexion.addActionListener(e -> {

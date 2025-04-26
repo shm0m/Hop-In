@@ -49,6 +49,7 @@ public class CreAtt extends JFrame {
         panel.setOpaque(false);
 
 
+
         modicNom=new JTextField("Nom de l'attraction");
 
         GridBagConstraints gbc = new GridBagConstraints();

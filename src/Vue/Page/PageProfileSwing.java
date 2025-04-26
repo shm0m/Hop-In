@@ -1,5 +1,6 @@
 package Vue.Page;
 
+import Controleur.ReservationControleur;
 import DAO.ReservationDAO;
 import DAO.CreneauDAO;
 import DAO.AttractionDAO;
@@ -10,7 +11,7 @@ import Vue.NavBarUtil;
 
 import javax.swing.*;
 import javax.swing.border.*;
-import javax.swing.table.DefaultTableModel;
+import javax.swing.table.*;
 import java.awt.*;
 import java.util.ArrayList;
 
@@ -27,8 +28,7 @@ public class PageProfileSwing extends JFrame {
                 super.paintComponent(g);
                 Graphics2D g2d = (Graphics2D) g;
                 GradientPaint gp = new GradientPaint(
-                        0, 0,
-                        new Color(255, 248, 230),
+                        0, 0, new Color(255, 248, 230),
                         getWidth(), getHeight(),
                         new Color(255, 240, 245)
                 );
@@ -48,26 +48,15 @@ public class PageProfileSwing extends JFrame {
         navBar.setAlignmentX(Component.CENTER_ALIGNMENT);
         content.add(navBar);
 
-        ImageIcon icon = new ImageIcon("assets/profil.png");
-        Image img = icon.getImage().getScaledInstance(80, 80, Image.SCALE_SMOOTH);
-        JLabel picLabel = new JLabel(new ImageIcon(img));
-        picLabel.setPreferredSize(new Dimension(80, 80));
-
         JLabel bienvenueLabel = new JLabel("Bienvenue, " + utilisateur.getPrenom() + " !");
         bienvenueLabel.setFont(new Font("Segoe UI", Font.BOLD, 26));
         bienvenueLabel.setForeground(labelColor);
-
-        JPanel header = new JPanel();
-        header.setOpaque(false);
-        header.setLayout(new FlowLayout(FlowLayout.CENTER, 20, 10));
-        header.add(picLabel);
-        header.add(bienvenueLabel);
-        header.setAlignmentX(Component.CENTER_ALIGNMENT);
-        content.add(header);
+        bienvenueLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        content.add(bienvenueLabel);
 
         JPanel formPanel = new RoundedPanel(20);
         formPanel.setLayout(new GridBagLayout());
-        formPanel.setBackground(new Color(255, 255, 255, 160));
+        formPanel.setBackground(new Color(255, 255, 255, 190));
         formPanel.setBorder(new EmptyBorder(30, 40, 30, 40));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -117,7 +106,7 @@ public class PageProfileSwing extends JFrame {
         btnEnregistrer.setFocusPainted(false);
         btnEnregistrer.setBackground(accentColor);
         btnEnregistrer.setForeground(Color.WHITE);
-        btnEnregistrer.setBorder(new LineBorder(accentColor, 1, true));
+        btnEnregistrer.setBorder(new LineBorder(accentColor, 2, true));
         btnEnregistrer.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnEnregistrer.setAlignmentX(Component.CENTER_ALIGNMENT);
 
@@ -125,7 +114,6 @@ public class PageProfileSwing extends JFrame {
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btnEnregistrer.setBackground(new Color(62, 15, 76));
             }
-
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btnEnregistrer.setBackground(accentColor);
             }
@@ -134,45 +122,67 @@ public class PageProfileSwing extends JFrame {
         content.add(Box.createRigidArea(new Dimension(0, 10)));
         content.add(btnEnregistrer);
 
-        JLabel titreHistorique = new JLabel("Mes réservations");
-        titreHistorique.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        JLabel titreHistorique = new JLabel("Mes Réservations");
+        titreHistorique.setFont(new Font("Segoe UI", Font.BOLD, 22));
         titreHistorique.setForeground(labelColor);
         titreHistorique.setAlignmentX(Component.CENTER_ALIGNMENT);
-        titreHistorique.setBorder(new EmptyBorder(20, 0, 10, 0));
+        titreHistorique.setBorder(new EmptyBorder(30, 0, 15, 0));
         content.add(titreHistorique);
 
-        String[] colonnes = {"Attraction", "Date", "Heure", "Nb Pers.", "Statut"};
+        String[] colonnes = {"Attraction", "Date", "Heure", "Nb Pers.", "Statut", "Action", "ID Réservation"};
         DefaultTableModel model = new DefaultTableModel(colonnes, 0);
-        ArrayList<Reservation> reservations = new ReservationDAO().getReservationsByClient(utilisateur.getId());
 
+        ArrayList<Reservation> reservations = new ReservationDAO().getReservationsByClient(utilisateur.getId());
         for (Reservation res : reservations) {
             String nomAtt = new AttractionDAO().getNomAttractionById(res.getIdAttraction());
             String horaire = new CreneauDAO().getHoraireById(res.getIdCreneau());
-            Object[] row = {
+            model.addRow(new Object[]{
                     nomAtt,
                     res.getDateReservation(),
                     horaire,
                     res.getNbPersonnes(),
-                    res.getStatut()
-            };
-            model.addRow(row);
+                    res.getStatut(),
+                    "Annuler",
+                    res.getIdReservation()
+            });
         }
 
         JTable table = new JTable(model);
+        table.setRowHeight(30);
         table.setFont(fieldFont);
-        table.setRowHeight(26);
+        table.setForeground(new Color(62, 15, 76));
+        table.setBackground(new Color(255, 255, 255, 230));
+        table.setSelectionBackground(new Color(255, 236, 210));
+        table.setSelectionForeground(new Color(62, 15, 76));
         table.setGridColor(new Color(230, 230, 230));
-        table.setShowGrid(true);
+        table.setIntercellSpacing(new Dimension(0, 0));
+        table.setShowVerticalLines(false);
+        table.setShowHorizontalLines(false);
         table.setFillsViewportHeight(true);
-        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 14));
-        table.getTableHeader().setBackground(new Color(235, 230, 255));
-        table.setBackground(Color.WHITE);
 
-        JScrollPane scroll = new JScrollPane(table);
-        scroll.setPreferredSize(new Dimension(800, 140));
-        scroll.setBorder(BorderFactory.createLineBorder(labelColor, 1, true));
-        scroll.setAlignmentX(Component.CENTER_ALIGNMENT);
-        content.add(scroll);
+        JTableHeader headerTable = table.getTableHeader();
+        headerTable.setBackground(new Color(76, 215, 179));
+        headerTable.setForeground(Color.WHITE);
+        headerTable.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        headerTable.setOpaque(false);
+        headerTable.setReorderingAllowed(false);
+
+        table.getColumn("Action").setCellRenderer(new ButtonRenderer());
+        table.getColumn("Action").setCellEditor(new ButtonEditor(new JCheckBox(), table, utilisateur));
+
+        table.getColumnModel().getColumn(6).setMinWidth(0);
+        table.getColumnModel().getColumn(6).setMaxWidth(0);
+        table.getColumnModel().getColumn(6).setWidth(0);
+
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setPreferredSize(new Dimension(950, 220));
+        scrollPane.setBorder(BorderFactory.createLineBorder(accentColor, 2, true));
+        scrollPane.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scrollPane.getViewport().setOpaque(false);
+        scrollPane.setOpaque(false);
+
+        content.add(Box.createRigidArea(new Dimension(0, 10)));
+        content.add(scrollPane);
 
         setContentPane(content);
         setVisible(true);
@@ -181,14 +191,14 @@ public class PageProfileSwing extends JFrame {
         JTextField tfPrenom = (JTextField) champs[1];
         JTextField tfEmail = (JTextField) champs[2];
         JTextField tfDateNaissance = (JTextField) champs[3];
-        JTextField tfmdp = (JTextField) champs[4];
+        JTextField tfMdp = (JTextField) champs[4];
 
         btnEnregistrer.addActionListener(e -> {
             utilisateur.setNom(tfNom.getText());
             utilisateur.setPrenom(tfPrenom.getText());
             utilisateur.setEmail(tfEmail.getText());
             utilisateur.setDateNaissance(tfDateNaissance.getText());
-            utilisateur.setMotDePasse(tfmdp.getText());
+            utilisateur.setMotDePasse(tfMdp.getText());
             new UtilisateurControleur().modifierUtilisateur(utilisateur);
             JOptionPane.showMessageDialog(this, "Profil mis à jour !");
         });
@@ -196,12 +206,10 @@ public class PageProfileSwing extends JFrame {
 
     class RoundedPanel extends JPanel {
         private final int cornerRadius;
-
         public RoundedPanel(int radius) {
             this.cornerRadius = radius;
             setOpaque(false);
         }
-
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2 = (Graphics2D) g;
