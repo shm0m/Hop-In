@@ -73,7 +73,7 @@ public class VueHoraireAttraction extends JFrame {
             JPanel ligne = new JPanel(new BorderLayout());
             ligne.setPreferredSize(new Dimension(700, 50));
             ligne.setBackground(Color.WHITE);
-            ligne.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
+            ligne.setBorder(BorderFactory.createLineBorder(new Color(255, 248, 230)));
 
             JLabel heure = new JLabel(" " + label, SwingConstants.LEFT);
             heure.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -132,11 +132,4 @@ public class VueHoraireAttraction extends JFrame {
         setVisible(true);
     }
 
-    public void rechargerAffichage(Utilisateur utilisateur) {
-        SwingUtilities.invokeLater(() -> {
-            dispose();
-            int capMax = new AttractionDAO().getCapaciteAttraction(id_attraction);
-            new VueHoraireAttraction(attraction, id_attraction, utilisateur, date, capMax);
-        });
-    }
 }

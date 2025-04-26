@@ -14,32 +14,61 @@ import java.util.ArrayList;
 public class FormulairePaiement extends JDialog {
     public FormulairePaiement(JFrame parent, Integer id_utilisateur, int id_attraction, int id_creneau, LocalDate date, String label, String attraction) {
         super(parent, "Paiement", true);
-        setSize(400, 300);
+        setSize(480, 400);
         setLocationRelativeTo(parent);
-        setLayout(new BorderLayout());
 
-        JPanel formPanel = new JPanel(new GridLayout(4, 2, 10, 10));
-        formPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        JPanel panel = new JPanel(new GridBagLayout()) {
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Graphics2D g2d = (Graphics2D) g;
+                GradientPaint gp = new GradientPaint(
+                        0, 0, new Color(255, 248, 230),
+                        getWidth(), getHeight(), new Color(255, 240, 245)
+                );
+                g2d.setPaint(gp);
+                g2d.fillRect(0, 0, getWidth(), getHeight());
+            }
+        };
+        panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(15, 10, 15, 10);
+        gbc.anchor = GridBagConstraints.WEST;
+
+        JLabel titre = new JLabel("Informations de Paiement");
+        titre.setFont(new Font("Segoe UI", Font.BOLD, 22));
+        titre.setForeground(new Color(62, 15, 76));
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 2;
+        panel.add(titre, gbc);
+
+        gbc.gridwidth = 1;
 
         JTextField numeroCarte = new JTextField();
         JTextField dateExpiration = new JTextField();
         JTextField cvc = new JTextField();
         JTextField nomTitulaire = new JTextField();
 
-        formPanel.add(new JLabel("Numéro de carte :"));
-        formPanel.add(numeroCarte);
-        formPanel.add(new JLabel("Date d’expiration :"));
-        formPanel.add(dateExpiration);
-        formPanel.add(new JLabel("CVC :"));
-        formPanel.add(cvc);
-        formPanel.add(new JLabel("Nom du titulaire :"));
-        formPanel.add(nomTitulaire);
+        addField(panel, gbc, "Numéro de carte :", numeroCarte, 1);
+        addField(panel, gbc, "Date d'expiration :", dateExpiration, 2);
+        addField(panel, gbc, "CVC :", cvc, 3);
+        addField(panel, gbc, "Nom du titulaire :", nomTitulaire, 4);
 
-        JButton btnValider = new JButton("Valider et réserver");
-        btnValider.setBackground(new Color(76, 175, 80));
+        JButton btnValider = new JButton("Valider et Réserver");
+        btnValider.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        btnValider.setBackground(new Color(76, 215, 179));
         btnValider.setForeground(Color.WHITE);
+        btnValider.setFocusPainted(false);
+        btnValider.setPreferredSize(new Dimension(200, 45));
+        btnValider.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnValider.setBorder(BorderFactory.createLineBorder(new Color(62, 15, 76), 2, true));
+        gbc.gridx = 0;
+        gbc.gridy = 5;
+        gbc.gridwidth = 2;
+        gbc.anchor = GridBagConstraints.CENTER;
+        panel.add(btnValider, gbc);
 
-        // Marquer id_utilisateur comme final pour qu'il soit utilisé dans la lambda
         final Integer finalIdUtilisateur = id_utilisateur;
 
         btnValider.addActionListener(e -> {
@@ -49,80 +78,43 @@ public class FormulairePaiement extends JDialog {
                 return;
             }
 
-            // verification si l'utilisateur est un invité
             boolean isInvited = finalIdUtilisateur == null || finalIdUtilisateur == -1;
-            if (isInvited) {
-                System.out.println("Mode invité : pas d'ID utilisateur.");
-            }
-
             UtilisateurchercherDAO userDAO = new UtilisateurchercherDAO();
             Client client = null;
-            if (!isInvited) {
-                client = userDAO.trouverParId(finalIdUtilisateur);
-            }
+            if (!isInvited) client = userDAO.trouverParId(finalIdUtilisateur);
 
-            if (client == null && isInvited) {
-                System.out.println("Aucun utilisateur trouvé, probablement un invité.");
-            }
-
-            // Calcul age
             int age = 14;
             if (client != null) {
                 LocalDate naissance = LocalDate.parse(client.getDateNaissance());
                 age = Period.between(naissance, LocalDate.now()).getYears();
-                System.out.println("Âge de l'utilisateur : " + age);
             }
 
             Reduction reduction = null;
             if (!isInvited) {
                 ReductionChercherDAO redDAO = new ReductionChercherDAO();
-                ArrayList<Reduction> allReductions = redDAO.getReducs();
-                System.out.println("Réductions disponibles en base :");
-                for (Reduction r : allReductions) {
-                    System.out.println("- " + r.getNom() + " (âge min : " + r.getageMin() + ", âge max : " + r.getageMax() + ")");
-                }
-
-                // Appliquer une réduction si applicable pour les utilisateurs
                 reduction = redDAO.getReductionApplicable(age);
-                if (reduction != null) {
-                    System.out.println("Réduction applicable trouvée : " + reduction.getNom());
-                } else {
-                    System.out.println("Aucune réduction applicable.");
-                }
             }
 
-            // réduction (n'applique la réduction que pour les utilisateurs avec id, pas les invité)
             AttractionDAO attractionDAO = new AttractionDAO();
             float prixBase = attractionDAO.getPrixById(id_attraction);
             float prixFinal = prixBase;
-            String messageReduc = "Aucune réduction appliquée.";
-
-            if (reduction != null && !isInvited) {  // Appliquer la réduction seulement pour les utilisateurs authentifiés
+            if (reduction != null && !isInvited) {
                 prixFinal = prixBase * (1 - (float) reduction.getprcRed() / 100);
-                messageReduc = "Réduction appliquée : " + reduction.getNom() + " (-" + reduction.getprcRed() + "%)";
             }
 
-            System.out.println("Prix original : " + prixBase + " €, Prix final après réduction : " + prixFinal);
-
-            // affichage du montant final
             JOptionPane.showMessageDialog(this,
                     "Prix original : " + prixBase + " €\n" +
-                            messageReduc + "\nTotal à payer : " + prixFinal + " €");
-
+                            (reduction != null ? "Réduction appliquée : " + reduction.getNom() + " (-" + reduction.getprcRed() + "%)\n" : "Aucune réduction appliquée.\n") +
+                            "Total à payer : " + prixFinal + " €");
 
             boolean ok = new ReservationControleur().reserver(finalIdUtilisateur, id_attraction, id_creneau, date);
 
             if (ok) {
-
                 int idReservation = ReservationDAO.getDernierIdReservation();
                 int idPaiement = new PaiementDAO().enregistrerPaiement(idReservation, prixFinal);
-
-
                 if (reduction != null && idPaiement != -1) {
                     new ReductionAppliqueeDAO().lierReductionPaiement(reduction.getid(), idPaiement);
                 }
-
-
                 JOptionPane.showMessageDialog(this, "Réservation confirmée pour " + label + "\nAttraction : " + attraction,
                         "Succès", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
@@ -132,11 +124,32 @@ public class FormulairePaiement extends JDialog {
             } else {
                 JOptionPane.showMessageDialog(this, "Erreur lors de la réservation.", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
-
         });
 
-        add(formPanel, BorderLayout.CENTER);
-        add(btnValider, BorderLayout.SOUTH);
+        setContentPane(panel);
         setVisible(true);
+    }
+
+    private void addField(JPanel panel, GridBagConstraints gbc, String label, JTextField field, int y) {
+        JLabel lbl = new JLabel(label);
+        lbl.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        lbl.setForeground(new Color(62, 15, 76));
+        gbc.gridx = 0;
+        gbc.gridy = y;
+        gbc.weightx = 0;
+        gbc.fill = GridBagConstraints.NONE;
+        panel.add(lbl, gbc);
+
+        gbc.gridx = 1;
+        gbc.weightx = 1;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        field.setFont(new Font("Segoe UI", Font.PLAIN, 15));
+        field.setPreferredSize(new Dimension(220, 30));
+        field.setBackground(new Color(255, 245, 250));
+        field.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(220, 220, 220), 1, true),
+                BorderFactory.createEmptyBorder(5, 10, 5, 10)
+        ));
+        panel.add(field, gbc);
     }
 }

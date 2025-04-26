@@ -27,7 +27,7 @@ public class PageReservationSwing extends JFrame {
     public PageReservationSwing(Utilisateur utilisateur) {
         this.utilisateur = utilisateur;
 
-        setTitle("📅 Réservation Hop'In");
+        setTitle("Réservation Hop'In");
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
