@@ -40,9 +40,9 @@ public class CreRed extends JFrame {
         modifieur=new ReductionDAO();
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Espacement autour des boutons
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplir horizontalement
-        // Ajouter les boutons avec des contraintes
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
         
         JPanel panel = new JPanel(new GridBagLayout()) {
             protected void paintComponent(Graphics g) {
@@ -63,7 +63,7 @@ public class CreRed extends JFrame {
         ajNom= new JTextField("Nom ");
         gbc.gridx = 1;
         gbc.gridy = 0;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
+        gbc.gridwidth = 4;     
        panel.add(ajNom, gbc);
 
         indPrc=new JLabel("Pourcentage de réduction");
@@ -73,7 +73,7 @@ public class CreRed extends JFrame {
         ajPrc= new JTextField("00");
         gbc.gridx = 1;
         gbc.gridy = 1;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
+        gbc.gridwidth = 4;     
        panel.add(ajPrc, gbc);
 
         indAgeMin=new JLabel("Age minimum");
@@ -83,7 +83,7 @@ public class CreRed extends JFrame {
         ajAgeMin= new JTextField("null");
         gbc.gridx = 1;
         gbc.gridy = 2;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
+        gbc.gridwidth = 4;     
        panel.add(ajAgeMin, gbc);
 
         indAgeMax=new JLabel("Age maximum ");
@@ -93,7 +93,7 @@ public class CreRed extends JFrame {
         ajAgeMax= new JTextField("null");
         gbc.gridx = 1;
         gbc.gridy = 3;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
+        gbc.gridwidth = 4;     
        panel.add(ajAgeMax, gbc);
 
         indDateMin=new JLabel("Date de début (aaaa-mm-jj)");
@@ -103,7 +103,7 @@ public class CreRed extends JFrame {
         ajDateMin= new JTextField("null");
         gbc.gridx = 1;
         gbc.gridy = 5;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
+        gbc.gridwidth = 4;     
        panel.add(ajDateMin, gbc);
 
         indDateMax=new JLabel("Date de fin (aaaa-mm-jj)");
@@ -113,7 +113,7 @@ public class CreRed extends JFrame {
         ajDateMax= new JTextField("null");
         gbc.gridx = 1;
         gbc.gridy = 6;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
+        gbc.gridwidth = 4;     
        panel.add(ajDateMax, gbc);
 
         indMinVis=new JLabel("Nombre minimum de réservations");
@@ -123,7 +123,7 @@ public class CreRed extends JFrame {
         ajMinVis= new JTextField("null");
         gbc.gridx = 1;
         gbc.gridy = 7;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
+        gbc.gridwidth = 4;     
         panel.add(ajMinVis, gbc);
 
         output=new JLabel("");

@@ -52,9 +52,9 @@ public class CreAtt extends JFrame {
         modicNom=new JTextField("Nom de l'attraction");
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(10, 10, 10, 10); // Espacement autour des boutons
-        gbc.fill = GridBagConstraints.HORIZONTAL; // Remplir horizontalement
-        // Ajouter les boutons avec des contraintes
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL; 
+        
 
 
         indicNom=new JLabel("Nom de l'attraction");
@@ -66,7 +66,7 @@ public class CreAtt extends JFrame {
 
         gbc.gridx = 1;
         gbc.gridy = 0;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
+        gbc.gridwidth = 4;
         panel.add(modicNom, gbc);
 
         indicDescription=new JLabel("Description: ");
@@ -77,7 +77,7 @@ public class CreAtt extends JFrame {
         modicDescription=new JTextField("Champ vide                                                                                          ");
         gbc.gridx = 1;
         gbc.gridy = 1;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
+        gbc.gridwidth = 4;   
         panel.add(modicDescription, gbc);
 
         indicPrix=new JLabel("Prix");
@@ -88,7 +88,7 @@ public class CreAtt extends JFrame {
         modicPrix=new JTextField("00.00");
         gbc.gridx = 1;
         gbc.gridy = 2;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
+        gbc.gridwidth = 4;   
         panel.add(modicPrix, gbc);
 
         indicCapaciteMax=new JLabel("Capacité maximum");
@@ -99,21 +99,21 @@ public class CreAtt extends JFrame {
         modicCapaciteMax=new JTextField("00");
         gbc.gridx = 1;
         gbc.gridy = 3;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
+        gbc.gridwidth = 4;   
         panel.add(modicCapaciteMax, gbc);
 
         ajouter = createButton("Ajouter", new Color(201, 222, 63));
         gbc.gridx = 0;
         gbc.gridy = 4;
 
-        gbc.gridwidth = 1; // Limiter à une seule colonne
+        gbc.gridwidth = 1;    
         panel.add(ajouter, gbc);
 
         retour =createButton("Retour", new Color(222, 63, 100));
         gbc.gridx = 1;
         gbc.gridy = 4;
 
-        gbc.gridwidth = 1; // Limiter à une seule colonne
+        gbc.gridwidth = 1;    
         panel.add(retour, gbc);
 
         ajouter.addActionListener(new ActionListener() {
