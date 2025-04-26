@@ -102,15 +102,6 @@ public class ModRed extends JFrame{
         gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
         panel.add(ajAgeMax, gbc);
 
-        indAgeMax=new JLabel("Age maximal ");
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        panel.add(indAgeMax, gbc);
-        ajAgeMax= new JTextField("null");
-        gbc.gridx = 1;
-        gbc.gridy = 4;
-        gbc.gridwidth = 4; // Ce bouton s'étend sur deux colonnes
-        panel.add(ajAgeMax, gbc);
 
         indDateMin=new JLabel("Date de début (aaaa-mm-jj)");
         gbc.gridx = 0;
