@@ -92,7 +92,7 @@ public class FormulairePaiement extends JDialog {
             Reduction reduction = null;
             if (!isInvited) {
                 ReductionChercherDAO redDAO = new ReductionChercherDAO();
-                reduction = redDAO.getReductionApplicable(age);
+                reduction = redDAO.getReductionApplicable(age,0);
             }
 
             AttractionDAO attractionDAO = new AttractionDAO();
