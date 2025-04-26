@@ -83,7 +83,7 @@ public class FormulairePaiement extends JDialog {
             Client client = null;
             if (!isInvited) client = userDAO.trouverParId(finalIdUtilisateur);
 
-            int age = 14;
+            int age = 30;
             if (client != null) {
                 LocalDate naissance = LocalDate.parse(client.getDateNaissance());
                 age = Period.between(naissance, LocalDate.now()).getYears();
@@ -92,7 +92,7 @@ public class FormulairePaiement extends JDialog {
             Reduction reduction = null;
             if (!isInvited) {
                 ReductionChercherDAO redDAO = new ReductionChercherDAO();
-                reduction = redDAO.getReductionApplicable(age,0);
+                reduction = redDAO.getReductionApplicable(age,userDAO.nbReservations(client.getId()));
             }
 
             AttractionDAO attractionDAO = new AttractionDAO();
