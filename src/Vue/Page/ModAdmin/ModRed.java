@@ -180,6 +180,12 @@ public class ModRed extends JFrame{
             ajDateMin.setText(reduction.getdateMin());
             ajDateMax.setText(reduction.getdateMax());
             ajMinVis.setText(reduction.getMinVis()+"");
+            if(ajDateMin.getText().equals("")){
+                ajDateMin.setText("null");
+            }
+            if(ajDateMax.getText().equals("")){
+                ajDateMax.setText("null");
+            }
         });
         enregQuitter.addActionListener(e->{
             int resultat =modifieur.updateReduc(new Reduction(

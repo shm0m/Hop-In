@@ -7,7 +7,9 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ReductionChercherDAO {
     private GestionConnexion gerant;
@@ -46,15 +48,41 @@ public class ReductionChercherDAO {
         return(new ArrayList<Reduction>());
     }
 
-    public Reduction getReductionApplicable(int age) {
+    public Reduction getReductionApplicable(int age,int nbResa) {
+        LocalDate dateAjd= LocalDate.now();
+
+
+        ArrayList<Reduction> reductionsApplicables=new ArrayList<>();
         for (Reduction r : getReducs()) {
+            boolean nbResavalide=true;
+            boolean dateMaxValide=true;
+            boolean dateMinValide=true;
+            if(!(r.getdateMax()==null)){
+                dateMaxValide=dateAjd.isBefore(LocalDate.parse(r.getdateMax())) ;
+            }
+            if(!(r.getdateMin()==null)){
+                dateMinValide=dateAjd.isAfter(LocalDate.parse(r.getdateMin()));
+            }
+            if(r.getMinVis()!=0){
+                nbResavalide=nbResa>r.getMinVis();
+            }
+
             boolean minValide = (r.getageMin() == 0 || age >= r.getageMin());
             boolean maxValide = (r.getageMax() == 0 || age <= r.getageMax());
-            if (minValide && maxValide) {
-                return r;
+            if (minValide && maxValide && dateMinValide && dateMaxValide && nbResavalide) {
+                reductionsApplicables.add(r);
             }
         }
-        return null;
+        if (reductionsApplicables.isEmpty()){
+            return null;
+        }
+        Reduction renvoi=reductionsApplicables.get(0);
+        for(Reduction r: reductionsApplicables){
+            if (r.getprcRed()>renvoi.getprcRed()){
+                renvoi=r;
+            }
+        }
+        return(renvoi);
     }
 
 

@@ -91,4 +91,19 @@ public class UtilisateurchercherDAO {
         }
         return clients;
     }
+    public int nbReservations(int idUt){
+        String sql = "SELECT COUNT(*) FROM reservation where id_utilisateur= ?";
+        try (Connection conn = gerant.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, idUt);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return(rs.getInt("COUNT(*)"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+
+    }
 }

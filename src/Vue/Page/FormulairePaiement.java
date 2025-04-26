@@ -83,7 +83,7 @@ public class FormulairePaiement extends JDialog {
                 }
 
                 // Appliquer une réduction si applicable pour les utilisateurs
-                reduction = redDAO.getReductionApplicable(age);
+                reduction = redDAO.getReductionApplicable(age,userDAO.nbReservations(client.getId()));
                 if (reduction != null) {
                     System.out.println("Réduction applicable trouvée : " + reduction.getNom());
                 } else {
