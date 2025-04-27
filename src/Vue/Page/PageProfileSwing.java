@@ -39,7 +39,7 @@ public class PageProfileSwing extends JFrame {
 
         Color accentColor = new Color(62, 15, 76);
         Color labelColor = new Color(62, 15, 76);
-        Color inputColor = new Color(255, 240, 245);
+        Color inputColor = new Color(255, 248, 230);
         Font labelFont = new Font("Segoe UI", Font.BOLD, 15);
         Font fieldFont = new Font("Segoe UI", Font.PLAIN, 16);
 
@@ -55,7 +55,7 @@ public class PageProfileSwing extends JFrame {
 
         JPanel formPanel = new RoundedPanel(20);
         formPanel.setLayout(new GridBagLayout());
-        formPanel.setBackground(new Color(255, 255, 255, 190));
+        formPanel.setBackground(new Color(255, 248, 230, 255));
         formPanel.setBorder(new EmptyBorder(30, 40, 30, 40));
 
         GridBagConstraints gbc = new GridBagConstraints();
@@ -87,7 +87,7 @@ public class PageProfileSwing extends JFrame {
                 champ.setBackground(inputColor);
                 champ.setPreferredSize(new Dimension(260, 34));
                 ((JTextField) champ).setBorder(BorderFactory.createCompoundBorder(
-                        new LineBorder(new Color(220, 220, 220), 1, true),
+                        new LineBorder(new Color(255, 248, 230), 1, true),
                         new EmptyBorder(6, 10, 6, 10)
                 ));
             }
@@ -150,17 +150,17 @@ public class PageProfileSwing extends JFrame {
         table.setRowHeight(30);
         table.setFont(fieldFont);
         table.setForeground(new Color(62, 15, 76));
-        table.setBackground(new Color(255, 255, 255, 230));
-        table.setSelectionBackground(new Color(255, 236, 210));
+        table.setBackground(new Color(255, 248, 230, 255));
+        table.setSelectionBackground(new Color(255, 248, 230));
         table.setSelectionForeground(new Color(62, 15, 76));
-        table.setGridColor(new Color(230, 230, 230));
+        table.setGridColor(new Color(255, 248, 230));
         table.setIntercellSpacing(new Dimension(0, 0));
         table.setShowVerticalLines(false);
         table.setShowHorizontalLines(false);
         table.setFillsViewportHeight(true);
 
         JTableHeader headerTable = table.getTableHeader();
-        headerTable.setBackground(new Color(76, 215, 179));
+        headerTable.setBackground(new Color(139, 76, 215));
         headerTable.setForeground(Color.WHITE);
         headerTable.setFont(new Font("Segoe UI", Font.BOLD, 16));
         headerTable.setOpaque(false);

@@ -65,7 +65,6 @@ public class ReservationDAO {
         try (Connection conn = ConnectionProvider.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
-            //ps.setString(1, mailInvite);
             ps.setString(1, mailInvite);
             ps.setInt(2, idAttraction);
             ps.setDate(3, Date.valueOf(date));

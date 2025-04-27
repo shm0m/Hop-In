@@ -41,7 +41,7 @@ public class ButtonEditor extends DefaultCellEditor {
         if (clicked) {
             int selectedRow = table.getSelectedRow();
             if (selectedRow >= 0) {
-                int modelRow = table.convertRowIndexToModel(selectedRow); // Correction ici !
+                int modelRow = table.convertRowIndexToModel(selectedRow);
                 int idReservation = Integer.parseInt(table.getModel().getValueAt(modelRow, 6).toString());
 
                 int confirm = JOptionPane.showConfirmDialog(button,
