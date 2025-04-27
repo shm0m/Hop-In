@@ -28,14 +28,14 @@ CREATE TABLE IF NOT EXISTS creneau (
     heure TIME NOT NULL
 );
 
--- Table Reservation (version simplifiée)
+-- Table Reservation
 CREATE TABLE IF NOT EXISTS reservation (
     id_reservation INT AUTO_INCREMENT PRIMARY KEY,
-    id_utilisateur INT,         -- Référence à l'utilisateur connecté (NULL pour une réservation invité)
-    mailUt VARCHAR(100),        -- Email, pour réservation d'invité
-    id_attraction INT,          -- Référence à l'attraction réservée
+    id_utilisateur INT,
+    mailUt VARCHAR(100),
+    id_attraction INT,
     date_reservation DATE NOT NULL,
-    id_creneau INT NOT NULL,    -- Référence au créneau horaire standard (obligatoire)
+    id_creneau INT NOT NULL,
     nb_personnes INT NOT NULL,
     statut ENUM('CONFIRMEE','EN ATTENTE' ,'ANNULEE') DEFAULT 'EN ATTENTE',
     FOREIGN KEY (id_utilisateur) REFERENCES utilisateur(id),

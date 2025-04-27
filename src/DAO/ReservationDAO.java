@@ -33,6 +33,54 @@ public class ReservationDAO {
         return map;
     }
 
+    public boolean reserve(int idUser, int idAttraction, int idCreneau, LocalDate date) {
+        String sql = "INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut) " +
+                "VALUES (?, ?, ?, ?, 1, 'CONFIRMEE')";
+        try (Connection conn = ConnectionProvider.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            if (idUser != 0) {
+                ps.setInt(1, idUser);
+            } else {
+                ps.setNull(1, Types.INTEGER);
+            }
+
+            ps.setInt(2, idAttraction);
+            ps.setDate(3, Date.valueOf(date));
+            ps.setInt(4, idCreneau);
+
+            int affectedRows = ps.executeUpdate();
+            System.out.println("Nombre de lignes insérées : " + affectedRows);
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de l'insertion de la réservation simplifiée :");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean reserveInvite(String mailInvite, int idAttraction, int idCreneau, LocalDate date) {
+        String sql = "INSERT INTO reservation (id_utilisateur, mailUt, id_attraction, date_reservation, id_creneau, nb_personnes, statut) " +
+                "VALUES (NULL, ?, ?, ?, ?, 1, 'CONFIRMEE')";
+        try (Connection conn = ConnectionProvider.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, mailInvite);
+            ps.setInt(2, idAttraction);
+            ps.setDate(3, Date.valueOf(date));
+            ps.setInt(4, idCreneau);
+
+            int affectedRows = ps.executeUpdate();
+            System.out.println("Nombre de lignes insérées (invité) : " + affectedRows);
+            return affectedRows > 0;
+
+        } catch (SQLException e) {
+            System.err.println("Erreur lors de l'insertion de la réservation invité :");
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public boolean annulerReservation(int idReservation) {
         System.out.println("Suppression reservation ID : " + idReservation);
         try (Connection conn = ConnectionProvider.getConnection()) {
@@ -111,6 +159,5 @@ public class ReservationDAO {
         }
         return -1;
     }
-
 
 }

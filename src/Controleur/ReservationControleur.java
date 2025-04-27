@@ -1,15 +1,15 @@
 package Controleur;
 
 import DAO.ReservationDAO;
-import DAO.ReservationmodifDAO;
 
 import java.time.LocalDate;
 
 public class ReservationControleur {
     public boolean reserver(int idUser, int idAttraction, int idCreneau, LocalDate date) {
-        ReservationmodifDAO dao = new ReservationmodifDAO();
+        ReservationDAO dao = new ReservationDAO();
         return dao.reserve(idUser, idAttraction, idCreneau, date);
     }
+
 
     public boolean annulerReservation(int idReservation) {
         System.out.println("[DEBUG] Controleur - Tentative d'annulation ID : " + idReservation);
