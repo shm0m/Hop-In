@@ -1,5 +1,7 @@
-package DAO;
+package DAO_Set;
 
+import DAO_Get.ConnectionProvider;
+import DAO_Get.GestionConnexion;
 import Modele.Attraction;
 import Modele.Trans;
 

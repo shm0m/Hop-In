@@ -1,7 +1,7 @@
 package Vue.Page.ModAdmin;
 
-import DAO.UtilisateurDAO;
-import DAO.UtilisateurchercherDAO;
+import DAO_Set.UtilisateurDAO;
+import DAO_Get.UtilisateurchercherDAO;
 import Modele.Client;
 
 import javax.swing.*;

@@ -1,9 +1,8 @@
 package Controleur;
 
-import DAO.UtilisateurDAO;
+import DAO_Set.UtilisateurDAO;
 import Modele.Utilisateur;
-import java.util.List;
-import DAO.UtilisateurchercherDAO;
+import DAO_Get.UtilisateurchercherDAO;
 public class UtilisateurControleur {
     private UtilisateurchercherDAO utilisateurDAO = new UtilisateurchercherDAO();
     private UtilisateurDAO utilisateur = new UtilisateurDAO();

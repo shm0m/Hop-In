@@ -1,6 +1,6 @@
 package Vue.Page;
 
-import DAO.ModifAdminDAO;
+import DAO_Get.ModifAdminDAO;
 import Vue.HopInGUI;
 import Vue.Page.ModAdmin.CreRed;
 import Vue.Page.ModAdmin.ModAtt;

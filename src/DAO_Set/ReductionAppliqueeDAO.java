@@ -1,4 +1,6 @@
-package DAO;
+package DAO_Set;
+
+import DAO_Get.ConnectionProvider;
 
 import java.sql.*;
 

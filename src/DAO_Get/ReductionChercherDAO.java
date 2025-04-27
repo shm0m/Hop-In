@@ -1,6 +1,5 @@
-package DAO;
+package DAO_Get;
 
-import Modele.Client;
 import Modele.Reduction;
 
 import java.sql.Connection;
@@ -9,7 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Date;
 
 public class ReductionChercherDAO {
     private GestionConnexion gerant;

@@ -1,13 +1,5 @@
 package Modele;
-import DAO.AttractionDAO;
-import DAO.GestionConnexion;
-import DAO.ModifAdminDAO;
-import DAO.UtilisateurDAO;
-import DAO.UtilisateurDAO.*;
-import DAO.ModifAdminDAO.*;
-
-
-import java.sql.*;
+import DAO_Set.AttractionDAO;
 
 public class Admin extends Utilisateur{
     AttractionDAO modifieur;

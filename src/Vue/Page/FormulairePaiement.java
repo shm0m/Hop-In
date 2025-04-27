@@ -1,7 +1,11 @@
 package Vue.Page;
 
 import Controleur.ReservationControleur;
-import DAO.*;
+import DAO_Get.*;
+import DAO_Set.AttractionDAO;
+import DAO_Set.PaiementDAO;
+import DAO_Set.ReductionAppliqueeDAO;
+import DAO_Set.ReservationDAO;
 import Modele.Client;
 import Modele.Reduction;
 

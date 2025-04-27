@@ -1,8 +1,6 @@
 package Vue.Page.ModAdmin;
 
-import DAO.ModifAdminDAO;
-import DAO.ReductionDAO;
-import Modele.Attraction;
+import DAO_Set.ReductionDAO;
 import Modele.Reduction;
 import Modele.Trans;
 

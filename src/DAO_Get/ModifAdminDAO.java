@@ -1,11 +1,6 @@
-package DAO;
+package DAO_Get;
 
-import java.awt.*;
 import java.sql.*;
-import java.util.ArrayList;
-
-import Modele.Attraction;
-import Modele.Utilisateur;
 
 public class ModifAdminDAO {
     GestionConnexion gerant;

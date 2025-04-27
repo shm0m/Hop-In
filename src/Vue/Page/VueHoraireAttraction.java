@@ -1,10 +1,8 @@
 package Vue.Page;
 
-import DAO.AttractionDAO;
-import DAO.ModifAdminDAO;
+import DAO_Get.ModifAdminDAO;
 import Modele.Utilisateur;
-import Controleur.ReservationControleur;
-import DAO.ReservationDAO;
+import DAO_Set.ReservationDAO;
 
 import javax.swing.*;
 import java.awt.*;

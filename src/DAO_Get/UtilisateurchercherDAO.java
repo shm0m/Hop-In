@@ -1,4 +1,4 @@
-package DAO;
+package DAO_Get;
 
 import Modele.Admin;
 import Modele.Client;

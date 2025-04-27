@@ -1,6 +1,6 @@
 package Vue.Page;
 
-import DAO.UtilisateurDAO;
+import DAO_Set.UtilisateurDAO;
 import Modele.Client;
 import Modele.Utilisateur;
 

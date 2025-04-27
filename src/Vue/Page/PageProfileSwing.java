@@ -1,8 +1,8 @@
 package Vue.Page;
 
-import DAO.ReservationDAO;
-import DAO.CreneauDAO;
-import DAO.AttractionDAO;
+import DAO_Set.ReservationDAO;
+import DAO_Get.CreneauDAO;
+import DAO_Set.AttractionDAO;
 import Modele.Reservation;
 import Modele.Utilisateur;
 import Controleur.UtilisateurControleur;

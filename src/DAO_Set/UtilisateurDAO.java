@@ -1,13 +1,10 @@
-package DAO;
+package DAO_Set;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 
-import Modele.Client;
+import DAO_Get.ConnectionProvider;
+import DAO_Get.GestionConnexion;
 import Modele.Utilisateur;
-import Modele.Admin;
 
 public class UtilisateurDAO {
     private GestionConnexion gerant;
