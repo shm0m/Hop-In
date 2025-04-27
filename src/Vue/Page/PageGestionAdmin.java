@@ -2,16 +2,13 @@ package Vue.Page;
 
 import DAO_Get.ModifAdminDAO;
 import Vue.HopInGUI;
-import Vue.Page.ModAdmin.CreRed;
-import Vue.Page.ModAdmin.ModAtt;
-import Vue.Page.ModAdmin.ModCli;
-import Vue.Page.ModAdmin.ModRed;
+import Vue.Page.ModAdmin.*;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class PageGestionAdmin extends JFrame {
-    private JButton ajAttraction, modAttraction, ajReductions, modReduction, modCLi, quitter;
+    private JButton ajAttraction, modAttraction, ajReductions, modReduction, modCLi, voirAffluence, quitter;
     private ModifAdminDAO modifieur;
     private JFrame previousFrame;
 
@@ -43,6 +40,7 @@ public class PageGestionAdmin extends JFrame {
         ajReductions = createButton("Ajouter Reductions", new Color(100, 149, 237));
         modReduction = createButton("Modifier Reduction", new Color(186, 85, 211));
         modCLi = createButton("Modifier Client", new Color(255, 160, 122));
+        voirAffluence = createButton("Voir Affluence", new Color(100, 200, 255));
         quitter = createButton("Quitter", new Color(249, 78, 139));
 
         gbc.gridx = 0;
@@ -64,6 +62,10 @@ public class PageGestionAdmin extends JFrame {
         panel.add(modCLi, gbc);
 
         gbc.gridx = 1;
+        panel.add(voirAffluence, gbc);
+
+        gbc.gridx = 0;
+        gbc.gridy = 3;
         panel.add(quitter, gbc);
 
         ajAttraction.addActionListener(e -> {
@@ -75,13 +77,15 @@ public class PageGestionAdmin extends JFrame {
             new ModAtt(this);
             setVisible(false);
         });
-        ajReductions.addActionListener(e ->{
+
+        ajReductions.addActionListener(e -> {
             new CreRed(this);
-            this.setVisible(false);
+            setVisible(false);
         });
-        modReduction.addActionListener(e->{
+
+        modReduction.addActionListener(e -> {
             new ModRed(this);
-            this.setVisible(false);
+            setVisible(false);
         });
 
         modCLi.addActionListener(e -> {
@@ -89,11 +93,15 @@ public class PageGestionAdmin extends JFrame {
             setVisible(false);
         });
 
+        voirAffluence.addActionListener(e -> {
+            new ModAff(this);
+            setVisible(false);
+        });
+
         quitter.addActionListener(e -> {
             this.dispose();
             new HopInGUI();
         });
-
 
         setContentPane(panel);
         setVisible(true);
@@ -112,6 +120,12 @@ public class PageGestionAdmin extends JFrame {
     }
 
     public static void main(String[] args) {
-        new PageGestionAdmin(new JFrame());
+        SwingUtilities.invokeLater(() -> new PageGestionAdmin(new JFrame()));
     }
+
+    public void setPreviousFrame(JFrame previousFrame) {
+        this.previousFrame = previousFrame;
+    }
+
+
 }
