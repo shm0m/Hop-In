@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS creneau (
 CREATE TABLE IF NOT EXISTS reservation (
     id_reservation INT AUTO_INCREMENT PRIMARY KEY,
     id_utilisateur INT,
+    mailUt VARCHAR(100) NOT NULL,
     id_attraction INT,
     date_reservation DATE NOT NULL,
     id_creneau INT NOT NULL,
