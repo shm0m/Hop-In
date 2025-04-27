@@ -32,31 +32,31 @@ public class UtilisateurDAO {
         return (-1);
     }
 
-    public boolean reserve(int idUser, int idAttraction, int idCreneau, LocalDate date) {
-        String sql = "INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut) " +
-                "VALUES (?, ?, ?, ?, 1, 'CONFIRMEE')";
+    public int creerInvite(String email) {
+        String sql = "INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, role) VALUES (?, ?, ?, ?, ?)";
         try (Connection conn = ConnectionProvider.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            if (idUser != 0) {
-                ps.setInt(1, idUser);
-            } else {
-                ps.setNull(1, Types.INTEGER);
-            }
-
-            ps.setInt(2, idAttraction);
-            ps.setDate(3, Date.valueOf(date));
-            ps.setInt(4, idCreneau);
+            ps.setString(1, " ");
+            ps.setString(2, "Invite");
+            ps.setString(3, email);
+            ps.setString(4, "1234");
+            ps.setString(5, "CLIENT");
 
             int affectedRows = ps.executeUpdate();
-            System.out.println("Nombre de lignes insérées : " + affectedRows);
-            return affectedRows > 0;
+
+            if (affectedRows > 0) {
+                ResultSet rs = ps.getGeneratedKeys();
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+            }
         } catch (SQLException e) {
-            System.err.println("Erreur lors de l'insertion de la réservation simplifiée :");
             e.printStackTrace();
-            return false;
         }
+        return -1;
     }
+
 
 
     public int ajouterUtilisateur(Utilisateur u) {

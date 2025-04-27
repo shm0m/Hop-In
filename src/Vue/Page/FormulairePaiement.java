@@ -9,12 +9,11 @@ import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
 
 public class FormulairePaiement extends JDialog {
     public FormulairePaiement(JFrame parent, Integer id_utilisateur, int id_attraction, int id_creneau, LocalDate date, String label, String attraction) {
         super(parent, "Paiement", true);
-        setSize(480, 400);
+        setSize(480, 480);
         setLocationRelativeTo(parent);
 
         JPanel panel = new JPanel(new GridBagLayout()) {
@@ -49,11 +48,22 @@ public class FormulairePaiement extends JDialog {
         JTextField dateExpiration = new JTextField();
         JTextField cvc = new JTextField();
         JTextField nomTitulaire = new JTextField();
+        JTextField mailInviteField = new JTextField(); // Champ pour l'email invité
 
         addField(panel, gbc, "Numéro de carte :", numeroCarte, 1);
         addField(panel, gbc, "Date d'expiration :", dateExpiration, 2);
         addField(panel, gbc, "CVC :", cvc, 3);
         addField(panel, gbc, "Nom du titulaire :", nomTitulaire, 4);
+
+        final Integer finalIdUtilisateur = id_utilisateur;
+        boolean isInvited = finalIdUtilisateur == null || finalIdUtilisateur == -1;
+
+        int ligneSuivante = 5;
+
+        if (isInvited) {
+            addField(panel, gbc, "Email :", mailInviteField, ligneSuivante);
+            ligneSuivante++;
+        }
 
         JButton btnValider = new JButton("Valider et Réserver");
         btnValider.setFont(new Font("Segoe UI", Font.BOLD, 16));
@@ -64,35 +74,42 @@ public class FormulairePaiement extends JDialog {
         btnValider.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnValider.setBorder(BorderFactory.createLineBorder(new Color(62, 15, 76), 2, true));
         gbc.gridx = 0;
-        gbc.gridy = 5;
+        gbc.gridy = ligneSuivante;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         panel.add(btnValider, gbc);
 
-        final Integer finalIdUtilisateur = id_utilisateur;
-
         btnValider.addActionListener(e -> {
             if (numeroCarte.getText().isEmpty() || dateExpiration.getText().isEmpty()
-                    || cvc.getText().isEmpty() || nomTitulaire.getText().isEmpty()) {
+                    || cvc.getText().isEmpty() || nomTitulaire.getText().isEmpty()
+                    || (isInvited && mailInviteField.getText().isEmpty())) {
                 JOptionPane.showMessageDialog(this, "Veuillez remplir tous les champs.", "Erreur", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
-            boolean isInvited = finalIdUtilisateur == null || finalIdUtilisateur == -1;
+            if (isInvited) {
+                String mailInvite = mailInviteField.getText();
+                if (!isValidEmail(mailInvite)) {
+                    JOptionPane.showMessageDialog(this, "Veuillez entrer un email valide.", "Erreur", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+
             UtilisateurchercherDAO userDAO = new UtilisateurchercherDAO();
             Client client = null;
             if (!isInvited) client = userDAO.trouverParId(finalIdUtilisateur);
 
             int age = 30;
-            if (client != null) {
+            if (client != null && client.getDateNaissance() != null) {
                 LocalDate naissance = LocalDate.parse(client.getDateNaissance());
                 age = Period.between(naissance, LocalDate.now()).getYears();
             }
 
+
             Reduction reduction = null;
             if (!isInvited) {
                 ReductionChercherDAO redDAO = new ReductionChercherDAO();
-                reduction = redDAO.getReductionApplicable(age,userDAO.nbReservations(client.getId()));
+                reduction = redDAO.getReductionApplicable(age, userDAO.nbReservations(client.getId()));
             }
 
             AttractionDAO attractionDAO = new AttractionDAO();
@@ -107,7 +124,13 @@ public class FormulairePaiement extends JDialog {
                             (reduction != null ? "Réduction appliquée : " + reduction.getNom() + " (-" + reduction.getprcRed() + "%)\n" : "Aucune réduction appliquée.\n") +
                             "Total à payer : " + prixFinal + " €");
 
-            boolean ok = new ReservationControleur().reserver(finalIdUtilisateur, id_attraction, id_creneau, date);
+            boolean ok;
+            if (!isInvited) {
+                ok = new ReservationControleur().reserver(finalIdUtilisateur, id_attraction, id_creneau, date);
+            } else {
+                String mailInvite = mailInviteField.getText();
+                ok = new ReservationControleur().reserverInvite(mailInvite, id_attraction, id_creneau, date);
+            }
 
             if (ok) {
                 int idReservation = ReservationDAO.getDernierIdReservation();
@@ -151,5 +174,9 @@ public class FormulairePaiement extends JDialog {
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
         panel.add(field, gbc);
+    }
+
+    private boolean isValidEmail(String email) {
+        return email != null && email.contains("@") && email.contains(".");
     }
 }

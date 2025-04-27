@@ -1,5 +1,6 @@
 package Vue.Page;
 
+import DAO.UtilisateurDAO;
 import Modele.Client;
 import Modele.Utilisateur;
 
@@ -71,13 +72,22 @@ public class PageInviteSwing extends JFrame {
         btnConnect.addActionListener(e -> {
             String email = emailField.getText();
             if (email != null && !email.trim().isEmpty()) {
-                Utilisateur invitedUser = new Client(0, "Invité", null, email, null, null);
+                UtilisateurDAO utilisateurDAO = new UtilisateurDAO();
+                int idInvite = utilisateurDAO.creerInvite(email);
+
+                if (idInvite == -1) {
+                    message.setText("Erreur lors de la création du compte invité.");
+                    return;
+                }
+
+                Utilisateur invitedUser = new Client(idInvite, "Invité", null, email, null, "CLIENT");
                 new PageReservationSwing(invitedUser);
                 setVisible(false);
             } else {
                 message.setText("Veuillez saisir une adresse email valide.");
             }
         });
+
 
         btnRetour.addActionListener(e -> {
             previousFrame.setVisible(true);

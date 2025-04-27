@@ -16,4 +16,10 @@ public class ReservationControleur {
         return new ReservationDAO().annulerReservation(idReservation);
     }
 
+    public boolean reserverInvite(String mailInvite, int idAttraction, int idCreneau, LocalDate date) {
+        ReservationDAO dao = new ReservationDAO();
+        return dao.reserveInvite(mailInvite, idAttraction, idCreneau, date);
+
+
+    }
 }
