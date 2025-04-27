@@ -59,33 +59,37 @@ public class VueAffluenceAttraction extends JFrame {
             int maxInscrits = reservationsMap.values().stream().mapToInt(Integer::intValue).max().orElse(10);
             maxInscrits = Math.max(maxInscrits, 5);
 
-            int barWidth = width / reservationsMap.size() - 20;
-            int x = padding + 10;
+            if( reservationsMap.size()==0){
+                setVisible(false);
+            }else {
+                int barWidth = width / reservationsMap.size() - 20;
+                int x = padding + 10;
 
-            for (Map.Entry<Integer, Integer> entry : reservationsMap.entrySet()) {
-                int idCreneau = entry.getKey();
-                int inscrits = entry.getValue();
-                Time heureDebut = creneauxDispo.get(idCreneau);
+                for (Map.Entry<Integer, Integer> entry : reservationsMap.entrySet()) {
+                    int idCreneau = entry.getKey();
+                    int inscrits = entry.getValue();
+                    Time heureDebut = creneauxDispo.get(idCreneau);
 
-                if (heureDebut == null) continue;
+                    if (heureDebut == null) continue;
 
-                int barHeight = (int) ((double) inscrits / maxInscrits * height);
-                int y = getHeight() - padding - barHeight;
+                    int barHeight = (int) ((double) inscrits / maxInscrits * height);
+                    int y = getHeight() - padding - barHeight;
 
-                g2.setColor(new Color(249, 78, 139));
-                g2.fillRect(x, y, barWidth, barHeight);
+                    g2.setColor(new Color(249, 78, 139));
+                    g2.fillRect(x, y, barWidth, barHeight);
+
+                    g2.setColor(Color.BLACK);
+                    g2.drawString(heureDebut.toString().substring(0, 5), x + 5, getHeight() - padding + 15);
+
+                    g2.drawString(String.valueOf(inscrits), x + 10, y - 5);
+
+                    x += barWidth + 20;
+                }
 
                 g2.setColor(Color.BLACK);
-                g2.drawString(heureDebut.toString().substring(0,5), x + 5, getHeight() - padding + 15);
-
-                g2.drawString(String.valueOf(inscrits), x + 10, y - 5);
-
-                x += barWidth + 20;
+                g2.drawLine(padding, getHeight() - padding, getWidth() - padding, getHeight() - padding); // Axe X
+                g2.drawLine(padding, padding, padding, getHeight() - padding); // Axe Y
             }
-
-            g2.setColor(Color.BLACK);
-            g2.drawLine(padding, getHeight() - padding, getWidth() - padding, getHeight() - padding); // Axe X
-            g2.drawLine(padding, padding, padding, getHeight() - padding); // Axe Y
         }
     }
 }
