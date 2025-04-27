@@ -34,8 +34,8 @@ public class ReservationDAO {
     }
 
     public boolean reserve(int idUser, int idAttraction, int idCreneau, LocalDate date) {
-        String sql = "INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut) " +
-                "VALUES (?, ?, ?, ?, 1, 'CONFIRMEE')";
+        String sql = "INSERT INTO reservation (id_utilisateur,mailUt, id_attraction, date_reservation, id_creneau, nb_personnes, statut) " +
+                "VALUES (?,?, ?, ?, ?, 1, 'CONFIRMEE')";
         try (Connection conn = ConnectionProvider.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -44,10 +44,10 @@ public class ReservationDAO {
             } else {
                 ps.setNull(1, Types.INTEGER);
             }
-
-            ps.setInt(2, idAttraction);
-            ps.setDate(3, Date.valueOf(date));
-            ps.setInt(4, idCreneau);
+            ps.setString(2, "a");
+            ps.setInt(3, idAttraction);
+            ps.setDate(4, Date.valueOf(date));
+            ps.setInt(5, idCreneau);
 
             int affectedRows = ps.executeUpdate();
             System.out.println("Nombre de lignes insérées : " + affectedRows);
@@ -65,6 +65,7 @@ public class ReservationDAO {
         try (Connection conn = ConnectionProvider.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
+            //ps.setString(1, mailInvite);
             ps.setString(1, mailInvite);
             ps.setInt(2, idAttraction);
             ps.setDate(3, Date.valueOf(date));
