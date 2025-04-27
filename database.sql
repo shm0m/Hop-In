@@ -113,3 +113,76 @@ VALUES (30, NULL, NULL, '2025-10-25', '2025-10-31', NULL, 'Réduction Halloween'
 
 INSERT INTO reduction (prc_reduction, age_min, age_max, date_min, date_max, nb_visites_min, nom)
 VALUES (35, NULL, NULL, '2025-12-20', '2025-12-31', NULL, 'Réduction Noël');
+
+-- Jeune
+INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, date_naissance, role)
+VALUES ('Petit', 'Jean', 'petit.jean@example.com', 'mdp123', '2015-06-12', 'CLIENT');
+
+-- Vieux
+INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, date_naissance, role)
+VALUES ('Grand', 'Paul', 'grand.paul@example.com', 'mdp123', '1950-04-08', 'CLIENT');
+
+-- Fan avec 15 réservations
+INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, date_naissance, role)
+VALUES ('Fou', 'Attraction', 'fou.attraction@example.com', 'mdp123', '1995-09-20', 'CLIENT');
+
+-- Admin
+INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, date_naissance, role)
+VALUES ('Admin', 'Hopin', 'admin@hopin.com', 'admin123', '1990-01-01', 'ADMIN');
+
+-- Utilisateur lambda 1
+INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, date_naissance, role)
+VALUES ('Simple', 'Utilisateur1', 'simple1@example.com', 'mdp123', '2000-02-02', 'CLIENT');
+
+-- Utilisateur lambda 2
+INSERT INTO utilisateur (nom, prenom, email, mot_de_passe, date_naissance, role)
+VALUES ('Simple', 'Utilisateur2', 'simple2@example.com', 'mdp123', '1998-03-03', 'CLIENT');
+
+
+SELECT id FROM utilisateur WHERE email = 'fou.attraction@example.com';
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 1, '2025-05-01', 1, 2, 'CONFIRMEE');
+
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 2, '2025-05-02', 2, 1, 'CONFIRMEE');
+
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 3, '2025-05-03', 3, 4, 'CONFIRMEE');
+
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 4, '2025-05-04', 1, 3, 'CONFIRMEE');
+
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 5, '2025-05-05', 2, 2, 'CONFIRMEE');
+
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 6, '2025-05-06', 3, 1, 'CONFIRMEE');
+
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 7, '2025-05-07', 1, 2, 'CONFIRMEE');
+
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 8, '2025-05-08', 2, 1, 'CONFIRMEE');
+
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 9, '2025-05-09', 3, 3, 'CONFIRMEE');
+
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 10, '2025-05-10', 1, 1, 'CONFIRMEE');
+
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 1, '2025-05-11', 2, 2, 'CONFIRMEE');
+
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 2, '2025-05-12', 3, 1, 'CONFIRMEE');
+
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 3, '2025-05-13', 1, 4, 'CONFIRMEE');
+
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 4, '2025-05-14', 2, 3, 'CONFIRMEE');
+
+INSERT INTO reservation (id_utilisateur, id_attraction, date_reservation, id_creneau, nb_personnes, statut)
+VALUES (3, 5, '2025-05-15', 3, 2, 'CONFIRMEE');
+
+
