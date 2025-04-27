@@ -1,6 +1,6 @@
 package Vue.Page.ModAdmin;
 
-import DAO.ReservationDAO;
+import DAO_Set.ReservationDAO;
 
 import javax.swing.*;
 import java.awt.*;
