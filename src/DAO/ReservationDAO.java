@@ -84,7 +84,7 @@ public class ReservationDAO {
     public boolean annulerReservation(int idReservation) {
         System.out.println("Suppression reservation ID : " + idReservation);
         try (Connection conn = ConnectionProvider.getConnection()) {
-            String query = "UPDATE reservation SET statut = 'ANNULEE' WHERE id_reservation = ?";
+            String query = "DELETE FROM reservation WHERE id_reservation = ?";
             PreparedStatement ps = conn.prepareStatement(query);
             ps.setInt(1, idReservation);
             int rowsAffected = ps.executeUpdate();
