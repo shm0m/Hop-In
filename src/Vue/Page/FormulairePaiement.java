@@ -142,8 +142,6 @@ public class FormulairePaiement extends JDialog {
                         "Succès", JOptionPane.INFORMATION_MESSAGE);
                 dispose();
                 parent.dispose();
-                new VueHoraireAttraction(attraction, id_attraction, null, date,
-                        attractionDAO.getCapaciteAttraction(id_attraction));
             } else {
                 JOptionPane.showMessageDialog(this, "Erreur lors de la réservation.", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
