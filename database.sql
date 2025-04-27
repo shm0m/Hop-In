@@ -92,4 +92,9 @@ INSERT INTO attraction (id_attraction, nom, description, prix, capacite_max) VAL
 (2, 'Exploration', 'Parcours d’énigmes et d’obstacles pour les plus téméraires.', 4.50, 25),
 (3, 'Sculpture Citrouille', 'Atelier Halloween de sculpture sur citrouille.', 3.00, 15),
 (4, 'Nocturne Halloween', 'Parc transformé en manoir hanté de nuit.', 7.50, 50),
-(5, 'Skibidi Toilet', 'Défi insolite et rigolo avec toilettes géantes  .', 6.00, 70);
+(5, 'Escape Game', 'Énigmes à résoudre en équipe pour s’échapper.', 6.00, 10),
+(6, 'Parcours Aventure', 'Accrobranche et tyrolienne dans les arbres.', 8.00, 30),
+(7, 'Chasse aux Fantômes', 'Chasse interactive aux fantômes dans le parc.', 4.00, 40),
+(8, 'Atelier Sorcellerie', 'Atelier de potions et de magie.', 3.50, 20),
+(9, 'Spectacle de Magie', 'Magicien en direct avec des tours époustouflants.', 5.50, 100),
+(10, 'Visite Nocturne', 'Visite guidée du parc à la tombée de la nuit.', 4.00, 60);
