@@ -48,20 +48,17 @@ public class ReductionChercherDAO {
         return(new ArrayList<Reduction>());
     }
 
-    public Reduction getReductionApplicable(int age,int nbResa) {
-        LocalDate dateAjd= LocalDate.now();
-
-
+    public Reduction getReductionApplicable(int age,int nbResa,LocalDate date) {
         ArrayList<Reduction> reductionsApplicables=new ArrayList<>();
         for (Reduction r : getReducs()) {
             boolean nbResavalide=true;
             boolean dateMaxValide=true;
             boolean dateMinValide=true;
             if(!(r.getdateMax()==null)){
-                dateMaxValide=dateAjd.isBefore(LocalDate.parse(r.getdateMax())) ;
+                dateMaxValide=date.isBefore(LocalDate.parse(r.getdateMax())) ;
             }
             if(!(r.getdateMin()==null)){
-                dateMinValide=dateAjd.isAfter(LocalDate.parse(r.getdateMin()));
+                dateMinValide=date.isAfter(LocalDate.parse(r.getdateMin()));
             }
             if(r.getMinVis()!=0){
                 nbResavalide=nbResa>r.getMinVis();
