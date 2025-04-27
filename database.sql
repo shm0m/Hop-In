@@ -98,3 +98,18 @@ INSERT INTO attraction (id_attraction, nom, description, prix, capacite_max) VAL
 (8, 'Atelier Sorcellerie', 'Atelier de potions et de magie.', 3.50, 20),
 (9, 'Spectacle de Magie', 'Magicien en direct avec des tours époustouflants.', 5.50, 100),
 (10, 'Visite Nocturne', 'Visite guidée du parc à la tombée de la nuit.', 4.00, 60);
+
+INSERT INTO reduction (prc_reduction, age_min, age_max, date_min, date_max, nb_visites_min, nom)
+VALUES (20, 0, 12, NULL, NULL, NULL, 'Réduction Enfant');
+
+INSERT INTO reduction (prc_reduction, age_min, age_max, date_min, date_max, nb_visites_min, nom)
+VALUES (25, 60, NULL, NULL, NULL, NULL, 'Réduction Senior');
+
+INSERT INTO reduction (prc_reduction, age_min, age_max, date_min, date_max, nb_visites_min, nom)
+VALUES (10, NULL, NULL, NULL, NULL, 5, 'Réduction Client Régulier');
+
+INSERT INTO reduction (prc_reduction, age_min, age_max, date_min, date_max, nb_visites_min, nom)
+VALUES (30, NULL, NULL, '2025-10-25', '2025-10-31', NULL, 'Réduction Halloween');
+
+INSERT INTO reduction (prc_reduction, age_min, age_max, date_min, date_max, nb_visites_min, nom)
+VALUES (35, NULL, NULL, '2025-12-20', '2025-12-31', NULL, 'Réduction Noël');

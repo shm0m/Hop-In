@@ -1,6 +1,5 @@
 package Vue.Page;
 
-import Controleur.ReservationControleur;
 import DAO.ReservationDAO;
 import DAO.CreneauDAO;
 import DAO.AttractionDAO;
@@ -38,7 +37,7 @@ public class PageProfileSwing extends JFrame {
         };
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-        Color accentColor = new Color(76, 215, 179);
+        Color accentColor = new Color(62, 15, 76);
         Color labelColor = new Color(62, 15, 76);
         Color inputColor = new Color(255, 240, 245);
         Font labelFont = new Font("Segoe UI", Font.BOLD, 15);
