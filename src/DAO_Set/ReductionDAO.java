@@ -1,5 +1,6 @@
-package DAO;
+package DAO_Set;
 
+import DAO_Get.GestionConnexion;
 import Modele.Reduction;
 
 import java.sql.Connection;

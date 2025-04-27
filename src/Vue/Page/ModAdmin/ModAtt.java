@@ -1,6 +1,6 @@
 package Vue.Page.ModAdmin;
 
-import DAO.AttractionDAO;
+import DAO_Set.AttractionDAO;
 import Modele.Attraction;
 
 import javax.swing.*;

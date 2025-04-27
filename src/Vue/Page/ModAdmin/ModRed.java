@@ -1,8 +1,7 @@
 package Vue.Page.ModAdmin;
 
-import DAO.ReductionChercherDAO;
-import DAO.ReductionDAO;
-import Modele.Client;
+import DAO_Get.ReductionChercherDAO;
+import DAO_Set.ReductionDAO;
 import Modele.Reduction;
 import Modele.Trans;
 

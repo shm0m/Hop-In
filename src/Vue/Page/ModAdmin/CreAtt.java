@@ -1,7 +1,6 @@
 package Vue.Page.ModAdmin;
 
-import DAO.AttractionDAO;
-import DAO.ModifAdminDAO;
+import DAO_Set.AttractionDAO;
 import Modele.Attraction;
 
 import javax.swing.*;
@@ -9,7 +8,6 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 public class CreAtt extends JFrame {
     private JLabel indicNom;

@@ -1,10 +1,8 @@
 package Vue.Page;
 
-import DAO.AttractionDAO;
-import DAO.ModifAdminDAO;
+import DAO_Get.ModifAdminDAO;
 import Modele.Utilisateur;
-import Controleur.ReservationControleur;
-import DAO.ReservationDAO;
+import DAO_Set.ReservationDAO;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,12 +36,32 @@ public class VueHoraireAttraction extends JFrame {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLayout(new BorderLayout());
 
-        JLabel titre = new JLabel(" Réservation - " + date + " | " + attraction, SwingConstants.CENTER);
+// Créer un panel pour contenir le titre et le bouton "Quitter"
+        JPanel topPanel = new JPanel(new BorderLayout());
+        topPanel.setOpaque(false);
+        topPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+
+// Titre
+        JLabel titre = new JLabel("Réservation - " + date + " | " + attraction, SwingConstants.CENTER);
         titre.setFont(new Font("Segoe UI", Font.BOLD, 22));
         titre.setForeground(new Color(62, 15, 76));
         titre.setOpaque(false);
-        titre.setBorder(BorderFactory.createEmptyBorder(20, 0, 20, 0));
-        add(titre, BorderLayout.NORTH);
+
+// Bouton Quitter
+        JButton quitterButton = new JButton("Quitter");
+        quitterButton.setFocusPainted(false);
+        quitterButton.setBackground(new Color(220, 53, 69)); // rouge doux
+        quitterButton.setForeground(Color.WHITE);
+        quitterButton.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        quitterButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        quitterButton.addActionListener(e -> dispose());
+
+// Ajouter le titre et le bouton dans le topPanel
+        topPanel.add(titre, BorderLayout.CENTER);
+        topPanel.add(quitterButton, BorderLayout.EAST);
+
+// Ajouter le topPanel au NORTH
+        add(topPanel, BorderLayout.NORTH);
 
         JPanel mainPanel = new JPanel(new BorderLayout()) {
             protected void paintComponent(Graphics g) {

@@ -1,6 +1,6 @@
 package Vue.Page;
 
-import DAO.AttractionDAO;
+import DAO_Set.AttractionDAO;
 import Modele.Attraction;
 import Modele.Utilisateur;
 import Vue.NavBarUtil;
