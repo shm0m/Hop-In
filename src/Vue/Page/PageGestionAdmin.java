@@ -1,6 +1,7 @@
 package Vue.Page;
 
 import DAO.ModifAdminDAO;
+import Vue.HopInGUI;
 import Vue.Page.ModAdmin.CreRed;
 import Vue.Page.ModAdmin.ModAtt;
 import Vue.Page.ModAdmin.ModCli;
@@ -89,8 +90,8 @@ public class PageGestionAdmin extends JFrame {
         });
 
         quitter.addActionListener(e -> {
-            this.previousFrame.setVisible(true);
-            setVisible(false);
+            this.dispose();
+            new HopInGUI();
         });
 
 
