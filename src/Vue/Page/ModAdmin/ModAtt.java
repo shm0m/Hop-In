@@ -2,6 +2,7 @@ package Vue.Page.ModAdmin;
 
 import DAO_Set.AttractionDAO;
 import Modele.Attraction;
+import Reporting.AffichageStats;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -14,11 +15,14 @@ public class ModAtt extends JFrame {
     private JComboBox<Attraction> men_attractions;
     private AttractionDAO modifieur;
     private JFrame previousFrame;
+    private JLabel stats;
+    private AffichageStats affichageStats;
 
     public ModAtt(JFrame previousFrame) {
         super("Modifier Attraction");
         this.previousFrame = previousFrame;
         this.modifieur = new AttractionDAO();
+        this.affichageStats=new AffichageStats();
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
@@ -78,6 +82,11 @@ public class ModAtt extends JFrame {
         gbc.gridwidth = 2;
         panel.add(btnPanel, gbc);
 
+        gbc.gridy=7;
+        stats=new JLabel("Actualisez pour voir les infos");
+        ;
+        panel.add(stats,gbc);
+
         afficherProp.addActionListener(e -> {
             Attraction a = getAtt(men_attractions.getSelectedItem().toString(), attractions);
             modicDescription.setText(a.get_description());
@@ -85,6 +94,8 @@ public class ModAtt extends JFrame {
             modicCapaciteMax.setText(a.get_capacite_max_Str());
             indicQuelId.setText(a.get_id_attraction_Str());
             affichAff.setText(modifieur.getAffluence(a.get_id_attraction_Str()));
+            stats.setText(affichageStats.getStatFromId(a.get_id_attraction()));
+            System.out.println(affichageStats.getStatFromId(a.get_id_attraction()));
         });
 
         modifier.addActionListener(e -> {
